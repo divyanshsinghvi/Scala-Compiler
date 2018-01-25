@@ -16,16 +16,19 @@ lexer = lex.lex()
 # lexer.input(code)
 
 #Example
-lexer.input('''object Demo {
-   def main(args: Array[String]) {
-      var a = 10;
-        a = 3 + 10;
-   	}
-}
+lexer.input('''abc HelloWorld {
+    def main(args: Array[String]) {
+      println("Hello, world!")
+      return 0;
+      a = -24;
+      b = +10.87;
+      c = 00001;
+    }
+  }
 ''')
 
 while True:
 	token = lexer.token()
-	if not tok:
+	if not token:
 		break
 	print(token)

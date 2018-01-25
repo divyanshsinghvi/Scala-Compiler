@@ -32,6 +32,7 @@ tokens = [
 'SUBASGN',
 'MULASGN',
 'DIVASGN',
+'MODASGN',
 'LSHIFTASGN',
 'RSHIFTASGN',
 'ANDASGN',
@@ -41,7 +42,12 @@ tokens = [
 'SEMICOLON',
 'DOT',
 'COMMA',
-'UNDER'
+'UNDER',
+'ID',
+'CHAR',
+'STRING',
+'INT',
+'FLOAT'
 ]
 
 reserved = {

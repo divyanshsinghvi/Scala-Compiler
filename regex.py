@@ -1,4 +1,5 @@
 from tokens import *
+from ply.lex import TOKEN
 
 t_BOOL = r'(true | false)'
 t_LEFTARROW = r'<-'
@@ -47,21 +48,73 @@ t_UNDER = r'_'
 
 #Litereals
 
-def t_INT(t):
-    r'((\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
+# def t_FLOAT(t):
+#     r'((\d+)?(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)| ((\d)+([Ee][+-]?(\d+))?([FfDd]))'
+
+#     if t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d' :
+#         t.value = t.value[:-1]
+#         t.value = float(t.value)
+#         return t
+
+# def t_INT(t):
+#     r'((\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
+#     t.value = int(t.value)
+#     return t
 
 def t_FLOAT(t):
-    r'((\d+)?(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)| ((\d)+([Ee][+-]?(\d+))?([FfDd]))'
-
-    if t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d' :
-        t.value = t.value[:-1]
-        t.value = float(t.value)
-        return t
-
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z0-9]*'
-    t.type = reserved.get(t.value,'ID')
+    r'((\d+)(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)|((\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)|((\d+)([Ee][+-]?(\d+))([FfDd])?)|((\d+)([Ee][+-]?(\d+))?([FfDd]))'    #r'((\d+)(\.\d+)(e(\+|-)?(\d+))?|(\d+)e(\+|-)?(\d+))([lL]|[fF])?'
+    # print 
+    if (t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d'):
+        t.value=t.value[:-1]
+    # print t.value
+    t.value = float(t.value)
     return t
+
+# Integer literal
+def t_INT(t):
+    r'(((((0x)|(0X))[0-9a-fA-F]+)|(\d+))([uU]|[lL]|[uU][lL]|[lL][uU])?)'
+    t.value = int(t.value)
+    return t
+
+def t_CHAR(t):
+	r'\'.\''
+	t.value = t.value[1:-1]
+	return t
+
+def t_STRING(t):
+	r'\"(\\.|[^\\"]|)*\"'
+	t.value = t.value[1:-1]
+	return t
+
+# def t_ID(t):
+#     r'[a-zA-Z_][a-zA-Z0-9]*'
+#     t.type = reserved.get(t.value,'ID')
+#     return t
+
+digit            = r'([0-9])'
+nondigit         = r'([_A-Za-z])'
+identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
+
+@TOKEN(identifier)
+def t_ID(t):
+	t.type = reserved.get(t.value,'ID')    # Check for reserved words
+	return t
+
+# track line numbers
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    # return t
+    pass
+
+# a string for ignored characters
+t_ignore = ' \t'
+
+# error handling rule
+def t_error(t):
+    print "Illegal character '%s'" % t.value[0]
+    t.lexer.skip(1)
+    pass
 
 
 
