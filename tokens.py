@@ -40,14 +40,8 @@ tokens = [
 'COLON',
 'SEMICOLON',
 'DOT',
-<<<<<<< HEAD
 'COMMA',
 'UNDER'
-
-        ]
-=======
-'SEMICOLON'
-'COLON'
 ]
 
 reserved = {
@@ -93,4 +87,3 @@ reserved = {
 }
 
 tokens = tokens + list(reserved.values())
->>>>>>> 42e94713d3a7bbf1e84ab2566f085254bac17de9
