@@ -1,7 +1,7 @@
 from tokens import *
 
-t_INT = r'[+-]?([0-9])+'
-t_FLOAT = r'([+-])?[0-9]+\.([0-9]+([Ee]?[+-][0-9]+)?)?'
+t_INT = r'[+-]?([0-9])+'									  # Skipped Hex.
+t_FLOAT = r'([+-])?[0-9]+\.([0-9]+([Ee]?[+-][0-9]+)?)?'       # Skipped float type.
 t_BOOL = r'(True | False)'
 t_LEFTARROW = r'<-'
 t_GT = r'>'
