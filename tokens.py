@@ -40,7 +40,57 @@ tokens = [
 'COLON',
 'SEMICOLON',
 'DOT',
+<<<<<<< HEAD
 'COMMA',
 'UNDER'
 
         ]
+=======
+'SEMICOLON'
+'COLON'
+]
+
+reserved = {
+	'abstract' : 'R_ABSTRACT',
+	'case' : 'R_CASE',
+	'catch' : 'R_CATCH',
+	'class' : 'R_CLASS',
+	'do' : 'R_DO',
+	'else' : 'R_ELSE',
+	'extends' : 'R_EXTENDS',
+	'false' : 'R_FALSE',
+	'final' : 'R_FINAL',
+	'finaly' : 'R_FINALLY',
+	'for' : 'R_FOR',
+	'forSome' : 'R_FOR_SOME',
+	'if' : 'R_IF',
+	'implicit' : 'R_IMPLICIT',
+	'import' : 'R_IMPORT',
+	'lazy' : 'R_LAZY',
+	'macro' : 'R_MACRO',
+	'match' : 'R_MATCH',
+	'new' : 'R_NEW',
+	'null' : 'R_NULL',
+	'object' : 'R_OBJECT',
+	'override' : 'R_OVERRIDE',
+	'package' : 'R_PACKAGE',
+	'private' : 'R_PRIVATE',
+	'protected' : 'R_PROTECTED',
+	'return' : 'R_RETURN',
+	'sealed' : 'R_SEALED',
+	'super' : 'R_SUPER',
+	'this' : 'R_THIS',
+	'throw' : 'R_THROW',
+	'trait' : 'R_TRAIT',
+	'try' : 'R_TRY',
+	'true' : 'R_TRUE',
+	'type' : 'R_TYPE',
+	'val' : 'R_VAL',
+	'var' : 'R_VAR',
+	'while' : 'R_WHILE',
+	'with' : 'R_WITH',
+	'yeild' : 'R_YIELD',
+}
+
+tokens = tokens + list(reserved.values())
+>>>>>>> 42e94713d3a7bbf1e84ab2566f085254bac17de9
