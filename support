@@ -1,0 +1,22 @@
+.....Integer
+0
+035
+21 
+0xFFFFFFFF 
+0777L
+.....Float
+0.0 
+1e30f 
+3.14159f 
+1.0e100
+.1
+#### boolean in reserved keyword
+.....char
+'a' 
+'\u0041'
+'\n' ###not working .illegal ??? error handling ?
+'\t'
+...strings
+....Null keyword
+
+type support added

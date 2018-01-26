@@ -1,5 +1,6 @@
 import sys
-import ply.lex as lex
+import lex
+import yacc
 from tokens import *
 from regex import *
 
@@ -16,15 +17,14 @@ lexer = lex.lex()
 # lexer.input(code)
 
 #Example
-lexer.input('''abc HelloWorld {
-    def main(args: Array[String]) {
-      println("Hello, world!")
-      return 0;
-      a = -24;
-      b = +10.87;
-      c = 00001;
-    }
-  }
+lexer.input('''
+  var myVar :Int;
+  val myVal :String;
+
+    a='\u0041'
+    a='\n'
+    a='\t'
+
 ''')
 
 tokens_d = {}

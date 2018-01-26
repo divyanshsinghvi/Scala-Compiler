@@ -1,5 +1,5 @@
 from tokens import *
-from ply.lex import TOKEN
+from lex import TOKEN
 
 t_BOOL = r'(true | false)'
 t_LEFTARROW = r'<-'
@@ -45,41 +45,32 @@ t_SEMICOLON = r';'
 t_DOT = r'\.'
 t_COMMA = r'\,'
 t_UNDER = r'_'
-
+#t_SQUOTE = r'\''
+#t_DQUOTE = r'\"'
 #Litereals
+#t_CHAR = r'\'([^\\\n]|(\\.))*?\''
 
-# def t_FLOAT(t):
-#     r'((\d+)?(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)| ((\d)+([Ee][+-]?(\d+))?([FfDd]))'
-
-#     if t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d' :
-#         t.value = t.value[:-1]
-#         t.value = float(t.value)
-#         return t
-
-# def t_INT(t):
-#     r'((\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
-#     t.value = int(t.value)
-#     return t
 
 def t_FLOAT(t):
-    r'((\d+)(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)|((\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?)|((\d+)([Ee][+-]?(\d+))([FfDd])?)|((\d+)([Ee][+-]?(\d+))?([FfDd]))'    #r'((\d+)(\.\d+)(e(\+|-)?(\d+))?|(\d+)e(\+|-)?(\d+))([lL]|[fF])?'
-    # print 
+    r'((\d+)?(\.)(\d+)([Ee][+-]?(\d+))?([FfDd])?) | ((\d)+([Ee][+-]?(\d+))?([FfDd]))|((\d)+([Ee][+-](\d+))([FfDd])?)'
+    print t.value
     if (t.value[-1]=='F' or t.value[-1]=='f' or t.value[-1]=='D' or t.value[-1]=='d'):
-        t.value=t.value[:-1]
-    # print t.value
+        t.value = t.value[:-1]
     t.value = float(t.value)
     return t
 
-# Integer literal
 def t_INT(t):
-    r'(((((0x)|(0X))[0-9a-fA-F]+)|(\d+))([uU]|[lL]|[uU][lL]|[lL][uU])?)'
+    r'((\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
+    if len(t.value) > 1 and (t.value[1]=='x' or t.value[1]=='X'):
+        return t
+    if t.value[-1]=='L' or t.value[-1]=='l':
+        t.value=t.value[:-1]
     t.value = int(t.value)
     return t
 
 def t_CHAR(t):
-	r'\'.\''
-	t.value = t.value[1:-1]
-	return t
+    r'\'([^\\\'\r\n\\[^\r\n]|\\u[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])(\'|\\)'
+    return t 
 
 def t_STRING(t):
 	r'\"(\\.|[^\\"]|)*\"'
