@@ -45,10 +45,6 @@ t_SEMICOLON = r';'
 t_DOT = r'\.'
 t_COMMA = r'\,'
 t_UNDER = r'_'
-#t_SQUOTE = r'\''
-#t_DQUOTE = r'\"'
-#Litereals
-#t_CHAR = r'\'([^\\\n]|(\\.))*?\''
 
 
 def t_FLOAT(t):
@@ -77,10 +73,6 @@ def t_STRING(t):
 	t.value = t.value[1:-1]
 	return t
 
-# def t_ID(t):
-#     r'[a-zA-Z_][a-zA-Z0-9]*'
-#     t.type = reserved.get(t.value,'ID')
-#     return t
 
 digit            = r'([0-9])'
 nondigit         = r'([_A-Za-z])'
@@ -91,17 +83,14 @@ def t_ID(t):
 	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
 
-# track line numbers
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-    # return t
     pass
 
-# a string for ignored characters
 t_ignore = ' \t'
 
-# error handling rule
+# error handling 
 def t_error(t):
     print "Illegal character '%s'" % t.value[0]
     t.lexer.skip(1)

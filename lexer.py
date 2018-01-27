@@ -22,7 +22,6 @@ lexer.input('''
   val myVal :String;
 
     a='\u0041'
-    a='\n'
     a='\t'
 
 ''')
