@@ -47,7 +47,9 @@ tokens = [
 'CHAR',
 'STRING',
 'INT',
-'FLOAT'
+'FLOAT',
+'SCOMMENT',
+'MCOMMENT'
 ]
 
 reserved = {

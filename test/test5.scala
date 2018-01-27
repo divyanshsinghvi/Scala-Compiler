@@ -1,10 +1,13 @@
-// Hello World from tutorialspoint.com
+// all data types supported in our grammar
 object HelloWorld {
-Int:a=0
-035
-21 
-0xFFFFFFFF 
-0777L
+
+var a :Int=0;  // All int types 
+var b :Int=035;
+var c :Int=21; 
+var d :Int=0xFFFFFFFF; 
+var e :Int=0777L;
+
+var a:Float= 
 
 
  }

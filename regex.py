@@ -90,6 +90,15 @@ def t_newline(t):
 
 t_ignore = ' \t'
 
+#handling nested comments and single line comments
+def t_MCOMMENT(t):
+    r'(/\*(\n|.)*?\*/)'
+    t.lexer.lineno += t.value.count('\n')
+
+def t_SCOMMENT(t):
+    r'(//.*?\n)'
+    t.lexer.lineno += t.value.count('\n')
+
 # error handling 
 def t_error(t):
     print "Illegal character '%s'" % t.value[0]

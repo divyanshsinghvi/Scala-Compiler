@@ -10,8 +10,7 @@ lexer = lex.lex()
 
 # Python Reading the file contents
 fileName = open(sys.argv[1],"r")
-code = f.read()
-code = code+'\n'
+code = fileName.read()
 fileName.close()
 
 
