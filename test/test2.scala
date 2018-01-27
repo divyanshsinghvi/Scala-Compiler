@@ -6,6 +6,6 @@ object Demo {
          println("This is if statement");
       } else {
          println("This is else statement");
-      }
-   }
+      };
+   };
 }
