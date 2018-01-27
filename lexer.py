@@ -7,25 +7,15 @@ from regex import *
 # Build the lexer.
 lexer = lex.lex()
 
-# # Read the input file as first argument.
-# file = open(sys.argv[1],"r")
-# code = file.read()
-# # code = code + '\n'
-# file.close()
 
-# # Use the lexer.
-# lexer.input(code)
+# Python Reading the file contents
+fileName = open(sys.argv[1],"r")
+code = f.read()
+code = code+'\n'
+fileName.close()
 
-#Example
-lexer.input('''
-  var myVar :Int;
-  val myVal :String;
 
-    a='\u0041'
-    a='\n'
-    a='\t'
-
-''')
+lexer.input(code)
 
 tokens_d = {}
 
