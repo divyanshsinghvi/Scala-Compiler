@@ -6,7 +6,7 @@ var a :Int=0;
 var b :Int=035;
 var c :Int=21; 
 var d :Int=0xFFFFFFFF; 
-var e :Int=0777L;
+var e :Int=777L;
 
 var a :Float=0.0; 
 var b :Float=1e30f; 
