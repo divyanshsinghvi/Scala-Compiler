@@ -68,10 +68,10 @@ def t_CHAR(t):
     return t 
 
 def t_STRING(t):
-    r'\"([^\"]|\"|\\|\n|\b)*\"'
-#r'\"(\\.|[^\\"]| )*\"'
-	t.value = t.value[1:-1]
-	return t
+   # r'\"([^\"]|\"|\\|\n|\b)*\"'
+    r'\"(\\.|[^\\"]| )*\"'
+    t.value = t.value[1:-1]
+    return t
 
 
 digit            = r'([0-9])'
