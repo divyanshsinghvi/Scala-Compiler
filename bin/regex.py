@@ -59,7 +59,7 @@ def t_INT(t):
 #r'(0|[1-9](\d+)|(((0x)|(0X))[0-9A-Fa-f]+))[lL]?'
     #print t.value
     if len(t.value) > 1 and (t.value[1]=='x' or t.value[1]=='X'):
-        print t 
+      #  print t 
         return t
     if t.value[-1]=='L' or t.value[-1]=='l':
         t.value=t.value[:-1]

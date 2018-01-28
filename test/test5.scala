@@ -10,18 +10,18 @@ var c :Int=21;
 var d :Int=0xFFFFFFFF; 
 var e :Int=777L;
 
-var a :Float=0.0; 
-var b :Float=1e30f; 
-var c :Float=3.14159f; 
-var d :Float=1.0e100;
-var e :Float=.1;
-var a :Char='a'; 
-var b :Char='\u0041';
+var f :Float=0.0; 
+var g :Float=1e30f; 
+var h :Float=3.14159f; 
+var i :Float=1.0e100;
+var j :Float=.1;
+var k :Char='a'; 
+var l :Char='\u0041';
+val m :Char='	';
 
-
-var d :String="Hello compilers\n world"
+var n :String="Hello compilers\n world";
 
 while( true ){
 println( "Value of a: " + a );};
- }
+ };
 }
