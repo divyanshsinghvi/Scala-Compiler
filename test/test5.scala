@@ -17,7 +17,7 @@ var a :Char='a';
 var b :Char='\u0041';
 
 
-var d :String="Hello compilers"
+var d :String="Hello compilers\n world"
 
 while( true ){
 println( "Value of a: " + a );};
