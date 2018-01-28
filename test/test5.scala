@@ -13,12 +13,11 @@ var b :Float=1e30f;
 var c :Float=3.14159f; 
 var d :Float=1.0e100;
 var e :Float=.1;
+var a :Char='a'; 
+var b :Char='\u0041';
 
-var a :Char=’a’; 
-var b :Char=’\u0041’;
-var c :Char=‘\t’;
 
-var d :String=“Hello compilers”
+var d :String="Hello compilers"
 
 while( true ){
 println( "Value of a: " + a );};
