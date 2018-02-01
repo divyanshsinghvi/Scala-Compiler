@@ -5,7 +5,7 @@ class T(var g: Char,var h: Int,var i: Char,var j: Short,var k: Double,Array[Char
   var b: Int=h;
   var c: Char=i;
   var d: Short=j;
-  var e: Double=k;
+  var e: Float=k;
   Array[Char] name[10]=l;
   var f: Char = m;
 };
@@ -24,7 +24,7 @@ void f (T x)
 
 object demo{
 int main (){
-    var k: T = new T('a',47114711,'c',1234,3.141592897932,'*',"abc")
+    var k: T = new T('a',47114711d,'c',1234,3.141592897932d,'*',"abc")
     return 0;
 };
 }
