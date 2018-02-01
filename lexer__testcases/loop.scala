@@ -1,5 +1,6 @@
-import package
+import package;
 
+object demo{
 def main(args: Array[String])={
 	
 	var i:Int;
@@ -15,4 +16,5 @@ def main(args: Array[String])={
 	};
 
 	printf("res = %d\n", res);
+};
 }

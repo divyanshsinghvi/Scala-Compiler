@@ -1,4 +1,5 @@
 import package;
+object demo{
 def main(args: Array[String])={
     var: Int i=6;
     for (;i<= 8 && i < 6.67 && i!= 7; i++){
@@ -12,4 +13,5 @@ def main(args: Array[String])={
         };
     };
     return 0;
+};
 }

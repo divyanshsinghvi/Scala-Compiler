@@ -1,3 +1,5 @@
+package tr;
+object demo{
 def main(var na:Int, Array[Char] argv)
 {
     var wflg: Int = 0;
@@ -22,4 +24,5 @@ def main(var na:Int, Array[Char] argv)
                  };
     };
     return 0;
+};
 }
