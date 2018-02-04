@@ -1,5 +1,6 @@
 import csv
 from enum import Enum
+from goto import goto, label
 
 class ir:
     
@@ -41,6 +42,10 @@ class ir:
     
     def Insert(self, rowList):
         for key, val in Dict.iteritems():
+            if rowList[0] in val:
+                op = key
+                goto .found
+        label .found
 
 with open('3ac.csv', 'r') as f:
     reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
