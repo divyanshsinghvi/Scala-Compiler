@@ -1,8 +1,8 @@
 import csv
 from enum import Enum
+from goto import goto, label
 
 class ir:
-   # Types = Enum(Binop,Unop,Assign,Goto,If,Param,Call,Fcall,Return,Freturn,Ldar,Star)
     
     out=None
     in1=None
