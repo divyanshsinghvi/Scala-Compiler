@@ -35,17 +35,48 @@ class ir:
     op['star']='star'
 
     def __init__(self, op, out, in1, in2):
-        self.op = op
-        self.out = out
-        self.in1 = in1
-        self.in2 = in2
+        self.oper = oper
+        self.out = out #x
+        self.in1 = in1 #y
+        self.in2 = in2 #z
     
     def Insert(self, rowList):
+        operator = rowList[0]
         for key, val in Dict.iteritems():
-            if rowList[0] in val:
-                op = key
-                goto .found
-        label .found
+            
+        
+        if operator == 'binop':
+            out = rowList[1]
+            in1 = rowList[2] 
+            in2 = rowList[3]
+        elif operator == 'unop':
+            out = rowList[1]
+            in1 = rowList[2]
+            in2 = 0
+        elif operator == 'assign':
+            out = rowList[1]
+            in1 = rowList[2]
+        elif operator == 'goto':
+            out = rowList[1]
+        elif operator == 'if':
+            out = rowList[1]
+            in1 = rowList[2]
+        elif operator == 'param':
+            in1 =rowList[1]
+        elif operator == 'fcall':
+            out = rowList[1]
+            in1 = rowList[2]
+            in2 = rowList[3]
+        elif operator == 'freturn':
+            in1 = rowList[1]
+        elif operator == 'ldar':
+            out = rowList[1]
+            in1 = rowList[2]
+            in2 = rowList[3]
+        elif operator == 'star':
+            out = rowList[1]
+            in1 = rowList[2]
+            in2 = rowList[3]
 
 
 with open('3ac.csv', 'r') as f:
