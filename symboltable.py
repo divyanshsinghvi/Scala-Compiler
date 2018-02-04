@@ -1,2 +1,13 @@
-class SybolTable:
-    uid = 0 
+class Instr3AC:
+    def __init__(self,):
+        
+
+
+
+class SymbolTable:
+    
+
+
+
+
+
