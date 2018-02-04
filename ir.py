@@ -2,7 +2,6 @@ import csv
 from enum import Enum
 
 class ir:
-   # Types = Enum(Binop,Unop,Assign,Goto,If,Param,Call,Fcall,Return,Freturn,Ldar,Star)
     
     out=None
     in1=None
