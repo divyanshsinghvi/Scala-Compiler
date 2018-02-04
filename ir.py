@@ -47,6 +47,7 @@ class ir:
                 goto .found
         label .found
 
+
 with open('3ac.csv', 'r') as f:
     reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
     for row in reader:
