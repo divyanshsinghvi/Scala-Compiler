@@ -1,0 +1,9 @@
++,a,b,c
+=,x,0
+label,bar
+return
+freturn,x
+ldar,x,y,i
+star,x,i,y
+fcall,a,b,c
+call,p,n
