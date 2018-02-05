@@ -32,15 +32,8 @@ class ir:
     out=None
     in1=None
     in2=None
-
     def __init__(self, rowList):
         self.oper = rowList[0]
-        #self.out = out  #x
-        #self.in1 = in1 #y
-        #self.in2 = in2 #z
-        #print(rowList[0])   
-    #def MakeEntry(rowList):
-    #    row = ir(rowList[0],null, null, null)
         for key, val in op.iteritems():
             if rowList[0] in val:
                 operator = key;
@@ -84,13 +77,14 @@ class ir:
         elif operator =='label':
             self.out = rowList[1]
 
-array = []
+class irTable:
+    def __init__(self, filename):
+        self.arr=[]
+        with open(filename, 'r') as f:
+            reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
+            for row in reader:
+                self.arr.append(ir(row))
 
-with open('3ac.csv', 'r') as f:
-    reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
-    for row in reader:
-        #print(ir(row))
-        array.append(ir(row))
 
-print [label.oper for label in array]
-        
+t = irTable('3ac.csv')
+print [label.oper for label in t.arr]
