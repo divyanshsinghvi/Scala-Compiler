@@ -85,6 +85,6 @@ class irTable:
             for row in reader:
                 self.arr.append(ir(row))
 
-
-t = irTable('3ac.csv')
-print [label.oper for label in t.arr]
+if __name__ == "__main__":
+    t = irTable('3ac.csv')
+    print [label.oper for label in t.arr]
