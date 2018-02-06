@@ -2,7 +2,7 @@ class SymbolTable:
     
     def __init__(self):
         self.var = {}           #dictionary of all variables
-
+    
     def set(self,name,attribute):
         if name not in self.var:
             self.var[name]=attribute
@@ -18,13 +18,16 @@ class SymbolTable:
         return self.var[name][value]
 
     def print_symboltable(self):
+        if not self.var:
+            return 
         for name in self.var:
-            print("Attribute for variable "+ name +":")
+            print(name)
+            #print("Attribute for variable " + name + ":")
             for key in self.var[name]:
                 print(key+"="+str(self.var[name][key]))
         print("----------------------------------------")
 
-
+    
 
 #Example to check symbol table 
 if __name__ == '__main__':
