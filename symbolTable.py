@@ -1,7 +1,9 @@
 class SymbolTable:
-    
+    idNo = 0
     def __init__(self):
         self.var = {}           #dictionary of all variables
+        self.id = idNo
+        SymbolTable.idNo += 1 
 
     def set(self,name,attribute):
         if name not in self.var:
