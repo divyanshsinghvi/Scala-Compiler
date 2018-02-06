@@ -32,49 +32,52 @@ class ir:
     out=None
     in1=None
     in2=None
+    nextUse={}
+    live={}
+    operator=None
+
     def __init__(self, rowList):
         self.oper = rowList[0]
         for key, val in op.iteritems():
             if rowList[0] in val:
-                operator = key;
+                self.operator = key;
                 break
         #print(operator)        
-        if operator == 'binop':
+        if self.operator == 'binop':
             self.out = rowList[1]
             self.in1 = rowList[2] 
             self.in2 = rowList[3]
-        elif operator == 'unop':
+        elif self.operator == 'unop':
             self.out = rowList[1]
             self.in1 = rowList[2]
-            self.in2 = 0
-        elif operator == 'assign':
+        elif self.operator == 'assign':
             self.out = rowList[1]
             self.in1 = rowList[2]
-        elif operator == 'goto':
+        elif self.operator == 'goto':
             self.out = rowList[1]
-        elif operator == 'if':
+        elif self.operator == 'if':
             self.out = rowList[1]
             self.in1 = rowList[2]
-        elif operator == 'param':
+        elif self.operator == 'param':
             self.in1 =rowList[1]
-        elif operator == 'fcall':
+        elif self.operator == 'fcall':
             self.out = rowList[1]
             self.in1 = rowList[2]
             self.in2 = rowList[3]
-        elif operator == 'freturn':
+        elif self.operator == 'freturn':
             self.in1 = rowList[1]
-        elif operator == 'ldar':
+        elif self.operator == 'ldar':
             self.out = rowList[1]
             self.in1 = rowList[2]
             self.in2 = rowList[3]
-        elif operator == 'star':
+        elif self.operator == 'star':
             self.out = rowList[1]
             self.in1 = rowList[2]
             self.in2 = rowList[3]
-        elif operator == 'call':
+        elif self.operator == 'call':
             self.in1 = rowList[1]
             self.in2 = rowList[2]
-        elif operator =='label':
+        elif self.operator =='label':
             self.out = rowList[1]
 
 class irTable:
@@ -84,7 +87,9 @@ class irTable:
             reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
             for row in reader:
                 self.arr.append(ir(row))
+               
 
 if __name__ == "__main__":
     t = irTable('3ac.csv')
     print [label.oper for label in t.arr]
+
