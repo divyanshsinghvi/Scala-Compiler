@@ -29,11 +29,11 @@ class NextUse:
                 #print(row.out+row.in1)
                 table.setVar(row.out,{'live':None,'nextUse':None})
                 table.setVar(row.in1,{'live':1,'nextUse':number})
-            for y in row.live:
+            #for y in row.live:
             #    if y and row.nextUse[y] is not None:
-                print (y +':' +str(row.live[y]))
-            print(number)
-            table.print_symboltable()
+            #    print (y +':' +str(row.live[y]))
+            #print(number)
+            #table.print_symboltable()
             number = number-1 
     
         for name in table.var:    #global assumed

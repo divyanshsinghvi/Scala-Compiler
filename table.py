@@ -5,12 +5,12 @@
 import ir
 from symbolTable import SymbolTable
 from nextUse import NextUse
-from basicBlock import basicBlock
+#from basicBlock import basicBlock
 from  globalvar import *
 
 class Table:
     table = SymbolTable()
-    b = basicBlock()
+    b = basicBlock
     def __init__(self ,ac):
         for row in ac:
             if row.operator == 'binop':           #Reading all values in symboltable
@@ -45,7 +45,7 @@ class Table:
                 self.table.setVar(row.in2,{'type':'int','live':1})
              
 
-        l = self.b.leadList
+        l = self.b
             
         length = len(ac)                    #last block case dealt
         l.append(length)
@@ -55,7 +55,7 @@ class Table:
         for i in reversed(range(1,len(l))): 
             #print("Block form range "+str(l[i-1])+"to"+str(l[i]))
             NextUse(ac[l[i-1]:l[i]], self.table,l[i-1])
-            self.table.print_symboltable()
+            #self.table.print_symboltable()
         #    no=1
         #for row in ac:
         #    print(str(no)+"------------------")
@@ -68,8 +68,9 @@ class Table:
  
         
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #filename = '3ac.csv'
     #global tacTable= ir.irTable(filename).arr
-    Table(tacTable)
-                         
+#    Table(tacTable)
+
+symbolTable = Table(tacTable).table
