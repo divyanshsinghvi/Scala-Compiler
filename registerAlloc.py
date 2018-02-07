@@ -20,9 +20,12 @@ def address(var):
 
 #def otherReg(noOf)
         
-def getReg(i):
+#def getReg(i):
     #return 1,2,3
-    return getRegOut(i,tacTable[i].out), getRegIn(i,tacTable[i].in1), getRegIn(i,tacTable[i].in2)
+#    outReg = getRegOut(i,tacTable[i].out)
+#    in1Reg = getRegIn(i,tacTable[i].in1)
+#    in2Reg = 
+#    return , getRegIn(i,tacTable[i].in1), getRegIn(i,tacTable[i].in2)
 def getRegIn(i,var): #getReg  8.6.3
     
     for regNo in range(noOfReg): # point 1 
@@ -70,7 +73,7 @@ def getRegOut(i,var): #getReg  8.6.3
             return regNo
 
     for regNo in range(noOfReg):
-        if registerDescr[regNo] == tacTable[i].in1 and nextUseVar(registerDescr[regNo]) is None and liveVar(registerDescr[regNo]) is None:
+        if registerDescr[regNo] == tacTable[i].in1 and tacTable[i].nextUse[registerDescr[regNo]] is None and tacTable[i].live[registerDescr[regNo]] is None:
             print(2,var,regNo)
             return regNo
 
@@ -105,41 +108,38 @@ def getRegOut(i,var): #getReg  8.6.3
     for regNo in range(noOfReg):#point 3.4
         if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
             print(8,var,regNo)
-            print('\tmov '+address(registerDescr[regNo])+' '+regName(regNo)) ### make a spilling function here and above
+            print('\tmov DWORD PTR '+address(registerDescr[regNo])+' '+regName(regNo)) ### make a spilling function here and above
             return regNo
 
 
 def generateCode(i):
             if tacTable[i].oper == '+' or tacTable[i].oper == '-':
-                    rx, ry, rz = getReg(i)
+                    #rx, ry, rz = getReg(i)
 
+                    ry = getRegIn(i,tacTable[i].in1)
                     if registerDescr[ry] != tacTable[i].in1:
                             print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
                             addressDescr[tacTable[i].in1]['Register'] = ry
+                            registerDescr[ry] = tacTable[i].in1
 
+                    rz = getRegIn(i,tacTable[i].in2)
                     if registerDescr[rz] != tacTable[i].in2:
                             print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
                             addressDescr[tacTable[i].in2]['Register'] = rz
+                            registerDescr[rz] = tacTable[i].in2
                     
+                    rx = getRegOut(i,tacTable[i].out)
+                    registerDescr[rx] = tacTable[i].out
                     print('\tmov ' + regName(rx) + ', ' + regName(ry))
 
                     if tacTable[i].oper == '+':
                             print('\tadd ' + regName(rx) + ', ' + regName(rz))
-                            registerDescr[rx] = tacTable[i].out
-                            registerDescr[ry] = tacTable[i].in1
-                            registerDescr[rz] = tacTable[i].in2
                             addressDescr[tacTable[i].out]['Register'] = rx
                     elif tacTable[i].oper == '-':
                             print('\tsub ' + regName(rx) + ', ' + regName(rz))
-                            registerDescr[rx] = tacTable[i].out
-                            registerDescr[ry] = tacTable[i].in1
-                            registerDescr[rz] = tacTable[i].in2
                             addressDescr[tacTable[i].out]['Register'] = rx
                     elif tacTable[i].oper == '*':
                             print('\timul ' + regName(rx) + ', ' + regName(rz))
-                            registerDescr[rx] = tacTable[i].out
-                            registerDescr[ry] = tacTable[i].in1
-                            registerDescr[rz] = tacTable[i].in2
                             addressDescr[tacTable[i].out]['Register'] = rx
                     # Division takes divides the contents of the 64 bit integer EDX:EAX 
                     #by the specified operand value. Syntax: idiv <reg32>
