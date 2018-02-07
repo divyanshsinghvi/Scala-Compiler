@@ -29,14 +29,14 @@ op['star']=['star']
 op['label']=['label']
 class ir:
     
-    out=None
-    in1=None
-    in2=None
-    nextUse={}
-    live={}
-    operator=None
 
     def __init__(self, rowList):
+        self.out=None
+        self.in1=None
+        self.in2=None
+        self.nextUse={}
+        self.live={}
+        self.operator=None
         self.oper = rowList[0]
         for key, val in op.iteritems():
             if rowList[0] in val:
