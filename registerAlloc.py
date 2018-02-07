@@ -75,6 +75,6 @@ class RegistorAlloc:
 
         for regNo in range(noOfReg):#point 3.4
             if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
-                print('\tmov '+address(registerDescr[regNo])+' '+regName(regNo))
+                print('\tmov '+address(registerDescr[regNo])+' '+regName(regNo)) ### make a spilling function here and above
                 return regNo
 
