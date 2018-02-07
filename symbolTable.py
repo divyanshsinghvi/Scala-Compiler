@@ -2,7 +2,7 @@
 #Dictionary of Dictionary to store nextUse and livelniess information about all variab
 
 class SymbolTable:
-    
+    idNo = 0
     def __init__(self):
         self.var = {}           #dictionary of all variables
     
