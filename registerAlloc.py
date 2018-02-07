@@ -62,7 +62,7 @@ def getRegIn(i,var): #getReg  8.6.3
     for regNo in range(noOfReg):#point 3.4
         if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
             print(7,var,regNo)
-            print('\tmov '+address(registerDescr[regNo])+', '+regName(regNo))
+            print('\tmov DWORD PTR '+address(registerDescr[regNo])+', '+regName(regNo))
             addressDescr[registerDescr[regNo]]['Memory'] = registerDescr[regNo]
             return regNo
 
@@ -115,7 +115,7 @@ def getRegOut(i,var): #getReg  8.6.3
 
 
 def generateCode(i):
-            if tacTable[i].oper == '+' or tacTable[i].oper == '-':
+            if tacTable[i].oper == '+' or tacTable[i].oper == '-' or tacTable[i].oper == '*':
                     #rx, ry, rz = getReg(i)
 
                     ry = getRegIn(i,tacTable[i].in1)
@@ -148,18 +148,19 @@ def generateCode(i):
                             addressDescr[tacTable[i].out]['Memory'] = None
                     # Division takes divides the contents of the 64 bit integer EDX:EAX 
                     #by the specified operand value. Syntax: idiv <reg32>
-'''            elif tacTable[i].oper == ('='):
-                    rx, ry = getReg(i)
-
+            elif tacTable[i].oper == ('='):
+                    #rx, ry = getReg(i)
+                    ry = getRegIn(i,tacTable[i].in1)
                     if registerDescr[ry] != tacTable[i].in1:
-                            print('\tmov ' + regName(ry) + ', DWORD PTR' + tacTable[i].in1)
-                            addressDescr[tacTable[i].in1]['register'] = ry
+                            print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+                            addressDescr[tacTable[i].in1]['Register'] = ry
+                            registerDescr[ry] = tacTable[i].in1
 
-                    print('\tmov' + regName(rx) + ', ' + regName(ry))
+                    rx = getRegOut(i,tacTable[i].out)
+                    print('\tmov ' + regName(rx) + ', ' + regName(ry))
                     registerDescr[rx] = tacTable[i].out
-                    registerDescr[ry] = tacTable[i].in1
-                    addressDescr[tacTable[i].out]['register'] = rx
-'''                    
+                    addressDescr[tacTable[i].out]['Register'] = rx
+                    
 def endBlock():
             print "t"
             for variable in addressDescr:
