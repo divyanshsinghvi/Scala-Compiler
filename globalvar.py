@@ -1,3 +1,4 @@
+#declare all global variabels here
 import ir 
 
 filename = '3ac.csv'

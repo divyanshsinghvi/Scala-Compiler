@@ -1,9 +1,10 @@
 import ir
+import globalvar 
 
 class basicBlock:
     leadList = set()
-    def __init__(self,filename):
-        instrTable = ir.irTable(filename).arr
+    def __init__(self):
+        instrTable = globalvar.tacTable # ir.irTable(filename).arr
         self.leadList.add(0)
         #print type(instrTable)
         for index ,ic  in enumerate(instrTable):
@@ -15,6 +16,6 @@ class basicBlock:
         self.leadList.sort()
 
 if __name__ == '__main__': 
-    b = basicBlock('3ac.csv')
+    b = basicBlock()
     print [ d for d in b.leadList]
 
