@@ -16,7 +16,7 @@ def regName(regNo):
     return registerName[regNo] 
 
 def address(var):
-    return addressDescr[var]['Memory']
+    return var
 
 #def otherReg(noOf)
         
@@ -62,7 +62,8 @@ def getRegIn(i,var): #getReg  8.6.3
     for regNo in range(noOfReg):#point 3.4
         if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
             print(7,var,regNo)
-            print('\tmov '+address(registerDescr[regNo])+' '+regName(regNo))
+            print('\tmov '+address(registerDescr[regNo])+', '+regName(regNo))
+            addressDescr[registerDescr[regNo]]['Memory'] = registerDescr[regNo]
             return regNo
 
 def getRegOut(i,var): #getReg  8.6.3
@@ -108,7 +109,8 @@ def getRegOut(i,var): #getReg  8.6.3
     for regNo in range(noOfReg):#point 3.4
         if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
             print(8,var,regNo)
-            print('\tmov DWORD PTR '+address(registerDescr[regNo])+' '+regName(regNo)) ### make a spilling function here and above
+            print('\tmov DWORD PTR '+address(registerDescr[regNo])+', '+regName(regNo)) ### make a spilling function here and above
+            addressDescr[registerDescr[regNo]]['Memory'] = registerDescr[regNo]
             return regNo
 
 
@@ -135,12 +137,15 @@ def generateCode(i):
                     if tacTable[i].oper == '+':
                             print('\tadd ' + regName(rx) + ', ' + regName(rz))
                             addressDescr[tacTable[i].out]['Register'] = rx
+                            addressDescr[tacTable[i].out]['Memory'] = None
                     elif tacTable[i].oper == '-':
                             print('\tsub ' + regName(rx) + ', ' + regName(rz))
                             addressDescr[tacTable[i].out]['Register'] = rx
+                            addressDescr[tacTable[i].out]['Memory'] = None
                     elif tacTable[i].oper == '*':
                             print('\timul ' + regName(rx) + ', ' + regName(rz))
                             addressDescr[tacTable[i].out]['Register'] = rx
+                            addressDescr[tacTable[i].out]['Memory'] = None
                     # Division takes divides the contents of the 64 bit integer EDX:EAX 
                     #by the specified operand value. Syntax: idiv <reg32>
 '''            elif tacTable[i].oper == ('='):
@@ -156,12 +161,18 @@ def generateCode(i):
                     addressDescr[tacTable[i].out]['register'] = rx
 '''                    
 def endBlock():
+            print "t"
             for variable in addressDescr:
-                    if addressDescr[variable][memory] is None:
-                            print('\tmov DWORD PTR' + addressDescr[variable] + ', ' + regName(addressDescr[variable][register]))
+                    if addressDescr[variable]['Memory'] is None:    
+                        print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
 
 
 if __name__ == '__main__':
     #d = RegisterAlloc()
-    for i in range(len(tacTable)):
-       generateCode(i)
+    l = basicBlock
+    length = len(tacTable)
+    l.append(length)
+    for i in range(1,len(l)-1):
+        for j in range(len(tacTable[l[i-1]:l[i]])):
+            generateCode(j+l[i-1])
+        endBlock()
