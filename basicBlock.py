@@ -1,10 +1,10 @@
 import ir
-import globalvar 
+import globalvar
 
 class basicBlock:
     leadList = set()
     def __init__(self):
-        instrTable = globalvar.tacTable # ir.irTable(filename).arr
+        instrTable = tacTable # ir.irTable(filename).arr
         self.leadList.add(0)
         #print type(instrTable)
         for index ,ic  in enumerate(instrTable):

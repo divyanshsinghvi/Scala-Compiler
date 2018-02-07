@@ -83,10 +83,21 @@ class ir:
 class irTable:
     def __init__(self, filename):
         self.arr=[]
+        self.leadList=set()
         with open(filename, 'r') as f:
             reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
             for row in reader:
                 self.arr.append(ir(row))
+        instrTable = self.arr # ir.irTable(filename).arr
+        self.leadList.add(0)
+        #print type(instrTable)
+        for index ,ic  in enumerate(instrTable):
+            if ic.oper == 'label':
+                self.leadList.add(index)
+            elif (ic.oper == 'call' or ic.oper == 'fcall' or ic.oper == 'if' or ic.oper == 'goto' or ic.oper == 'return' or ic.oper == 'freturn') and index != len(instrTable) - 1:
+                self.leadList.add(index+1)
+        self.leadList= list(self.leadList)
+        self.leadList.sort()
                
 
 if __name__ == "__main__":
