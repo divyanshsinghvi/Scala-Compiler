@@ -1,0 +1,18 @@
+1) Unop in2 is to be set to 0
+2) again Update symbol Table with next Use and liveness
+3) getVar and setVar is to be updated in symbol Table
+4) return value register allocation 
+
+
+
+
+
+
+
+Doubts::
+
+1) addresses ? 
+
+2) next use and liveness
+
+3) 
