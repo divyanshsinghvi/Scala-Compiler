@@ -17,5 +17,5 @@ addressDescr = {}
 
 #print dir(ST)
 for name in ST.var:
-    addressDescr[name]={'Register':None, 'Stack':None, 'Memory':None}
+    addressDescr[name]={'Register':None, 'Stack':None, 'Memory': name}
 #    print name
