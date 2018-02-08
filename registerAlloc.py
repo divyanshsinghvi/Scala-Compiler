@@ -262,7 +262,7 @@ def generateCode(i):
             print('\tsetg %al')
         elif tacTable[i].oper == '!=':
             print('\tsetne %al')
-        print('\tmovzbl %al, %' + regName[rx])
+        print('\tmovzbl %al, %' + regName(rx))
         registerDescr[rx] = tacTable[i].out
         addressDescr[tacTable[i].out]['Register'] = rx
         addressDescr[tacTable[i].out]['Mempry'] = None
@@ -273,7 +273,9 @@ def generateCode(i):
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
             addressDescr[tacTable[i].in1]['Register'] = ry
             registerDescr[ry] = tacTable[i].in1
-
+        
+        print('\ttestl %' + regName(ry) + ', %' + regName(ry))
+        print('\tjne .' + tacTable[i].out)
 
 def endBlock():
     #print "t"
