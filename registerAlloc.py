@@ -332,7 +332,7 @@ def generateCode(i):
         addressDescr[tacTable[i].out]['Register'] = rx
         addressDescr[tacTable[i].out]['Mempry'] = None
         
-    elif tacTable[i] == 'if':
+    elif tacTable[i].oper == 'if':
         ry = getRegIn(i, tacTable[i].in1)
         if registerDescr[ry] != tacTable[i].in1:
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
