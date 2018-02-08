@@ -250,13 +250,30 @@ def generateCode(i):
         
         rx = getRegOut(i,tacTable[i].out)
         #if b = a<b is an independent statement and not followed by if?
-        print('\tsetl %al')
+        if tacTable[i].oper == '<':
+            print('\tsetl %al')
+        elif tacTable[i].oper == '<=':
+            print('\tsetle %al')
+        elif tacTable[i].oper == '==':
+            print('\tsete %al')
+        elif tacTable[i].oper == '>=':
+            print('\tsetge %al')
+        elif tacTable[i].oper == '>':
+            print('\tsetg %al')
+        elif tacTable[i].oper == '!=':
+            print('\tsetne %al')
         print('\tmovzbl %al, %' + regName[rx])
         registerDescr[rx] = tacTable[i].out
         addressDescr[tacTable[i].out]['Register'] = rx
         addressDescr[tacTable[i].out]['Mempry'] = None
         
     elif tacTable[i] == 'if':
+        ry = getRegIn(i, tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
+
 
 def endBlock():
     #print "t"
