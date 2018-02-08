@@ -1,5 +1,6 @@
 import ir
 from globalvar import *
+from globalData import *
 
 #addressDescr = {}
 
@@ -11,7 +12,13 @@ registerDescr=[None]*6
 
     #def printCode(instr,op1,op2):
     #    if instr == ''
-    
+def is_number(var):
+    try:
+        int(var)
+        return True
+    except Exception:
+        return False 
+
 def regName(regNo):
     return registerName[regNo] 
 
@@ -35,6 +42,8 @@ def printInstr(op,x,xDest,y=None,yDest=None):
             print('\tmovl %'+y + ', ' + x)
         elif xDest == 'Register' and yDest == 'Memory':
             print('\tmovl '+y + ', %' + x)
+        elif xDest == 'Register' and yDest == 'Constant':
+            print('\tmovl $'+y + ', %' + x)
     elif op == 'cmp':
         if xDest == 'Register' and yDest == 'Register':
             print('\tcmpl %'+x + ', %' + y)
@@ -145,9 +154,63 @@ def getRegOut(i,var): #getReg  8.6.3
 
 
 def generateCode(i):
-    if tacTable[i].oper in ['+', '-', '*']:
-        #rx, ry, rz = getReg(i)
-
+                   # Division takes divides the contents of the 64 bit integer EDX:EAX 
+                    #by the specified operand value. Syntax: idiv <reg32>
+ 
+#    elif tacTable[i].oper == ('='):
+#                    rx, ry = getReg(i)
+#                    ry = getRegIn(i,tacTable[i].in1)
+#                    if registerDescr[ry] != tacTable[i].in1:
+#                            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+#                            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+#                            addressDescr[tacTable[i].in1]['Register'] = ry
+#                            registerDescr[ry] = tacTable[i].in1
+#
+#                    rx = getRegOut(i,tacTable[i].out)
+#                    printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+#                    #print('\tmov ' + regName(rx) + ', ' + regName(ry))
+#                    registerDescr[rx] = tacTable[i].out
+#                    addressDescr[tacTable[i].out]['Register'] = rx
+#    if tacTable[i].oper in ['+', '-', '*']:
+#        #rx, ry, rz = getReg(i)
+#
+#        ry = getRegIn(i,tacTable[i].in1)
+#        if registerDescr[ry] != tacTable[i].in1:
+#            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+#            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+#            addressDescr[tacTable[i].in1]['Register'] = ry
+#            registerDescr[ry] = tacTable[i].in1
+#
+#        rz = getRegIn(i,tacTable[i].in2)
+#        if registerDescr[rz] != tacTable[i].in2:
+#            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
+#            #print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
+#            addressDescr[tacTable[i].in2]['Register'] = rz
+#            registerDescr[rz] = tacTable[i].in2
+#        
+#        rx = getRegOut(i,tacTable[i].out)
+#        registerDescr[rx] = tacTable[i].out
+#        printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+#        #print('\tmov ' + regName(rx) + ', ' + regName(ry))
+#
+#        if tacTable[i].oper == '+':
+#            printInstr('addl',regName(rx),'Register',regName(rz),'Register')
+#            #print('\tadd ' + regName(rx) + ', ' + regName(rz))
+#            addressDescr[tacTable[i].out]['Register'] = rx
+#            addressDescr[tacTable[i].out]['Memory'] = None
+#        elif tacTable[i].oper == '-':
+#            printInstr('subl',regName(rx),'Register',regName(rz),'Register')
+#            #print('\tsub ' + regName(rx) + ', ' + regName(rz))
+#            addressDescr[tacTable[i].out]['Register'] = rx
+#            addressDescr[tacTable[i].out]['Memory'] = None
+#        elif tacTable[i].oper == '*':
+#            printInstr('imul',regName(rx),'Register',regName(rz),'Register')
+#            #print('\timul ' + regName(rx) + ', ' + regName(rz))
+#            addressDescr[tacTable[i].out]['Register'] = rx
+#            addressDescr[tacTable[i].out]['Memory'] = None
+#        # Division takes divides the contents of the 64 bit integer EDX:EAX 
+#        #by the specified operand value. Syntax: idiv <reg32>
+    if tacTable[i].oper == '+' or tacTable[i].oper == '-' or tacTable[i].oper == '*': 
         ry = getRegIn(i,tacTable[i].in1)
         if registerDescr[ry] != tacTable[i].in1:
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
@@ -174,31 +237,33 @@ def generateCode(i):
             addressDescr[tacTable[i].out]['Memory'] = None
         elif tacTable[i].oper == '-':
             printInstr('subl',regName(rx),'Register',regName(rz),'Register')
-            #print('\tsub ' + regName(rx) + ', ' + regName(rz))
+                #print('\tsub ' + regName(rx) + ', ' + regName(rz))
             addressDescr[tacTable[i].out]['Register'] = rx
             addressDescr[tacTable[i].out]['Memory'] = None
         elif tacTable[i].oper == '*':
-            printInstr('imul',regName(rx),'Register',regName(rz),'Register')
+            printInstr('imull',regName(rx),'Register',regName(rz),'Register')
             #print('\timul ' + regName(rx) + ', ' + regName(rz))
             addressDescr[tacTable[i].out]['Register'] = rx
             addressDescr[tacTable[i].out]['Memory'] = None
-        # Division takes divides the contents of the 64 bit integer EDX:EAX 
-        #by the specified operand value. Syntax: idiv <reg32>
     elif tacTable[i].oper == '=':
         #rx, ry = getReg(i)
-        ry = getRegIn(i,tacTable[i].in1)
-        if registerDescr[ry] != tacTable[i].in1:
-            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
-            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
-            addressDescr[tacTable[i].in1]['Register'] = ry
-            registerDescr[ry] = tacTable[i].in1
+	if not is_number(tacTable[i].in1):
+            ry = getRegIn(i,tacTable[i].in1)
+            if registerDescr[ry] != tacTable[i].in1:
+                printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+                #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+                addressDescr[tacTable[i].in1]['Register'] = ry
+                registerDescr[ry] = tacTable[i].in1
+            rx = getRegOut(i,tacTable[i].out)
+            printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+        else:
+            rx = getRegOut(i,tacTable[i].out)
+            const = tacTable[i].in1
+            printInstr('movl',regName(rx),'Register',const,'Constant')
 
-        rx = getRegOut(i,tacTable[i].out)
-        printInstr('movl',regName(rx),'Register',regName(ry),'Register')
         #print('\tmov ' + regName(rx) + ', ' + regName(ry))
         registerDescr[rx] = tacTable[i].out
         addressDescr[tacTable[i].out]['Register'] = rx
-    
     elif tacTable[i].oper == '/' or tacTable[i].oper == '%':
         if registerDescr[0] != None:
             print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
@@ -290,6 +355,10 @@ if __name__ == '__main__':
     l = basicBlock
     length = len(tacTable)
     l.append(length)
+    globalData()
+    print('\t.text')
+    print('\t.globl main')
+    print("main:")
     for i in range(1,len(l)-1):
         for j in range(len(tacTable[l[i-1]:l[i]])):
             generateCode(j+l[i-1])
