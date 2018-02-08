@@ -264,6 +264,7 @@ def generateCode(i):
         #print('\tmov ' + regName(rx) + ', ' + regName(ry))
         registerDescr[rx] = tacTable[i].out
         addressDescr[tacTable[i].out]['Register'] = rx
+        addressDescr[tacTable[i].out]['Memory'] = None
     elif tacTable[i].oper == '/' or tacTable[i].oper == '%':
         if registerDescr[0] != None:
             print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))

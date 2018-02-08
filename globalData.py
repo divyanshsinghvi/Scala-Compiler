@@ -12,7 +12,7 @@ def globalData():
         if ST.getVar(name,'value') is None :
             print("\t.globl "+str(name))
             print(str(name)+":")
-            print("\t."+ST.var[name]['type'])
+            print("\t.zero 4") #all are integers so space is 4byte
         #else:
         #    print("\t."+ST.var[name]['type'])
         
