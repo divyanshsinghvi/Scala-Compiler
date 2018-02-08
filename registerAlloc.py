@@ -256,7 +256,7 @@ def generateCode(i):
         addressDescr[tacTable[i].out]['Register'] = rx
         addressDescr[tacTable[i].out]['Mempry'] = None
         
-    elif tacTable[i] ==
+    elif tacTable[i] == 'if':
 
 def endBlock():
     #print "t"
