@@ -274,40 +274,46 @@ def generateCode(i):
             rx = getRegOut(i,tacTable[i].out)
             const = tacTable[i].in1
             printInstr('movl',regName(rx),'Register',const,'Constant')
-
-        #print('\tmov ' + regName(rx) + ', ' + regName(ry))
-        registerDescr[rx] = tacTable[i].out
-        addressDescr[tacTable[i].out]['Register'] = rx
-    elif tacTable[i].oper == '/' or tacTable[i].oper == '%':
+            #print('\tmov ' + regName(rx) + ', ' + regName(ry))
+            registerDescr[rx] = tacTable[i].out
+            addressDescr[tacTable[i].out]['Register'] = rx
+    elif tacTable[i].oper in ['/', '%']:
         if registerDescr[0] != None:
-            print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            printInstr('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
             addressDescr[registerDescr[0]]['Register'] = None
             addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
 
         if registerDescr[3] != None:
-            print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            printInstr('movl', address(registerDescr[3]), 'Memory', regName(3), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[3] + ', ' + regName(3))
             addressDescr[registerDescr[3]]['Register'] = None
             addressDescr[registerDescr[3]]['Memory'] = registerDescr[3]
 
-        print('\tmov ' + regName(3) + ', 0')
-        registerDescr[3] = tacTable[i].in1
-        print('\tmov ' + regName(0) + ', ' + tacTable[i].in1)
+
+        printInstr('movl', address(tacTable[i].in1), 'Memory', regName(0), 'Register')
         registerDescr[0] = tacTable[i].in1
         addressDescr[tacTable[i].in1]['Register'] = 0
-
+            
+        print('\tcltd')
+        registerDescr[3] = tacTable[i].in1
+        
         rz = getRegIn(i, tacTable[i].in2) 
         if registerDescr[rz] != tacTable[i].in2:
-            print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
+            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
             addressDescr[tacTable[i].in2]['Register'] = rz
             registerDescr[rz] = tacTable[i].in2
        
-        print('\tidiv ' + regName(rz))
+        print('\tidivl ' + regName(rz))
         rx = getRegOut(i, tacTable[i].out)
         if tacTable[i].oper == '/':
             # move eax to rx
+            printInstr('movl', regName(rx), 'Register', 'eax', 'Register') 
             registerDescr[rx] = registerDescr[0]
         elif tacTable[i].oper =='%':
             # move edx to rx
+            printInstr('movl', regName(rx), 'Register', 'edx', 'Register') 
+            registerDescr[rx] = registerDescr[0]
             registerDescr[rx] = registerDescr[3]
         addressDescr[tacTable[i].out]['Register'] = rx
         registerDescr[0], registerDescr[3] = None, None
