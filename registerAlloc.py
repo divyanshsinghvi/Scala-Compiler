@@ -35,6 +35,16 @@ def printInstr(op,x,xDest,y=None,yDest=None):
             print('\tmovl %'+y + ', ' + x)
         elif xDest == 'Register' and yDest == 'Memory':
             print('\tmovl '+y + ', %' + x)
+    elif op == 'cmp':
+        if xDest == 'Register' and yDest == 'Register':
+            print('\tcmpl %'+x + ', %' + y)
+        elif xDest == 'Register' and yDest == 'Memory':
+            print('\tcmpl %'+x + ', ' + y)
+        elif xDest == 'Memory' and yDest == 'Register':
+            print('\tcmpl '+x + ', %' + y)
+ 
+
+
 
 #def otherReg(noOf)
         
@@ -135,102 +145,125 @@ def getRegOut(i,var): #getReg  8.6.3
 
 
 def generateCode(i):
-            if tacTable[i].oper == '+' or tacTable[i].oper == '-' or tacTable[i].oper == '*':
-                    #rx, ry, rz = getReg(i)
+    if tacTable[i].oper in ['+', '-', '*']:
+        #rx, ry, rz = getReg(i)
 
-                    ry = getRegIn(i,tacTable[i].in1)
-                    if registerDescr[ry] != tacTable[i].in1:
-                            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
-                            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
-                            addressDescr[tacTable[i].in1]['Register'] = ry
-                            registerDescr[ry] = tacTable[i].in1
+        ry = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
 
-                    rz = getRegIn(i,tacTable[i].in2)
-                    if registerDescr[rz] != tacTable[i].in2:
-                            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
-                            #print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
-                            addressDescr[tacTable[i].in2]['Register'] = rz
-                            registerDescr[rz] = tacTable[i].in2
-                    
-                    rx = getRegOut(i,tacTable[i].out)
-                    registerDescr[rx] = tacTable[i].out
-                    printInstr('movl',regName(rx),'Register',regName(ry),'Register')
-                    #print('\tmov ' + regName(rx) + ', ' + regName(ry))
+        rz = getRegIn(i,tacTable[i].in2)
+        if registerDescr[rz] != tacTable[i].in2:
+            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
+            #print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
+            addressDescr[tacTable[i].in2]['Register'] = rz
+            registerDescr[rz] = tacTable[i].in2
+        
+        rx = getRegOut(i,tacTable[i].out)
+        registerDescr[rx] = tacTable[i].out
+        printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+        #print('\tmov ' + regName(rx) + ', ' + regName(ry))
 
-                    if tacTable[i].oper == '+':
-                            printInstr('addl',regName(rx),'Register',regName(rz),'Register')
-                            #print('\tadd ' + regName(rx) + ', ' + regName(rz))
-                            addressDescr[tacTable[i].out]['Register'] = rx
-                            addressDescr[tacTable[i].out]['Memory'] = None
-                    elif tacTable[i].oper == '-':
-                            printInstr('subl',regName(rx),'Register',regName(rz),'Register')
-                            #print('\tsub ' + regName(rx) + ', ' + regName(rz))
-                            addressDescr[tacTable[i].out]['Register'] = rx
-                            addressDescr[tacTable[i].out]['Memory'] = None
-                    elif tacTable[i].oper == '*':
-                            printInstr('imul',regName(rx),'Register',regName(rz),'Register')
-                            #print('\timul ' + regName(rx) + ', ' + regName(rz))
-                            addressDescr[tacTable[i].out]['Register'] = rx
-                            addressDescr[tacTable[i].out]['Memory'] = None
-                    # Division takes divides the contents of the 64 bit integer EDX:EAX 
-                    #by the specified operand value. Syntax: idiv <reg32>
-            elif tacTable[i].oper == '=':
-                    #rx, ry = getReg(i)
-                    ry = getRegIn(i,tacTable[i].in1)
-                    if registerDescr[ry] != tacTable[i].in1:
-                            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
-                            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
-                            addressDescr[tacTable[i].in1]['Register'] = ry
-                            registerDescr[ry] = tacTable[i].in1
+        if tacTable[i].oper == '+':
+            printInstr('addl',regName(rx),'Register',regName(rz),'Register')
+            #print('\tadd ' + regName(rx) + ', ' + regName(rz))
+            addressDescr[tacTable[i].out]['Register'] = rx
+            addressDescr[tacTable[i].out]['Memory'] = None
+        elif tacTable[i].oper == '-':
+            printInstr('subl',regName(rx),'Register',regName(rz),'Register')
+            #print('\tsub ' + regName(rx) + ', ' + regName(rz))
+            addressDescr[tacTable[i].out]['Register'] = rx
+            addressDescr[tacTable[i].out]['Memory'] = None
+        elif tacTable[i].oper == '*':
+            printInstr('imul',regName(rx),'Register',regName(rz),'Register')
+            #print('\timul ' + regName(rx) + ', ' + regName(rz))
+            addressDescr[tacTable[i].out]['Register'] = rx
+            addressDescr[tacTable[i].out]['Memory'] = None
+        # Division takes divides the contents of the 64 bit integer EDX:EAX 
+        #by the specified operand value. Syntax: idiv <reg32>
+    elif tacTable[i].oper == '=':
+        #rx, ry = getReg(i)
+        ry = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
 
-                    rx = getRegOut(i,tacTable[i].out)
-                    printInstr('movl',regName(rx),'Register',regName(ry),'Register')
-                    #print('\tmov ' + regName(rx) + ', ' + regName(ry))
-                    registerDescr[rx] = tacTable[i].out
-                    addressDescr[tacTable[i].out]['Register'] = rx
-            
-            elif tacTable[i].oper == '/' or tacTable[i].oper == '%':
-                    if registerDescr[0] != None:
-                            print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-                            addressDescr[registerDescr[0]]['Register'] = None
-                            addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
+        rx = getRegOut(i,tacTable[i].out)
+        printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+        #print('\tmov ' + regName(rx) + ', ' + regName(ry))
+        registerDescr[rx] = tacTable[i].out
+        addressDescr[tacTable[i].out]['Register'] = rx
+    
+    elif tacTable[i].oper == '/' or tacTable[i].oper == '%':
+        if registerDescr[0] != None:
+            print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[0]]['Register'] = None
+            addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
 
-                    if registerDescr[3] != None:
-                            print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-                            addressDescr[registerDescr[3]]['Register'] = None
-                            addressDescr[registerDescr[3]]['Memory'] = registerDescr[3]
+        if registerDescr[3] != None:
+            print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[3]]['Register'] = None
+            addressDescr[registerDescr[3]]['Memory'] = registerDescr[3]
 
-                    print('\tmov ' + regName(3) + ', 0')
-                    registerDescr[3] = tacTable[i].in1
-                    print('\tmov ' + regName(0) + ', ' + tacTable[i].in1)
-                    registerDescr[0] = tacTable[i].in1
-                    addressDescr[tacTable[i].in1]['Register'] = 0
+        print('\tmov ' + regName(3) + ', 0')
+        registerDescr[3] = tacTable[i].in1
+        print('\tmov ' + regName(0) + ', ' + tacTable[i].in1)
+        registerDescr[0] = tacTable[i].in1
+        addressDescr[tacTable[i].in1]['Register'] = 0
 
-                    rz = getRegIn(i, tacTable[i].in2) 
-                    if registerDescr[rz] != tacTable[i].in2:
-                            print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
-                            addressDescr[tacTable[i].in2]['Register'] = rz
-                            registerDescr[rz] = tacTable[i].in2
-                   
-                    print('\tidiv ' + regName(rz))
-                    rx = getRegOut(i, tacTable[i].out)
-                    if tacTable[i].oper == '/':
-                            # move eax to rx
-                             registerDescr[rx] = registerDescr[0]
-                    elif tacTable[i].oper =='%':
-                            # move edx to rx
-                            registerDescr[rx] = registerDescr[3]
-                    addressDescr[tacTable[i].out]['Register'] = rx
-                    registerDescr[0], registerDescr[3] = None, None
-            
-            elif tacTable[i].oper == 
+        rz = getRegIn(i, tacTable[i].in2) 
+        if registerDescr[rz] != tacTable[i].in2:
+            print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
+            addressDescr[tacTable[i].in2]['Register'] = rz
+            registerDescr[rz] = tacTable[i].in2
+       
+        print('\tidiv ' + regName(rz))
+        rx = getRegOut(i, tacTable[i].out)
+        if tacTable[i].oper == '/':
+            # move eax to rx
+            registerDescr[rx] = registerDescr[0]
+        elif tacTable[i].oper =='%':
+            # move edx to rx
+            registerDescr[rx] = registerDescr[3]
+        addressDescr[tacTable[i].out]['Register'] = rx
+        registerDescr[0], registerDescr[3] = None, None
+    
+    elif tacTable[i].oper in ['<', '<=', '==', '>=', '>', '!=']:
+        ry = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
+
+        rz = getRegIn(i,tacTable[i].in2)
+        if registerDescr[rz] != tacTable[i].in2:
+            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
+            addressDescr[tacTable[i].in2]['Register'] = rz
+            registerDescr[rz] = tacTable[i].in2
+        
+        printInstr('cmpl',regName(ry),'Register',regName(rz),'Register')
+        
+        rx = getRegOut(i,tacTable[i].out)
+        #if b = a<b is an independent statement and not followed by if?
+        print('\tsetl %al')
+        print('\tmovzbl %al, %' + regName[rx])
+        registerDescr[rx] = tacTable[i].out
+        addressDescr[tacTable[i].out]['Register'] = rx
+        addressDescr[tacTable[i].out]['Mempry'] = None
+        
+    elif tacTable[i] ==
 
 def endBlock():
-            #print "t"
-            for variable in addressDescr:
-                    if addressDescr[variable]['Memory'] is None:    
-                        printInstr('movl',address(variable),'Memory',regName(addressDescr[variable]['Register']),'Register')
-                        #print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
+    #print "t"
+    for variable in addressDescr:
+        if addressDescr[variable]['Memory'] is None:    
+            printInstr('movl',address(variable),'Memory',regName(addressDescr[variable]['Register']),'Register')
+            #print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
 
 
 if __name__ == '__main__':
