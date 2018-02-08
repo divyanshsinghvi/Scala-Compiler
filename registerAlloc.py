@@ -65,7 +65,9 @@ def printInstr(op,x,xDest,y=None,yDest=None):
         elif tacTable[i].oper == '!=':
             print('\tsetne %al')
         print('\tmovzbl %al, %' + x)
-        
+    elif op == 'idivl':
+        if xDest == 'Register':
+            print('\tidivl %' + x)
 
 
 
@@ -306,7 +308,8 @@ def generateCode(i):
             addressDescr[tacTable[i].in2]['Register'] = rz
             registerDescr[rz] = tacTable[i].in2
        
-        print('\tidivl ' + regName(rz))
+        #print('\tidivl %' + regName(rz))
+        printInstr('idivl',regName(rz),'Register')
         rx = getRegOut(i, tacTable[i].out)
         if tacTable[i].oper == '/':
             # move eax to rx
