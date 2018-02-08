@@ -2,7 +2,7 @@
 2) again Update symbol Table with next Use and liveness
 3) getVar and setVar is to be updated in symbol Table
 4) return value register allocation 
-
+5) Division has to be checked again there is a probability of it being wrong. https://stackoverflow.com/questions/39658992/division-in-x86-assembly-gas. 
 
 
 
