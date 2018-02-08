@@ -7,6 +7,14 @@ from symbolTable import SymbolTable
 from nextUse import NextUse
 #from basicBlock import basicBlock
 from  globalvar import *
+import numbers
+
+def is_number(var):
+    try:
+        int(var)
+        return True
+    except Exception:
+        return False
 
 class Table:
     table = SymbolTable()
@@ -21,8 +29,11 @@ class Table:
                 self.table.setVar(row.out,{'type':'int','live':1})
                 self.table.setVar(row.in1,{'type':'int','live':1})
             elif row.operator == 'assign':
+                if is_number(row.in1):
+                    self.table.setVar(row.out,{'value':row.in1})	
+		else:
+                    self.table.setVar(row.in1,{'type':'int','live':1})
                 self.table.setVar(row.out,{'type':'int','live':1})
-                self.table.setVar(row.in1,{'type':'int','live':1})
             elif row.operator == 'goto':
                 self.table.setVar(row.out,{'type':'int','live':1})
             elif row.operator == 'if':

@@ -1,5 +1,6 @@
 import ir
 from globalvar import *
+from globalData import *
 
 #addressDescr = {}
 
@@ -174,7 +175,7 @@ def generateCode(i):
                             addressDescr[tacTable[i].out]['Memory'] = None
                     # Division takes divides the contents of the 64 bit integer EDX:EAX 
                     #by the specified operand value. Syntax: idiv <reg32>
-            elif tacTable[i].oper == ('='):
+'''            elif tacTable[i].oper == ('='):
                     #rx, ry = getReg(i)
                     ry = getRegIn(i,tacTable[i].in1)
                     if registerDescr[ry] != tacTable[i].in1:
@@ -188,7 +189,8 @@ def generateCode(i):
                     #print('\tmov ' + regName(rx) + ', ' + regName(ry))
                     registerDescr[rx] = tacTable[i].out
                     addressDescr[tacTable[i].out]['Register'] = rx
-                    
+'''
+
 def endBlock():
             #print "t"
             for variable in addressDescr:
@@ -202,6 +204,10 @@ if __name__ == '__main__':
     l = basicBlock
     length = len(tacTable)
     l.append(length)
+    globalData()
+    print('\t.text')
+    print('\t.globl main')
+    print("main:")
     for i in range(1,len(l)-1):
         for j in range(len(tacTable[l[i-1]:l[i]])):
             generateCode(j+l[i-1])

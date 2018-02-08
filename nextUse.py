@@ -2,6 +2,13 @@
 import ir
 from symbolTable import SymbolTable
 
+def is_number(var):
+    try:
+        int(var)
+        return True
+    except Exception:
+        return False
+
 
 class NextUse:
 
@@ -20,7 +27,7 @@ class NextUse:
                 table.setVar(row.out,{'live':None,'nextUse':None})
                 table.setVar(row.in2,{'live':1,'nextUse':number})
                 table.setVar(row.in1,{'live':1,'nextUse':number})
-            elif row.operator == 'assign' or row.operator == 'unop':
+            elif row.operator == 'unop':
                 row.live[row.out]=table.getVar(row.out,'live')
                 row.live[row.in1]=table.getVar(row.in1,'live')
             
@@ -29,6 +36,17 @@ class NextUse:
                 #print(row.out+row.in1)
                 table.setVar(row.out,{'live':None,'nextUse':None})
                 table.setVar(row.in1,{'live':1,'nextUse':number})
+            elif row.operator == 'assign':
+		
+                row.live[row.out]=table.getVar(row.out,'live')
+            	row.nextUse[row.out] = table.getVar(row.out,'nextUse') 
+                
+		if not is_number(row.in1):
+		    row.nextUse[row.in1] = table.getVar(row.in1,'nextUse') 
+                    row.live[row.in1]=table.getVar(row.in1,'live')
+                    table.setVar(row.in1,{'live':1,'nextUse':number})
+                #print(row.out+row.in1)
+                table.setVar(row.out,{'live':None,'nextUse':None})
             #for y in row.live:
             #    if y and row.nextUse[y] is not None:
             #    print (y +':' +str(row.live[y]))
