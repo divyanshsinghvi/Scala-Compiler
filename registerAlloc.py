@@ -44,14 +44,28 @@ def printInstr(op,x,xDest,y=None,yDest=None):
             print('\tmovl '+y + ', %' + x)
         elif xDest == 'Register' and yDest == 'Constant':
             print('\tmovl $'+y + ', %' + x)
-    elif op == 'cmp':
+    elif op == 'cmpl':
         if xDest == 'Register' and yDest == 'Register':
             print('\tcmpl %'+x + ', %' + y)
         elif xDest == 'Register' and yDest == 'Memory':
             print('\tcmpl %'+x + ', ' + y)
         elif xDest == 'Memory' and yDest == 'Register':
             print('\tcmpl '+x + ', %' + y)
- 
+    elif op == 'cmp':
+        if tacTable[i].oper == '<':
+            print('\tsetl %al')
+        elif tacTable[i].oper == '<=':
+            print('\tsetle %al')
+        elif tacTable[i].oper == '==':
+            print('\tsete %al')
+        elif tacTable[i].oper == '>=':
+            print('\tsetge %al')
+        elif tacTable[i].oper == '>':
+            print('\tsetg %al')
+        elif tacTable[i].oper == '!=':
+            print('\tsetne %al')
+        print('\tmovzbl %al, %' + x)
+        
 
 
 
@@ -316,19 +330,7 @@ def generateCode(i):
         
         rx = getRegOut(i,tacTable[i].out)
         #if b = a<b is an independent statement and not followed by if?
-        if tacTable[i].oper == '<':
-            print('\tsetl %al')
-        elif tacTable[i].oper == '<=':
-            print('\tsetle %al')
-        elif tacTable[i].oper == '==':
-            print('\tsete %al')
-        elif tacTable[i].oper == '>=':
-            print('\tsetge %al')
-        elif tacTable[i].oper == '>':
-            print('\tsetg %al')
-        elif tacTable[i].oper == '!=':
-            print('\tsetne %al')
-        print('\tmovzbl %al, %' + regName(rx))
+        printInstr('cmp', regName(rx), 'Register')
         registerDescr[rx] = tacTable[i].out
         addressDescr[tacTable[i].out]['Register'] = rx
         addressDescr[tacTable[i].out]['Mempry'] = None
