@@ -295,7 +295,7 @@ def generateCode(i):
             addressDescr[registerDescr[3]]['Memory'] = registerDescr[3]
 
 
-        printInstr('movl', address(tacTable[i].in1), 'Memory', regName(0), 'Register')
+        printInstr('movl',regName(0), 'Register', address(tacTable[i].in1), 'Memory')
         registerDescr[0] = tacTable[i].in1
         addressDescr[tacTable[i].in1]['Register'] = 0
             
