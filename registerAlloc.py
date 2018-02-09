@@ -311,11 +311,15 @@ def generateCode(i):
         print('.' + tacTable[i].out + ':')
 
 def endBlock():
-    #print "t"
+#    print "t"
     for variable in addressDescr:
-        if addressDescr[variable]['Memory'] is None:    
+        if addressDescr[variable]['Memory'] is None and addressDescr[variable]['Register'] is not None:    
             printInstr('movl',address(variable),'Memory',regName(addressDescr[variable]['Register']),'Register')
             #print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
+    for r in registerDescr:
+        r = None
+    for r in addressDescr:
+        addressDescr[r]['Register'] = None
 
 
 if __name__ == '__main__':
