@@ -311,6 +311,24 @@ def generateCode(i):
     elif tacTable[i].oper == 'label':
         endBlock()
         print('.' + tacTable[i].out + ':')
+    
+    elif tacTable[i].oper == 'ldar':
+        rx = getRegOut(i,tacTable[i].out)
+        if registerDescr[rx] != tacTable[i].out:
+            printInstr('movl',regName(rx),'Register',address(tacTable[i].out),'Memory')
+            addressDescr[tacTable[i].out]['Register'] = rx
+            registerDescr[rx] = tacTable[i].out
+        
+        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1) + " + " + str(int(tacTable[i].in2)*4),'Memory')
+    elif tacTable[i].oper == 'star':
+        ry = getRegIn(i,tacTable[i].in2)
+        if registerDescr[ry] !=tacTable[i].in2:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in2),'Memory')
+            addressDescr[tacTable[i].in2]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in2
+
+        printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
+
 
 def endBlock():
 #    print "t"

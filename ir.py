@@ -86,6 +86,9 @@ class ir:
             self.out = rowList[1]
             self.in1 = rowList[2]
             self.in2 = rowList[3]
+        elif self.operator == 'array':
+            self.out = rowList[1]
+            self.in1 = rowList[2]
 
 class irTable:
     def __init__(self, filename):
