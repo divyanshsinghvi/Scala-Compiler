@@ -1,6 +1,5 @@
-+,a,b,c
--,d,e,f
-+,b,c,f
--,x,a,d
-<=,d,a,b
-if,Label,d
+=,b,3
+=,c,8
+<=,a,c,b
+array,a,4
+star,a,3,c 
