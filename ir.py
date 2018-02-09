@@ -79,6 +79,9 @@ class ir:
             self.in2 = rowList[2]
         elif self.operator =='label':
             self.out = rowList[1]
+        elif self.operator == 'array':
+            self.out = rowList[1]
+            self.in1 = rowList[2]
 
 class irTable:
     def __init__(self, filename):

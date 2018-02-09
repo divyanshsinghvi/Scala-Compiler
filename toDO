@@ -6,4 +6,4 @@
 6) x = x + y nextUse info to be handled carefully . 
 7) addition of constants x = y+1
 8) idivl first two cases can be optimised by checking is the value in register is already in it's memory
- 
+9) && || ^ arr[1] load store print scan  
