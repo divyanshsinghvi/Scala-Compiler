@@ -3,3 +3,8 @@
 <=,a,c,b
 array,a,4
 star,a,3,c 
+=,b,2
+label,foo
+=,b,3
+=,b,7
+goto,foo
