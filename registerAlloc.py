@@ -309,8 +309,8 @@ def generateCode(i):
         print('\tjmp .' + tacTable[i].out)
 
     elif tacTable[i].oper == 'label':
-        print('.' + tacTable[i].out + ':')
         endBlock()
+        print('.' + tacTable[i].out + ':')
 
 def endBlock():
 #    print "t"

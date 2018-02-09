@@ -4,6 +4,7 @@ PLUS ='+'
 MINUS='-'
 TIMES='*'
 DIV='/'
+MOD='%'
 AND='&&'
 OR ='||'
 LT='<'
@@ -14,7 +15,7 @@ GT='>'
 NE='!='
 NOT='!'
 op = {}
-op['binop']=[PLUS, MINUS, TIMES, DIV, AND, OR, LT, LE, EQ, GE, GT, NE]
+op['binop']=[PLUS, MINUS, TIMES, DIV, AND, OR, LT, LE, EQ, GE, GT, NE, MOD]
 op['unop']=[NOT]
 op['assign']= ['=']
 op['goto']=['goto']
@@ -27,6 +28,8 @@ op['freturn']=['freturn']
 op['ldar']=['ldar']
 op['star']=['star']
 op['label']=['label']
+op['array']=['array']
+op['bitwise']=['&', '|', '^']
 class ir:
     
 
@@ -79,6 +82,10 @@ class ir:
             self.in2 = rowList[2]
         elif self.operator =='label':
             self.out = rowList[1]
+        elif se;f.operator == 'bitwise':
+            self.out = rowList[1]
+            self.in1 = rowList[2]
+            self.in2 = rowList[3]
 
 class irTable:
     def __init__(self, filename):
