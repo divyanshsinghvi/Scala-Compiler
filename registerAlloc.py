@@ -25,7 +25,7 @@ def regName(regNo):
 def address(var):
     return var
 
-def printInstr(op,x,xDest,y=None,yDest=Nonei,i=-1):
+def printInstr(op,x,xDest,y=None,yDest=None,i=-1):
     if op == 'addl':
         if xDest == 'Register' and yDest == 'Register':
             print('\taddl %'+ y + ', %' + x)
@@ -169,7 +169,7 @@ def getRegOut(i,var): #getReg  8.6.3
 
 
 def generateCode(i):
-   if tacTable[i].oper == '+' or tacTable[i].oper == '-' or tacTable[i].oper == '*': 
+    if tacTable[i].oper == '+' or tacTable[i].oper == '-' or tacTable[i].oper == '*': 
         ry = getRegIn(i,tacTable[i].in1)
         if registerDescr[ry] != tacTable[i].in1:
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
@@ -283,7 +283,7 @@ def generateCode(i):
         
         rx = getRegOut(i,tacTable[i].out)
         #if b = a<b is an independent statement and not followed by if?
-        printInst('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
+        printInstr('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
         addressDescr[registerDescr[0]]['Register'] = None
         addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
         registerDescr[0] = None
