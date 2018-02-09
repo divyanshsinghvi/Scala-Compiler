@@ -300,15 +300,17 @@ def generateCode(i):
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
             addressDescr[tacTable[i].in1]['Register'] = ry
             registerDescr[ry] = tacTable[i].in1
-        
+        endBlock()
         print('\ttestl %' + regName(ry) + ', %' + regName(ry))
         print('\tjne .' + tacTable[i].out)
 
     elif tacTable[i].oper == 'goto':
+        endBlock()
         print('\tjmp .' + tacTable[i].out)
 
     elif tacTable[i].oper == 'label':
         print('.' + tacTable[i].out + ':')
+        endBlock()
 
 def endBlock():
 #    print "t"
@@ -334,4 +336,4 @@ if __name__ == '__main__':
     for i in range(1,len(l)-1):
         for j in range(len(tacTable[l[i-1]:l[i]])):
             generateCode(j+l[i-1])
-        endBlock()
+#        endBlock()
