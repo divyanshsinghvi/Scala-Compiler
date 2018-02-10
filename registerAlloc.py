@@ -44,6 +44,8 @@ def printInstr(op,x,xDest,y=None,yDest=None,i=-1):
             print('\tmovl '+y + ', %' + x)
         elif xDest == 'Register' and yDest == 'Constant':
             print('\tmovl $'+y + ', %' + x)
+        elif xDest == 'Constant' and yDest == 'Register':
+            print('\tmovl %'+y + ', $' + x)
     elif op == 'cmpl':
         if xDest == 'Register' and yDest == 'Register':
             print('\tcmpl %'+x + ', %' + y)
@@ -67,7 +69,9 @@ def printInstr(op,x,xDest,y=None,yDest=None,i=-1):
     elif op == 'idivl':
         if xDest == 'Register':
             print('\tidivl %' + x)
-
+    elif op == 'xorl':
+        if xDest == 'Register' and yDest=='Register':
+            print('\txorl %'+y+', %'+x)
 
 
 #def otherReg(noOf)
@@ -341,7 +345,26 @@ def generateCode(i):
 
         printInstr('movl',address(tacTable[i].out)+ "(,%"+regName(ri)+",4)",'Memory',regName(ry),'Register')
         #printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
-
+    elif tacTable[i].oper == 'printInt':
+        if registerDescr[5] != None:
+            printInstr('movl', address(registerDescr[5]), 'Memory', regName(5), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[5]]['Register'] = None
+            addressDescr[registerDescr[5]]['Memory'] = registerDescr[5]
+        if registerDescr[4] != None:
+            printInstr('movl', address(registerDescr[4]), 'Memory', regName(4), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[4]]['Register'] = None
+            addressDescr[registerDescr[4]]['Memory'] = registerDescr[4]
+        if registerDescr[0] != None:
+            printInstr('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[0]]['Register'] = None
+            addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
+        printInstr('xorl',regName(0),'Register',regName(0),'Register')
+        printInstr('movl',regName(4),'Register','5','Constant')
+        printInstr('movl',regName(5),'Register','$.format','Memory')
+        print('\tcall printf')
 
 def endBlock():
 #    print "t"
@@ -360,6 +383,11 @@ if __name__ == '__main__':
     l = basicBlock
     length = len(tacTable)
     l.append(length)
+    for op in tacTable:
+        if op.oper == 'printInt':
+            print('\t.extern printf')
+            break;
+
     globalData()
     print('\t.text')
     print('\t.globl main')

@@ -89,6 +89,8 @@ class ir:
         elif self.operator == 'array':
             self.out = rowList[1]
             self.in1 = rowList[2]
+        elif self.operator == 'printInt':
+            self.out == rowList[0]
 
 class irTable:
     def __init__(self, filename):

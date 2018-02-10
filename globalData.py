@@ -18,6 +18,11 @@ def globalData():
             print(str(name)+":")
             print("\t.zero 4") #all are integers so space is 4byte
         #else:
+    print("\t.section\t.rodata")
+    print(".format :")
+    print('\t.string "%d\\n"')
+    print(".format1 :")
+    print('\t.string "%d "')
         #    print("\t."+ST.var[name]['type'])
         
 if __name__ == '__main__':

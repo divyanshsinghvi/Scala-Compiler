@@ -10,7 +10,7 @@ all:
 
 ass:
 		python registerAlloc.py > seemsok.s
-		gcc -m32 seemsok.s -o seemsok.out
+		gcc  seemsok.s -o seemsok.out
 
 clean:
 		rm -rf bin/*
