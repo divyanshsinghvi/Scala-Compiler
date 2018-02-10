@@ -318,16 +318,29 @@ def generateCode(i):
             printInstr('movl',regName(rx),'Register',address(tacTable[i].out),'Memory')
             addressDescr[tacTable[i].out]['Register'] = rx
             registerDescr[rx] = tacTable[i].out
-        
-        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1) + " + " + str(int(tacTable[i].in2)*4),'Memory')
+        ri = getRegOut(i,tacTable[i].in2)
+        if registerDescr[ri] != tacTable[i].in2:
+            printInstr('movl',regName(ri),'Register',address(tacTable[i].in2),'Memory')
+            addressDescr[tacTable[i].in2]['Register'] = ri
+            registerDescr[ri] = tacTable[i].in2
+ 
+ 
+        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1)+"(,%"+regName(ri)+",4)",'Memory')
+#        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1) + " + " + str(int(tacTable[i].in2)*4),'Memory')
     elif tacTable[i].oper == 'star':
         ry = getRegIn(i,tacTable[i].in2)
         if registerDescr[ry] !=tacTable[i].in2:
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in2),'Memory')
             addressDescr[tacTable[i].in2]['Register'] = ry
             registerDescr[ry] = tacTable[i].in2
+        ri = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ri] !=tacTable[i].in1:
+            printInstr('movl',regName(ri),'Register',address(tacTable[i].in1),'Memory')
+            addressDescr[tacTable[i].in1]['Register'] = ri
+            registerDescr[ri] = tacTable[i].in1
 
-        printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
+        printInstr('movl',address(tacTable[i].out)+ "(,%"+regName(ri)+",4)",'Memory',regName(ry),'Register')
+        #printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
 
 
 def endBlock():

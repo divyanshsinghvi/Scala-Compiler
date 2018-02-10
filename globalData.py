@@ -12,8 +12,8 @@ def globalData():
         if ST.getVar(name,'value') is None and ST.getVar(name,'type') == 'array':
             print("\t.globl "+str(name))
             print(str(name)+":")
-            print("\t.zero " + str(int(ST.getVar(name,'size')*4))) #all are integers so space is 4byte
-        if ST.getVar(name,'value') is None :
+            print("\t.zero " + str(int(ST.getVar(name,'size'))*4)) #all are integers so space is 4byte
+        elif ST.getVar(name,'value') is None :
             print("\t.globl "+str(name))
             print(str(name)+":")
             print("\t.zero 4") #all are integers so space is 4byte

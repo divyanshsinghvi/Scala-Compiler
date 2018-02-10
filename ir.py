@@ -82,7 +82,7 @@ class ir:
             self.in2 = rowList[2]
         elif self.operator =='label':
             self.out = rowList[1]
-        elif se;f.operator == 'bitwise':
+        elif self.operator == 'bitwise':
             self.out = rowList[1]
             self.in1 = rowList[2]
             self.in2 = rowList[3]
