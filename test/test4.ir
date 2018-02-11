@@ -1,8 +1,8 @@
-label,main
-#scanInt,t1
-#scanInt,t2
-=,t2,3
-=,t1,7
+flabel,main
+scanInt,t1
+scanInt,t2
+#=,t2,3
+#=,t1,7
 +,t3,t2,t1
 printInt,t3
 -,t3,t2,t1

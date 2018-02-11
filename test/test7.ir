@@ -1,9 +1,9 @@
 #fcall and return
-label,foo
+flabel,foo
 printInt,4
 =,c,1
 freturn,c
-label,main
+flabel,main
 =,a,4
 =,b,10
 fcall,b,foo,0

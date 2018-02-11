@@ -1,10 +1,10 @@
-label,foo
-+,c,a,b
-freturn,c
-label,main
+flabel,foo
++,d,a,b
+return
+flabel,main
 scanInt,a
-scanint,b
-fcall,d,foo,0
+scanInt,b
+call,foo,0
 printInt,d
 #int foo()
 #{return a + b;}

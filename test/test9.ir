@@ -6,11 +6,11 @@ prinInt,t1
 >=,t2,t1,t
 if,foo2,t2
 *,t3,t1,t1
-#printInt,t3
+printInt,t3
 =,t6,t1
 +,t1,t6,o
 goto,foo
-label,main
+flabel,main
 =,t1,0
 =,o,1
 =,t,10

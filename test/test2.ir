@@ -1,15 +1,18 @@
 label,foo
 *,t4,b,c
 =,c,t4
-label,main
+goto,e
+flabel,main
 scanInt,b
-scanint,c
-scanint,a
+scanInt,c
+scanInt,a
 +,t1,b,c
 <,t2,a,t1
 if,foo,t2
 -,t3,a,c
-=,a,t3
+=,c,t3
+label,e
+printInt,c
 #if (a < b + c)
-#     a = a - c;
+#     c = a - c;
 #c = b * c;

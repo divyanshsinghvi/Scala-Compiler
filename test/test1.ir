@@ -1,4 +1,4 @@
-label,main
+flabel,main
 =,b,2
 =,c,3
 =,d,4
@@ -6,4 +6,5 @@ label,main
 *,t2,b,d
 +,t3,t1,t2
 =,a,t3
+printInt,a
 #a = b * c + b * d;

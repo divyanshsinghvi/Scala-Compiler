@@ -2,5 +2,7 @@ label,L1
 printInt,5
 scanInt,a
 if,L1,a
-label,main
+goto,L2
+flabel,main
 goto,L1
+label,L2
