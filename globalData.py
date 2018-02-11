@@ -13,7 +13,7 @@ def globalData():
             print("\t.globl "+str(name))
             print(str(name)+":")
             print("\t.zero " + str(int(ST.getVar(name,'size'))*4)) #all are integers so space is 4byte
-        elif ST.getVar(name,'value') is None :
+        elif ST.getVar(name,'value') is None and ST.getVar(name,'type') == 'int':
             print("\t.globl "+str(name))
             print(str(name)+":")
             print("\t.zero 4") #all are integers so space is 4byte
@@ -23,6 +23,8 @@ def globalData():
     print('\t.string "%d\\n"')
     print(".format1 :")
     print('\t.string "%d "')
+    print(".format2 :")
+    print('\t.string "%d"')
         #    print("\t."+ST.var[name]['type'])
         
 if __name__ == '__main__':
