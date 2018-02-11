@@ -376,7 +376,7 @@ def generateCode(i):
         printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
         #else:
         #    printInstr('movl',regName(4),'Register',tacTable[i].in1,'Memory')
-        printInstr('movl',regName(5),'Register','$.format','Memory')
+        printInstr('movl',regName(5),'Register','$.format2','Memory')
         print('\tcall scanf')
 
 
@@ -420,7 +420,7 @@ if __name__ == '__main__':
             break;
     for op in tacTable:
         if op.oper == 'scanInt':
-            print('\t.extern printf')
+            print('\t.extern scanf')
             break;
 
     globalData()
