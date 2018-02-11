@@ -1,0 +1,9 @@
+label,main
+=,b,2
+=,c,3
+=,d,4
+*,t1,b,c
+*,t2,b,d
++,t3,t1,t2
+=,a,t3
+#a = b * c + b * d;
