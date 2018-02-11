@@ -1,4 +1,19 @@
-all:
+.DEFAULT_GOAL := codegen
+
+codegen:
+	cp src/ir.py bin/ir.py
+	cp src/basicBlock.py bin/basicBlock.py
+	cp src/globalData.py bin/globalData.py
+	cp src/globalvar.py bin/globalvar.py
+	cp src/nextUse.py bin/nestUse.py
+	cp src/registerAlloc.py bin/registerAlloc.py
+	cp src/symbolTable.py bin/symbolTable.py
+	cp src/table.py bin/table.py
+	python -m py_compile bin/registerAlloc.py
+	mv bin/registerAlloc.pyc bin/codegen
+	chmod -R 777 bin/
+
+lexer:
 		cp src/lexer.py bin/lexer.py
 		cp src/lex.py bin/lex.py
 		cp src/yacc.py bin/yacc.py
