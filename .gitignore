@@ -4,3 +4,5 @@
 *.s
 *.S
 *.out
+*.gdb_history
+*.txt
