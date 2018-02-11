@@ -1,0 +1,13 @@
+label,foo
++,c,a,b
+freturn,c
+label,main
+scanInt,a
+scanint,b
+fcall,d,foo,0
+printInt,d
+#int foo()
+#{return a + b;}
+#int c; int d;
+#void main() {
+#foo(c, d);}

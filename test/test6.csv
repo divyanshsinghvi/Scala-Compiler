@@ -1,0 +1,4 @@
+label,L1
+printInt,5
+scanInt,a
+If,L1,a

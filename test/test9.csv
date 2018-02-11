@@ -1,0 +1,11 @@
+#for loop
+#for (i = 0; i < 10; ++i) {
+#    b = i*i;printint(b)}
+=,t1,0
+=,t,10
+label,foo
+>=,t2,t1,t
+if,exit,t2
+*,t3,t1,t1
+printInt,t3
+label,exit
