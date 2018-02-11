@@ -1,0 +1,13 @@
+#for loop
+#for (i = 0; i < 10; ++i) {
+#    b = i*i;printint(b)}
+label,foo
+>=,t2,t1,t
+if,foo2,t2
+*,t3,t1,t1
+printInt,t3
+label,foo2
+label,main
+=,t1,0
+=,t,10
+goto,foo

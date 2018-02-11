@@ -1,0 +1,13 @@
+label,main
+scanInt,t1
+scanInt,t2
++,t3,t2,t1
+printInt,t3
+-,t3,t2,t1
+printInt,t3
+*,t3,t2,t1
+printInt,t3
+/,t3,t2,t1
+printInt,t3
+%,t3,t2,t1
+printInt,t3
