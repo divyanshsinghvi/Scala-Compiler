@@ -14,7 +14,12 @@ class NextUse:
 
     def __init__(self,block,table,offset):
         number = len(block)+offset
+        prev=None
         for row in reversed(block):
+            if prev is not None:
+                row.nextUse = prev.nextUse;
+                row.live = prev.live
+
             if row.operator == 'binop': 
                 row.live[row.out]=table.getVar(row.out,'live')
                 row.live[row.in2]=table.getVar(row.in2,'live')
@@ -47,11 +52,8 @@ class NextUse:
                     table.setVar(row.in1,{'live':1,'nextUse':number})
                 #print(row.out+row.in1)
                 table.setVar(row.out,{'live':None,'nextUse':None})
-            #for y in row.live:
-            #    if y and row.nextUse[y] is not None:
-            #    print (y +':' +str(row.live[y]))
-            #print(number)
             #table.print_symboltable()
+            prev = row
             number = number-1 
     
         for name in table.var:    #global assumed
