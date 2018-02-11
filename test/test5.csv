@@ -1,10 +1,17 @@
 label,main
+<<<<<<< HEAD
 #scanInt,t1
 #scanInt,t2
 =,t1,2
 =,t2,3
 ==,t3,t2,t1
 printInt,t3
+=======
+scanInt,t1
+scanInt,t2
+#==,t3,t2,t1
+#printInt,t3
+>>>>>>> f04f7922a82cb4055e44b64c3528f202f1b3e89f
 <,t3,t2,t1
 printInt,t3
 #&&,t3,t2,t1
