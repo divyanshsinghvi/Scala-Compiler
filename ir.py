@@ -104,6 +104,8 @@ class irTable:
         with open(filename, 'r') as f:
             reader = csv.reader(f, delimiter=',', quotechar='"', doublequote=True, quoting=csv.QUOTE_MINIMAL)
             for row in reader:
+                if row[0].startswith('#'):
+                    continue
                 self.arr.append(ir(row))
         instrTable = self.arr # ir.irTable(filename).arr
         self.leadList.add(0)
