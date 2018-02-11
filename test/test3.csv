@@ -1,0 +1,7 @@
+=,n,2
+array,a,n
+=,i,1
+star,a,i,c
+ldar,d,a,i
+printInt,d
+#array access
