@@ -28,6 +28,7 @@ op['freturn']=['freturn']
 op['ldar']=['ldar']
 op['star']=['star']
 op['label']=['label']
+op['flabel']=['flabel']
 op['array']=['array']
 op['bitwise']=['&', '|', '^']
 op['printInt']=['printInt']
@@ -82,6 +83,8 @@ class ir:
         elif self.operator == 'call':
             self.out = rowList[1]
             self.in1 = rowList[2]
+        elif self.operator =='flabel':
+            self.out = rowList[1]
         elif self.operator =='label':
             self.out = rowList[1]
         elif self.operator == 'bitwise':
