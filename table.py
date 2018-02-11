@@ -44,8 +44,8 @@ class Table:
             elif row.operator == 'fcall':
                 self.table.setVar(row.out,{'type':'int','live':1})
                 #self.table.setVar(row.in1,{'type':'int','live':1})
-            elif row.operator == 'call':
-                self.table.setVar(row.out,{'type':'int','live':1})
+            #elif row.operator == 'call':
+            #    self.table.setVar(row.out,{'type':'int','live':1})
             elif row.operator == 'freturn':
                 self.table.setVar(row.in1,{'type':'int','live':1})
             elif row.operator == 'ldar':          
