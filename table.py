@@ -34,10 +34,10 @@ class Table:
 		else:
                     self.table.setVar(row.in1,{'type':'int','live':1})
                 self.table.setVar(row.out,{'type':'int','live':1})
-            elif row.operator == 'goto':
-                self.table.setVar(row.out,{'type':'int','live':1})
+#            elif row.operator == 'goto':
+                #self.table.setVar(row.out,{'type':'int','live':1})
             elif row.operator == 'if':
-                self.table.setVar(row.out,{'type':'int','live':1})
+ #               self.table.setVar(row.out,{'type':'int','live':1})
                 self.table.setVar(row.in1,{'type':'int','live':1})
             elif row.operator == 'param':
                 self.table.setVar(row.out,{'type':'int','live':1})

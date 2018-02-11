@@ -1,0 +1,11 @@
+label,foo
+printInt,4
+=,c,1
+freturn,c
+label,main
+=,a,4
+=,b,10
+fcall,b,foo,0
+=,c,5
+printInt,b
+printInt,c

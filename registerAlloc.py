@@ -314,11 +314,11 @@ def generateCode(i):
             registerDescr[ry] = tacTable[i].in1
         endBlock()
         print('\ttestl %' + regName(ry) + ', %' + regName(ry))
-        print('\tjne .' + tacTable[i].out)
+        print('\tjne ' + tacTable[i].out)
 
     elif tacTable[i].oper == 'goto':
         endBlock()
-        print('\tjmp .' + tacTable[i].out)
+        print('\tjmp ' + tacTable[i].out)
 
     elif tacTable[i].oper == 'label':
         #endBlock()
