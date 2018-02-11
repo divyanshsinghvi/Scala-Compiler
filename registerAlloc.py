@@ -375,6 +375,22 @@ def generateCode(i):
         print('\tcall scanf')
 
 
+    elif tacTable[i].oper in ['call', 'fcall']:
+        endBlock();
+        print('\tcall ' + tacTable[i].in1)
+        if tacTable[i].oper == 'fcall':
+            printInstr('movl', tacTable[i].out, 'Memory', regName(0), 'Register')
+            registerDescr[0] = None;
+            addressDescr[tacTable[i].out]['Memory'] = tacTable[i].out
+            addressDescr[tacTable[i].out]['Register'] = None
+
+    elif tacTable[i].oper in ['return', 'freturn']:
+        endBlock();
+        if tacTable[i].oper == 'freturn':
+            prtinInstr('movl', regName(0), 'Register', tacTable[i].in1, 'Memory')
+            addressDescr[tacTable[i].in1]['Register'] = 0
+        print('\tret')
+
 def endBlock():
 #    print "t"
     for variable in addressDescr:
