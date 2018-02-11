@@ -331,6 +331,8 @@ def generateCode(i):
             printInstr('movl',regName(rx),'Register',address(tacTable[i].out),'Memory')
             addressDescr[tacTable[i].out]['Register'] = rx
             registerDescr[rx] = tacTable[i].out
+        addressDescr[tacTable[i].out]['Memory'] = None
+        
         ri = getRegOut(i,tacTable[i].in2)
         if registerDescr[ri] != tacTable[i].in2:
             printInstr('movl',regName(ri),'Register',address(tacTable[i].in2),'Memory')
@@ -402,8 +404,8 @@ def endBlock():
         if addressDescr[variable]['Memory'] is None and addressDescr[variable]['Register'] is not None:    
             printInstr('movl',address(variable),'Memory',regName(addressDescr[variable]['Register']),'Register')
             #print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
-    for r in registerDescr:
-        r = None
+    for r in range(6):
+        registerDescr[r] = None
     for r in addressDescr:
         addressDescr[r]['Register'] = None
         addressDescr[r]['Memory'] = r
