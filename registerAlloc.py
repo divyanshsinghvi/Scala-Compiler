@@ -362,9 +362,38 @@ def generateCode(i):
             addressDescr[registerDescr[0]]['Register'] = None
             addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
         printInstr('xorl',regName(0),'Register',regName(0),'Register')
-        printInstr('movl',regName(4),'Register','5','Constant')
+        #printInstr('movl',regName(4),'Register','5','Constant')
+        #print tacTable[i].out
+        if is_number(tacTable[i].out):
+            printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
+        else:
+            printInstr('movl',regName(4),'Register',tacTable[i].out,'Memory')
         printInstr('movl',regName(5),'Register','$.format','Memory')
         print('\tcall printf')
+    elif tacTable[i].oper == 'scanInt':
+        if registerDescr[5] != None:
+            printInstr('movl', address(registerDescr[5]), 'Memory', regName(5), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[5]]['Register'] = None
+            addressDescr[registerDescr[5]]['Memory'] = registerDescr[5]
+        if registerDescr[4] != None:
+            printInstr('movl', address(registerDescr[4]), 'Memory', regName(4), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[4]]['Register'] = None
+            addressDescr[registerDescr[4]]['Memory'] = registerDescr[4]
+        if registerDescr[0] != None:
+            printInstr('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[0]]['Register'] = None
+            addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
+        printInstr('xorl',regName(0),'Register',regName(0),'Register')
+        #if is_number(tacTable[i].in1):
+        printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
+        #else:
+        #    printInstr('movl',regName(4),'Register',tacTable[i].in1,'Memory')
+        printInstr('movl',regName(5),'Register','$.format','Memory')
+        print('\tcall scanf')
+
 
 def endBlock():
 #    print "t"
