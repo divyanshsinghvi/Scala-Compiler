@@ -92,10 +92,10 @@ class ir:
             self.out = rowList[1]
             self.in1 = rowList[2]
         elif self.operator == 'printInt':
-            self.out == rowList[1]
+            self.out = rowList[1]
             #print rowList[1]
         elif self.operator == 'scanInt':
-            self.out == rowList[1]
+            self.out = rowList[1]
 
 class irTable:
     def __init__(self, filename):

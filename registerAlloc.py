@@ -73,7 +73,14 @@ def printInstr(op,x,xDest,y=None,yDest=None,i=-1):
         if xDest == 'Register' and yDest=='Register':
             print('\txorl %'+y+', %'+x)
 
-
+def spillAllReg():
+    for i in range(noOfReg):
+        if registerDescr[i] != None:
+            printInstr('movl', address(registerDescr[i]), 'Memory', regName(i), 'Register')
+            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
+            addressDescr[registerDescr[i]]['Register'] = None
+            addressDescr[registerDescr[i]]['Memory'] = registerDescr[i]
+       
 #def otherReg(noOf)
         
 #def getReg(i):
@@ -314,7 +321,8 @@ def generateCode(i):
 
     elif tacTable[i].oper == 'label':
         endBlock()
-        print('.' + tacTable[i].out + ':')
+        print('\t.globl ' + tacTable[i].out)
+        print(tacTable[i].out + ':')
     
     elif tacTable[i].oper == 'ldar':
         rx = getRegOut(i,tacTable[i].out)
@@ -346,46 +354,20 @@ def generateCode(i):
         printInstr('movl',address(tacTable[i].out)+ "(,%"+regName(ri)+",4)",'Memory',regName(ry),'Register')
         #printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
     elif tacTable[i].oper == 'printInt':
-        if registerDescr[5] != None:
-            printInstr('movl', address(registerDescr[5]), 'Memory', regName(5), 'Register')
-            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-            addressDescr[registerDescr[5]]['Register'] = None
-            addressDescr[registerDescr[5]]['Memory'] = registerDescr[5]
-        if registerDescr[4] != None:
-            printInstr('movl', address(registerDescr[4]), 'Memory', regName(4), 'Register')
-            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-            addressDescr[registerDescr[4]]['Register'] = None
-            addressDescr[registerDescr[4]]['Memory'] = registerDescr[4]
-        if registerDescr[0] != None:
-            printInstr('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
-            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-            addressDescr[registerDescr[0]]['Register'] = None
-            addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
+        #print(tacTable[i].oper, tacTable[i].out, tacTable[i].in1, tacTable[i].in2)
+        spillAllReg()
         printInstr('xorl',regName(0),'Register',regName(0),'Register')
-        #printInstr('movl',regName(4),'Register','5','Constant')
+        printInstr('movl',regName(4),'Register','5','Constant')
+        #printInstr('movl',regName(4),'Register','b','Memory')
         #print tacTable[i].out
-        if is_number(tacTable[i].out):
-            printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
-        else:
-            printInstr('movl',regName(4),'Register',tacTable[i].out,'Memory')
+        #if is_number(tacTable[i].out):
+        #    printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
+        #else:
+        #    printInstr('movl',regName(4),'Register',tacTable[i].out,'Memory')
         printInstr('movl',regName(5),'Register','$.format','Memory')
         print('\tcall printf')
     elif tacTable[i].oper == 'scanInt':
-        if registerDescr[5] != None:
-            printInstr('movl', address(registerDescr[5]), 'Memory', regName(5), 'Register')
-            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-            addressDescr[registerDescr[5]]['Register'] = None
-            addressDescr[registerDescr[5]]['Memory'] = registerDescr[5]
-        if registerDescr[4] != None:
-            printInstr('movl', address(registerDescr[4]), 'Memory', regName(4), 'Register')
-            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-            addressDescr[registerDescr[4]]['Register'] = None
-            addressDescr[registerDescr[4]]['Memory'] = registerDescr[4]
-        if registerDescr[0] != None:
-            printInstr('movl', address(registerDescr[0]), 'Memory', regName(0), 'Register')
-            #print('\tmov  DWORD PTR ' + registerDescr[0] + ', ' + regName(0))
-            addressDescr[registerDescr[0]]['Register'] = None
-            addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
+        spillAllReg()
         printInstr('xorl',regName(0),'Register',regName(0),'Register')
         #if is_number(tacTable[i].in1):
         printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
@@ -394,6 +376,22 @@ def generateCode(i):
         printInstr('movl',regName(5),'Register','$.format','Memory')
         print('\tcall scanf')
 
+
+    elif tacTable[i].oper in ['call', 'fcall']:
+        endBlock();
+        print('\tcall ' + tacTable[i].in1)
+        if tacTable[i].oper == 'fcall':
+            printInstr('movl', tacTable[i].out, 'Memory', regName(0), 'Register')
+            registerDescr[0] = None;
+            addressDescr[tacTable[i].out]['Memory'] = tacTable[i].out
+            addressDescr[tacTable[i].out]['Register'] = None
+
+    elif tacTable[i].oper in ['return', 'freturn']:
+        endBlock();
+        if tacTable[i].oper == 'freturn':
+            prtinInstr('movl', regName(0), 'Register', tacTable[i].in1, 'Memory')
+            addressDescr[tacTable[i].in1]['Register'] = 0
+        print('\tret')
 
 def endBlock():
 #    print "t"
@@ -416,11 +414,13 @@ if __name__ == '__main__':
         if op.oper == 'printInt':
             print('\t.extern printf')
             break;
+    for op in tacTable:
+        if op.oper == 'scanInt':
+            print('\t.extern printf')
+            break;
 
     globalData()
     print('\t.text')
-    print('\t.globl main')
-    print("main:")
     for i in range(1,len(l)-1):
         for j in range(len(tacTable[l[i-1]:l[i]])):
             generateCode(j+l[i-1])
