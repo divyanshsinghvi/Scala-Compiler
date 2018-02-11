@@ -55,7 +55,10 @@ class Table:
                 self.table.setVar(row.in1,{'type':'int','live':1})
                 self.table.setVar(row.in2,{'type':'int','live':1})
             elif row.operator == 'array':
-                self.table.setVar(row.out,{'type':'array','live':1,'size':row.in1})
+                if is_number(row.in1):
+                    self.table.setVar(row.out,{'type':'array','live':1,'size':row.in1})
+                else:
+                    self.table.setVar(row.out,{'type':'array','live':1,'size':self.table.getVar(row.in1,'value')})
 
         l = self.b
             
