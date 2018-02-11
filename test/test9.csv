@@ -2,12 +2,17 @@
 #for (i = 0; i < 10; ++i) {
 #    b = i*i;printint(b)}
 label,foo
+prinInt,t1
 >=,t2,t1,t
 if,foo2,t2
 *,t3,t1,t1
-printInt,t3
-label,foo2
+#printInt,t3
+=,t6,t1
++,t1,t6,o
+goto,foo
 label,main
 =,t1,0
+=,o,1
 =,t,10
 goto,foo
+label,foo2

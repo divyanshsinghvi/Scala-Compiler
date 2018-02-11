@@ -1,6 +1,9 @@
+label,main
 =,n,2
 array,a,n
+=,c,5
 =,i,1
+printInt,c
 star,a,i,c
 ldar,d,a,i
 printInt,d
