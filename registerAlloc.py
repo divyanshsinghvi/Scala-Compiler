@@ -372,16 +372,20 @@ def generateCode(i):
         #print(tacTable[i].oper, tacTable[i].out, tacTable[i].in1, tacTable[i].in2)
         #spillAllReg()
         endBlock()
-        printInstr('xorl',regName(0),'Register',regName(0),'Register')
+        #printInstr('xorl',regName(0),'Register',regName(0),'Register')
         #printInstr('movl',regName(4),'Register','5','Constant')
         #printInstr('movl',regName(4),'Register','b','Memory')
         #print tacTable[i].out
         if is_number(tacTable[i].out):
-            printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
+            printInstr('movl',regName(0),'Register',tacTable[i].out,'Constant')
         else:
-            printInstr('movl',regName(4),'Register',tacTable[i].out,'Memory')
-        printInstr('movl',regName(5),'Register','$.format','Memory')
+            printInstr('movl',regName(0),'Register',tacTable[i].out,'Memory')
+        print('\tsubl $8, %esp')
+        print('\tpushl %'+regName(0))
+        print('\tpushl $.format')
+        #printInstr('movl',regName(5),'Register','$.format','Memory')
         print('\tcall printf')
+        print('\taddl $16, %esp')
     elif tacTable[i].oper == 'scanInt':
         #spillAllReg()
         endBlock()
