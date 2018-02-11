@@ -81,8 +81,8 @@ class ir:
             self.in1 = rowList[2]
             self.in2 = rowList[3]
         elif self.operator == 'call':
-            self.out = rowList[1]
-            self.in1 = rowList[2]
+            self.in1 = rowList[1]
+            self.in2 = rowList[2]
         elif self.operator =='flabel':
             self.out = rowList[1]
         elif self.operator =='label':
