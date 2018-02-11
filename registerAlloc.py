@@ -288,6 +288,7 @@ def generateCode(i):
             registerDescr[rx] = registerDescr[3]
         registerDescr[0], registerDescr[3] = None, None
         addressDescr[tacTable[i].out]['Register'] = rx
+        addressDescr[tacTable[i].out]['Memory'] = None
         registerDescr[rx] = tacTable[i].out
     
     elif tacTable[i].oper in ['<', '<=', '==', '>=', '>', '!=']:
