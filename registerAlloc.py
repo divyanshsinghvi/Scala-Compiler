@@ -285,10 +285,11 @@ def generateCode(i):
         elif tacTable[i].oper =='%':
             # move edx to rx
             printInstr('movl', regName(rx), 'Register', 'edx', 'Register') 
-            registerDescr[rx] = registerDescr[0]
             registerDescr[rx] = registerDescr[3]
-        addressDescr[tacTable[i].out]['Register'] = rx
         registerDescr[0], registerDescr[3] = None, None
+        addressDescr[tacTable[i].out]['Register'] = rx
+        addressDescr[tacTable[i].out]['Memory'] = None
+        registerDescr[rx] = tacTable[i].out
     
     elif tacTable[i].oper in ['<', '<=', '==', '>=', '>', '!=']:
         ry = getRegIn(i,tacTable[i].in1)
@@ -389,13 +390,17 @@ def generateCode(i):
     elif tacTable[i].oper == 'scanInt':
         #spillAllReg()
         endBlock()
-        printInstr('xorl',regName(0),'Register',regName(0),'Register')
+        print('\tsubl $8, %esp')
+        print('\tpushl $'+tacTable[i].out)
+        print('\tpushl $.format2')
+        #printInstr('xorl',regName(0),'Register',regName(0),'Register')
         #if is_number(tacTable[i].in1):
-        printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
+        #printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
         #else:
         #    printInstr('movl',regName(4),'Register',tacTable[i].in1,'Memory')
-        printInstr('movl',regName(5),'Register','$.format2','Memory')
+        #printInstr('movl',regName(5),'Register','$.format2','Memory')
         print('\tcall scanf')
+        print('\taddl $16, %esp')
 
 
     elif tacTable[i].oper in ['call', 'fcall']:
