@@ -314,7 +314,8 @@ def generateCode(i):
 
     elif tacTable[i].oper == 'label':
         endBlock()
-        print('.' + tacTable[i].out + ':')
+        print('\t.globl ' + tacTable[i].out)
+        print(tacTable[i].out + ':')
     
     elif tacTable[i].oper == 'ldar':
         rx = getRegOut(i,tacTable[i].out)
@@ -362,12 +363,12 @@ def generateCode(i):
             addressDescr[registerDescr[0]]['Register'] = None
             addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
         printInstr('xorl',regName(0),'Register',regName(0),'Register')
-        #printInstr('movl',regName(4),'Register','5','Constant')
+        printInstr('movl',regName(4),'Register','5','Constant')
         #print tacTable[i].out
-        if is_number(tacTable[i].out):
-            printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
-        else:
-            printInstr('movl',regName(4),'Register',tacTable[i].out,'Memory')
+        #if is_number(tacTable[i].out):
+        #    printInstr('movl',regName(4),'Register',tacTable[i].out,'Constant')
+        #else:
+        #    printInstr('movl',regName(4),'Register',tacTable[i].out,'Memory')
         printInstr('movl',regName(5),'Register','$.format','Memory')
         print('\tcall printf')
     elif tacTable[i].oper == 'scanInt':
@@ -435,8 +436,6 @@ if __name__ == '__main__':
 
     globalData()
     print('\t.text')
-    print('\t.globl main')
-    print("main:")
     for i in range(1,len(l)-1):
         for j in range(len(tacTable[l[i-1]:l[i]])):
             generateCode(j+l[i-1])
