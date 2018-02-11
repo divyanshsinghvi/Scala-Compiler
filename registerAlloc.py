@@ -313,7 +313,7 @@ def generateCode(i):
         addressDescr[registerDescr[0]]['Memory'] = registerDescr[0]
         registerDescr[0] = None
 
-        printInstr('cmp', regName(rx), 'Register', i)
+        printInstr('cmp', regName(rx), 'Register',i=i)
         print('\tmovzbl %al, %' + regName(rx))
         registerDescr[rx] = tacTable[i].out
         addressDescr[tacTable[i].out]['Register'] = rx
