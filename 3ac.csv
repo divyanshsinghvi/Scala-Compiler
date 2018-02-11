@@ -8,10 +8,11 @@ label,main
 =,b,10
 =,x,5
 fcall,b,foo,0
-=,c,5
+&,c,a,b
 printInt,b
 scanInt,x
 array,y,5
+!,g,a
 =,r,3
 star,y,r,x
 ldar,c,y,r

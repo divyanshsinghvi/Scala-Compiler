@@ -181,7 +181,7 @@ def getRegOut(i,var): #getReg  8.6.3
 
 
 def generateCode(i):
-    if tacTable[i].oper == '+' or tacTable[i].oper == '-' or tacTable[i].oper == '*': 
+    if tacTable[i].oper in ['+', '-', '*', '&', '|', '^']: 
         ry = getRegIn(i,tacTable[i].in1)
         if registerDescr[ry] != tacTable[i].in1:
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
@@ -214,6 +214,18 @@ def generateCode(i):
         elif tacTable[i].oper == '*':
             printInstr('imull',regName(rx),'Register',regName(rz),'Register')
             #print('\timul ' + regName(rx) + ', ' + regName(rz))
+            addressDescr[tacTable[i].out]['Register'] = rx
+            addressDescr[tacTable[i].out]['Memory'] = None
+        elif tacTable[i].oper == '&':
+            print('\tandl %' + regName(rz) + ', %' + regName(rx))
+            addressDescr[tacTable[i].out]['Register'] = rx
+            addressDescr[tacTable[i].out]['Memory'] = None
+        elif tacTable[i].oper == '|':
+            print('\torl %' + regName(rz) + ', %' + regName(rx))
+            addressDescr[tacTable[i].out]['Register'] = rx
+            addressDescr[tacTable[i].out]['Memory'] = None
+        elif tacTable[i].oper == '^':
+            print('\txorl %' + regName(rz) + ', %' + regName(rx))
             addressDescr[tacTable[i].out]['Register'] = rx
             addressDescr[tacTable[i].out]['Memory'] = None
     elif tacTable[i].oper == '=':
@@ -398,6 +410,27 @@ def generateCode(i):
             addressDescr[tacTable[i].in1]['Register'] = 0
             addressDescr[tacTable[i].in1]['Memory'] = tacTable[i].in1
         print('\tret')
+
+    elif tacTable[i].oper == '!':
+        ry = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
+    
+        rx = getRegOut(i,tacTable[i].out)
+        registerDescr[rx] = tacTable[i].out
+        printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+        
+        printInstr('movl', tacTable[i].in1, 'Memory', regName(ry), 'Register')
+        print('\tnotl %' + regName(ry))
+        printInstr('movl', regName(rx), 'Register', regName(ry), 'Register')
+        addressDescr[tacTable[i].in1]['Register']=None
+        addressDescr[tacTable[i].in1]['Memory']=tacTable[i].in1
+        addressDescr[tacTable[i].out]['Register']=ry
+        addressDescr[tacTable[i].in1]['Memory']=None
+        registerDescr[ry] = tacTable[i].out
 
 def endBlock():
     for variable in addressDescr:
