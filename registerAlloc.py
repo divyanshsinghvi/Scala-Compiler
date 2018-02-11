@@ -438,7 +438,7 @@ def generateCode(i):
         addressDescr[tacTable[i].in1]['Register']=None
         addressDescr[tacTable[i].in1]['Memory']=tacTable[i].in1
         addressDescr[tacTable[i].out]['Register']=ry
-        addressDescr[tacTable[i].in1]['Memory']=None
+        addressDescr[tacTable[i].out]['Memory']=None
         registerDescr[ry] = tacTable[i].out
 
 def endBlock():
