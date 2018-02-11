@@ -5,7 +5,7 @@ codegen:
 	cp src/basicBlock.py bin/basicBlock.py
 	cp src/globalData.py bin/globalData.py
 	cp src/globalvar.py bin/globalvar.py
-	cp src/nextUse.py bin/nestUse.py
+	cp src/nextUse.py bin/nextUse.py
 	cp src/registerAlloc.py bin/registerAlloc.py
 	cp src/symbolTable.py bin/symbolTable.py
 	cp src/table.py bin/table.py
