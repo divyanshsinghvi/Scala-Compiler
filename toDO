@@ -9,5 +9,6 @@
 <<<<<<< HEAD
 9) && || ^ arr[1] load store print scan  
 =======
-9) enblock to be added in fcall, freturn, return, 
+9) enblock to be added in fcall, freturn, return,
+10) function return values to be handled 
 >>>>>>> e269b206f57966cefb333e9374c832c993034a00
