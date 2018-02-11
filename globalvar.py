@@ -1,7 +1,9 @@
 #declare all global variabels here
+import sys
 import ir 
 
-filename = '3ac.csv'
+filename = sys.argv[1]
+
 global tacTable
 global addressDescr
 global ST
