@@ -285,10 +285,10 @@ def generateCode(i):
         elif tacTable[i].oper =='%':
             # move edx to rx
             printInstr('movl', regName(rx), 'Register', 'edx', 'Register') 
-            registerDescr[rx] = registerDescr[0]
             registerDescr[rx] = registerDescr[3]
-        addressDescr[tacTable[i].out]['Register'] = rx
         registerDescr[0], registerDescr[3] = None, None
+        addressDescr[tacTable[i].out]['Register'] = rx
+        registerDescr[rx] = tacTable[i].out
     
     elif tacTable[i].oper in ['<', '<=', '==', '>=', '>', '!=']:
         ry = getRegIn(i,tacTable[i].in1)
