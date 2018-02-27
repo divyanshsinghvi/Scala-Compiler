@@ -1,0 +1,162 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AND	src/ir.py	/^AND='&&'$/;"	v
+DIV	src/ir.py	/^DIV='\/'$/;"	v
+GT	src/ir.py	/^GT='>'$/;"	v
+LT	src/ir.py	/^LT='<'$/;"	v
+MINUS	src/ir.py	/^MINUS='-'$/;"	v
+MOD	src/ir.py	/^MOD='%'$/;"	v
+NOT	src/ir.py	/^NOT='!'$/;"	v
+NextUse	src/nextUse.py	/^class NextUse:$/;"	c
+OR	src/ir.py	/^OR ='||'$/;"	v
+PLUS	src/ir.py	/^PLUS ='+'$/;"	v
+ST	src/globalvar.py	/^ST = symbolTable$/;"	v
+SymbolTable	src/symbolTable.py	/^class SymbolTable:$/;"	c
+TIMES	src/ir.py	/^TIMES='*'$/;"	v
+Table	src/table.py	/^class Table:$/;"	c
+__init__	src/basicBlock.py	/^    def __init__(self):$/;"	m	class:basicBlock
+__init__	src/ir.py	/^    def __init__(self, filename):$/;"	m	class:irTable
+__init__	src/ir.py	/^    def __init__(self, rowList):$/;"	m	class:ir
+__init__	src/nextUse.py	/^    def __init__(self,block,table,offset):$/;"	m	class:NextUse
+__init__	src/symbolTable.py	/^    def __init__(self):$/;"	m	class:SymbolTable
+__init__	src/table.py	/^    def __init__(self ,ac):$/;"	m	class:Table
+address	src/registerAlloc.py	/^def address(var):$/;"	f
+addressDescr	src/globalvar.py	/^addressDescr = {}$/;"	v
+b	src/basicBlock.py	/^    b = basicBlock()$/;"	v	class:basicBlock
+b	src/table.py	/^    b = basicBlock$/;"	v	class:Table
+basicBlock	src/basicBlock.py	/^class basicBlock:$/;"	c
+basicBlock	src/globalvar.py	/^basicBlock=tacBB.leadList$/;"	v
+code	bin/lexer.py	/^code = fileName.read()$/;"	v
+code	src/lexer.py	/^code = fileName.read()$/;"	v
+digit	bin/regex.py	/^digit            = r'([0-9])'$/;"	v
+digit	src/regex.py	/^digit            = r'([0-9])'$/;"	v
+endBlock	src/registerAlloc.py	/^def endBlock():$/;"	f
+fileName	bin/lexer.py	/^fileName = open(sys.argv[1],"r")$/;"	v
+fileName	src/lexer.py	/^fileName = open(sys.argv[1],"r")$/;"	v
+filename	src/globalvar.py	/^filename = sys.argv[1]$/;"	v
+generateCode	src/registerAlloc.py	/^def generateCode(i):$/;"	f
+getRegIn	src/registerAlloc.py	/^def getRegIn(i,var): #getReg  8.6.3$/;"	f
+getRegOut	src/registerAlloc.py	/^def getRegOut(i,var): #getReg  8.6.3$/;"	f
+getVar	src/symbolTable.py	/^    def getVar(self,name,value):$/;"	m	class:SymbolTable
+globalData	src/globalData.py	/^def globalData():$/;"	f
+idNo	src/symbolTable.py	/^    idNo = 0$/;"	v	class:SymbolTable
+identifier	bin/regex.py	/^identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'$/;"	v
+identifier	src/regex.py	/^identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'$/;"	v
+ir	src/ir.py	/^class ir:$/;"	c
+irTable	src/ir.py	/^class irTable:$/;"	c
+is_number	src/nextUse.py	/^def is_number(var):$/;"	f
+is_number	src/registerAlloc.py	/^def is_number(var):$/;"	f
+is_number	src/table.py	/^def is_number(var):$/;"	f
+leadList	src/basicBlock.py	/^    leadList = set()$/;"	v	class:basicBlock
+lexer	bin/lexer.py	/^lexer = lex.lex()$/;"	v
+lexer	src/lexer.py	/^lexer = lex.lex()$/;"	v
+noOfReg	src/registerAlloc.py	/^noOfReg = 6$/;"	v
+nondigit	bin/regex.py	/^nondigit         = r'([_A-Za-z])'$/;"	v
+nondigit	src/regex.py	/^nondigit         = r'([_A-Za-z])'$/;"	v
+op	src/ir.py	/^op = {}$/;"	v
+printInstr	src/registerAlloc.py	/^def printInstr(op,x,xDest,y=None,yDest=None,i=-1):$/;"	f
+print_symboltable	src/symbolTable.py	/^    def print_symboltable(self):$/;"	m	class:SymbolTable
+regName	src/registerAlloc.py	/^def regName(regNo):$/;"	f
+registerDescr	src/registerAlloc.py	/^registerDescr=[None]*6$/;"	v
+registerName	src/registerAlloc.py	/^registerName = ["eax", "ebx", "ecx","edx","esi", "edi"]$/;"	v
+reserved	bin/tokens.py	/^reserved = {$/;"	v
+reserved	src/tokens.py	/^reserved = {$/;"	v
+s	src/symbolTable.py	/^    s=SymbolTable()$/;"	v
+setVar	src/symbolTable.py	/^    def setVar(self,name,attribute):$/;"	m	class:SymbolTable
+spillAllReg	src/registerAlloc.py	/^def spillAllReg():$/;"	f
+symbolTable	src/table.py	/^symbolTable = Table(tacTable).table$/;"	v
+t	src/ir.py	/^    t = irTable('3ac.csv')$/;"	v	class:irTable
+t	src/nextUse.py	/^    t = ir.irTable('3ac.csv').arr$/;"	v	class:NextUse
+t_AND	bin/regex.py	/^t_AND = r'&&'$/;"	v
+t_AND	src/regex.py	/^t_AND = r'&&'$/;"	v
+t_AND_BIT	bin/regex.py	/^t_AND_BIT = '&'$/;"	v
+t_AND_BIT	src/regex.py	/^t_AND_BIT = '&'$/;"	v
+t_BLOCKBEGIN	bin/regex.py	/^t_BLOCKBEGIN = r'\\{'$/;"	v
+t_BLOCKBEGIN	src/regex.py	/^t_BLOCKBEGIN = r'\\{'$/;"	v
+t_BLOCKEND	bin/regex.py	/^t_BLOCKEND = r'\\}'$/;"	v
+t_BLOCKEND	src/regex.py	/^t_BLOCKEND = r'\\}'$/;"	v
+t_BOOL	bin/regex.py	/^t_BOOL = r'(true | false)'$/;"	v
+t_BOOL	src/regex.py	/^t_BOOL = r'(true | false)'$/;"	v
+t_CHAR	bin/regex.py	/^def t_CHAR(t):$/;"	f
+t_CHAR	src/regex.py	/^def t_CHAR(t):$/;"	f
+t_COLON	bin/regex.py	/^t_COLON = r':'$/;"	v
+t_COLON	src/regex.py	/^t_COLON = r':'$/;"	v
+t_COMMA	bin/regex.py	/^t_COMMA = r'\\,'$/;"	v
+t_COMMA	src/regex.py	/^t_COMMA = r'\\,'$/;"	v
+t_DOT	bin/regex.py	/^t_DOT = r'\\.'$/;"	v
+t_DOT	src/regex.py	/^t_DOT = r'\\.'$/;"	v
+t_FLOAT	bin/regex.py	/^def t_FLOAT(t):$/;"	f
+t_FLOAT	src/regex.py	/^def t_FLOAT(t):$/;"	f
+t_GT	bin/regex.py	/^t_GT = r'>'$/;"	v
+t_GT	src/regex.py	/^t_GT = r'>'$/;"	v
+t_ID	bin/regex.py	/^def t_ID(t):$/;"	f
+t_ID	src/regex.py	/^def t_ID(t):$/;"	f
+t_INT	bin/regex.py	/^def t_INT(t):$/;"	f
+t_INT	src/regex.py	/^def t_INT(t):$/;"	f
+t_LEFTARROW	bin/regex.py	/^t_LEFTARROW = r'<-'$/;"	v
+t_LEFTARROW	src/regex.py	/^t_LEFTARROW = r'<-'$/;"	v
+t_LPARAN	bin/regex.py	/^t_LPARAN = r'\\('$/;"	v
+t_LPARAN	src/regex.py	/^t_LPARAN = r'\\('$/;"	v
+t_LSHIFT	bin/regex.py	/^t_LSHIFT = r'<<'$/;"	v
+t_LSHIFT	src/regex.py	/^t_LSHIFT = r'<<'$/;"	v
+t_LSQRB	bin/regex.py	/^t_LSQRB = r'\\['$/;"	v
+t_LSQRB	src/regex.py	/^t_LSQRB = r'\\['$/;"	v
+t_LT	bin/regex.py	/^t_LT = r'<'$/;"	v
+t_LT	src/regex.py	/^t_LT = r'<'$/;"	v
+t_MCOMMENT	bin/regex.py	/^def t_MCOMMENT(t):$/;"	f
+t_MCOMMENT	src/regex.py	/^def t_MCOMMENT(t):$/;"	f
+t_NOT	bin/regex.py	/^t_NOT = r'!'$/;"	v
+t_NOT	src/regex.py	/^t_NOT = r'!'$/;"	v
+t_OP_ADD	bin/regex.py	/^t_OP_ADD = r'\\+'$/;"	v
+t_OP_ADD	src/regex.py	/^t_OP_ADD = r'\\+'$/;"	v
+t_OP_DIV	bin/regex.py	/^t_OP_DIV = r'\/'$/;"	v
+t_OP_DIV	src/regex.py	/^t_OP_DIV = r'\/'$/;"	v
+t_OP_MOD	bin/regex.py	/^t_OP_MOD = r'%'$/;"	v
+t_OP_MOD	src/regex.py	/^t_OP_MOD = r'%'$/;"	v
+t_OP_MUL	bin/regex.py	/^t_OP_MUL = r'\\*'$/;"	v
+t_OP_MUL	src/regex.py	/^t_OP_MUL = r'\\*'$/;"	v
+t_OP_SUB	bin/regex.py	/^t_OP_SUB = r'-'$/;"	v
+t_OP_SUB	src/regex.py	/^t_OP_SUB = r'-'$/;"	v
+t_OR	bin/regex.py	/^t_OR = r'\\|\\|'$/;"	v
+t_OR	src/regex.py	/^t_OR = r'\\|\\|'$/;"	v
+t_OR_BIT	bin/regex.py	/^t_OR_BIT = '\\|'$/;"	v
+t_OR_BIT	src/regex.py	/^t_OR_BIT = '\\|'$/;"	v
+t_RPARAN	bin/regex.py	/^t_RPARAN = r'\\)'$/;"	v
+t_RPARAN	src/regex.py	/^t_RPARAN = r'\\)'$/;"	v
+t_RRSHIFT	bin/regex.py	/^t_RRSHIFT = r'>>>'$/;"	v
+t_RRSHIFT	src/regex.py	/^t_RRSHIFT = r'>>>'$/;"	v
+t_RSHIFT	bin/regex.py	/^t_RSHIFT = r'>>'$/;"	v
+t_RSHIFT	src/regex.py	/^t_RSHIFT = r'>>'$/;"	v
+t_RSQRB	bin/regex.py	/^t_RSQRB = r'\\]'$/;"	v
+t_RSQRB	src/regex.py	/^t_RSQRB = r'\\]'$/;"	v
+t_SCOMMENT	bin/regex.py	/^def t_SCOMMENT(t):$/;"	f
+t_SCOMMENT	src/regex.py	/^def t_SCOMMENT(t):$/;"	f
+t_SEMICOLON	bin/regex.py	/^t_SEMICOLON = r';'$/;"	v
+t_SEMICOLON	src/regex.py	/^t_SEMICOLON = r';'$/;"	v
+t_STRING	bin/regex.py	/^def t_STRING(t):$/;"	f
+t_STRING	src/regex.py	/^def t_STRING(t):$/;"	f
+t_UNDER	bin/regex.py	/^t_UNDER = r'_'$/;"	v
+t_UNDER	src/regex.py	/^t_UNDER = r'_'$/;"	v
+t_XOR	bin/regex.py	/^t_XOR = r'\\^'$/;"	v
+t_XOR	src/regex.py	/^t_XOR = r'\\^'$/;"	v
+t_error	bin/regex.py	/^def t_error(t):$/;"	f
+t_error	src/regex.py	/^def t_error(t):$/;"	f
+t_ignore	bin/regex.py	/^t_ignore = ' \\t'$/;"	v
+t_ignore	src/regex.py	/^t_ignore = ' \\t'$/;"	v
+t_newline	bin/regex.py	/^def t_newline(t):$/;"	f
+t_newline	src/regex.py	/^def t_newline(t):$/;"	f
+table	src/table.py	/^    table = SymbolTable()$/;"	v	class:Table
+tacBB	src/globalvar.py	/^tacBB = ir.irTable(filename)$/;"	v
+tacTable	src/globalvar.py	/^tacTable = tacBB.arr$/;"	v
+token	bin/lexer.py	/^	token = lexer.token()$/;"	v
+token	src/lexer.py	/^	token = lexer.token()$/;"	v
+tokens	bin/tokens.py	/^tokens = [$/;"	v
+tokens	bin/tokens.py	/^tokens = tokens + list(reserved.values())$/;"	v
+tokens	src/tokens.py	/^tokens = [$/;"	v
+tokens	src/tokens.py	/^tokens = tokens + list(reserved.values())$/;"	v
+tokens_d	bin/lexer.py	/^tokens_d = {}$/;"	v
+tokens_d	src/lexer.py	/^tokens_d = {}$/;"	v
