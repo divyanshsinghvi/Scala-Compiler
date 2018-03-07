@@ -6,3 +6,4 @@
 *.out
 *.gdb_history
 *.txt
+/src/*.pyc
