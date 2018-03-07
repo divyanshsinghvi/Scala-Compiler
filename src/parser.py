@@ -9,159 +9,197 @@ def printp(p):
 def p_compilation_unit(p):
     '''compilation_unit : compilation_unit_0 top_stat_seq
     '''
+    printp(p)
     
 def p_compilation_unit_0(p):
     '''compilation_unit_0 : empty
                          | compilation_unit_0  R_PACKAGE qual_id semi  
     '''
+    printp(p)
 
 def p_top_stat_seq(p):
     '''top_stat_seq : top_stat_seq_0
     '''
+    printp(p)
 
 def p_top_stat_seq_0(p):
     '''top_stat_seq_0 :  empty
                     | top_stat_seq_0 top_stat semi
     '''
+    printp(p)
 
 def p_top_stat(p):
     '''top_stat : local_modifier_0 tmpl_def
                 | import
     '''
+    printp(p)
 
 def p_local_modifier_0(p):
     '''local_modifier_0 : empty 
                         | local_modifier_0 local_modifier
     '''
+    printp(p)
 
 def p_tmpl_def(p):
     ''' tmpl_def : R_CLASS class_def
                  | R_OBJECT object_def        
     '''
+    printp(p)
 
 def p_class_def(p): 
     '''class_def : id class_param_clause class_template_opt
     '''
+    printp(p)
 
 def p_class_param_clause(p):
     '''class_param_clause : LPARAN  class_params_1  RPARAN
     '''
+    printp(p)
 
 def p_class_params_1(p):
     '''class_params_1 : class_params
                       | epsilon
     '''
+    printp(p)
 
 def p_class_params(p) :  
     ''' class_params : class_param
                      | class_param_0
     '''
+    printp(p)
 
 def p_class_param_0(p):
     ''' class_param_0 : empty
                       | class_param_0 COMMA class_param
     '''
+    printp(p)
 
 def p_class_param(p):
     ''' class_param : val_var_1 id COLON type eq_expr_1
     '''
+    printp(p)
 
 def p_val_var_1(p):
     ''' val_var_1 : val_var 
                   | epsilon
     '''
+    printp(p)
 
 def p_val_var(p):
     ''' val_var : R_VAL 
                 | R_VAR
     '''
+    printp(p)
 def p_eq_expr_1(p):
     ''' eq_expr_1 : EQUALASGN expr
                   | epsilon
     '''
+    printp(p)
 def p_class_template_opt(p):
     ''' class_template_opt : class_template_opt_2 template_body
     '''
+    printp(p)
 def p_class_template_opt_2(p):
     ''' class_template_opt_2 : R_EXTENDS id  class_template_opt_1
                              | empty
 
     '''
+    printp(p)
 def p_class_template_opt_1(p):
     '''class_template_opt_1 : LPARAN id com_id_0 RPARAN
                             | empty
     '''
+    printp(p)
 def p_com_id(p):
     ''' com_id : empty
                 | com_id COMMA id 
     '''
+    printp(p)
 def p_template_body(p):
     ''' template_body : BLOCKBEGIN template_body_0 BLOCKEND
     '''
+    printp(p)
 
 def p_template_body_0(p):
     ''' template_body_0 : empty
                         | template_body_0 template_stat semi
     '''
+    printp(p)
 def p_template_stat(p):
     ''' template_stat : expr
                       | modifier_0 def
                       | modifier_0 dcl
     '''
+    printp(p)
 def p_modifier_0(p):
     ''' modifier_0 : empty
                     | modifier_0 modifier
     '''
+    printp(p)
 def p_import(p):
     ''' import : R_IMPORT import_expr COMMA import_expr
     '''
+    printp(p)
 def p_import_expr(p):
     '''import_expr : stable_id DOT id
     '''
+    printp(p)
 def p_def(p):
     ''' def : path_var_def 
             | R_DEF fun_def 
             | tmpl_def
     '''
+    printp(p)
 def p_pat_var_def(p):
     ''' pat_var_def : R_VAR var_def
                     | R_VAL val_def
     '''
+    printp(p)
 def p_var_def(p):
     ''' var_def : id COLON type EQUALASGN expr
     '''
+    printp(p)
 def p_val_def(p):
     ''' val_def : id COLON type EQUALASGN expr
     '''
+    printp(p)
 #some ambiguity here ???
 def p_fun_def(p):
     ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN expr semi BLOCKEND
     '''
+    printp(p)
 def p_col_type_1(p) :
     ''' col_type_1 : COLON type
                     | epsilon
     '''
+    printp(p)
 def p_funsig(p):
     ''' funsig : id param_clause
     '''
+    printp(p)
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
                       | LPARAM params RPARAN
     '''
+    printp(p)
 def p_params(p):
     ''' params : param COMMA param
     '''
+    printp(p)
 def p_param(p):
     ''' param : id COLON param_type eq_expr | id eq_expr
     '''
+    printp(p)
 def p_eq_expr(p):
     ''' eq_expr : empty
                 | EQUALASGN expr
     '''
+    printp(p)
 def p_param_type(p):
     ''' param_type : type
                     | type LEFTARROW type
     '''
+    printp(p)
 def p_dcl(p):
     '''dcl  :   R_VAL val_dcl
             |   R_VAR var_dcl
@@ -170,21 +208,26 @@ def p_dcl(p):
 
 def p_val_dcl(p):
     '''val_dcl   :   id COLON type val_dcl_0'''
+    printp(p)
 
 def p_val_dcl_0(p):
     '''val_dcl_0    :   epsilon
                     |   COMMA val_dcl'''
+    printp(p)
 
 def p_var_dcl(p):
     '''var_dcl  :   id COLON type var_dcl_0'''
+    printp(p)
 
 def p_var_dcl_0(p):
     '''var_dcl_0    :   epsilon
                     |   COMMA var_dcl'''
+    printp(p)
 
 def p_fun_dcl(p):
     '''fun_dcl  :   fun_sig COLON type 
                 |   fun_sig'''
+    printp(p)
 
 #def fun_dcl_1(p):
 #    '''fun_dcl_0    :   COLON type fun_dcl_0
@@ -194,19 +237,23 @@ def p_modifier(p):
     '''modifier :   local_modifier
                 |   access_modifier
                 |   R_OVERRIDE'''
+    printp(p)
 
 def p_local_modifier(p):
     '''local_modifier   :   R_FINAL
                         |   R_ABSTRACT'''
+    printp(p)
 
 def p_access_modifier(p):
     '''access_modifier  :   R_PRIVATE
                         |   R_PROTECTED'''
+    printp(p)
 
 def p_path(p):
     '''path :   stable_id
             |   id DOT R_THIS
             |   R_THIS'''
+    printp(p)
 
 #def path_0(p):
 #    '''path_0   :   id DOT path_0
@@ -217,36 +264,44 @@ def p_block_stat(p):
                     |   R_DCL
                     |   local_modifier_0 tmpl_def
                     |   expr1'''
+    printp(p)
                     
 def p_block(p):
     '''block    :   epsilon
                 |   block_stat semi block'''
+    printp(p)
 
 def p_stable_id(p):
     '''id       :   id
                 |   path DOT id
                 |   id DOT R_SUPER DOT id
                 |   R_SUPER DOT id'''
+    printp(p)
 
 
 def p_simple_expr(p):
     '''simple_expr  :   R_NEW class_template
                     |   block_expr
                     |   simple_expr1'''
+    printp(p)
 
 def p_class_template(p):
     '''class_template   :   id class_template_1'''
+    printp(p)
 
 def p_class_template_1(p):
     '''class_template_1 :   LAPARAN id  class_template_0 RPARAN class_template_1
                         |   epsilon '''
+    printp(p)
 
 def p_class_template_0(p):
     '''class_template_0 :   COMMA id class_template_0
                         |   epsilon'''
+    printp(p)
 
 def p_block_expr(p):
     '''block_expr   :   block'''
+    printp(p)
 
 def p_simple_expr1(p):
     '''simple_expr1 :   literal
@@ -255,16 +310,19 @@ def p_simple_expr1(p):
                     |   simple_expr DOT id
                     |   simple_expr type_args
                     |   simple_expr1 arguement_exprs'''
+    printp(p)
 
 def p_exprs_1(p):
     '''exprs_1  :   exprs
                 |   epsilon'''
+    printp(p)
 
 def p_prefix_expr(p):
     '''prefix_expr  :   simple_expr
                     |   OP_MINUS simple_exprs
                     |   OP_PLUS simple_exprs
                     |   OP_NOT simple_exprs'''
+    printp(p)
 
 
 
