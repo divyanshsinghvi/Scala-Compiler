@@ -63,7 +63,6 @@ def p_class_param_clause(p):
 
 def p_class_params_1(p):
     '''class_params_1 : class_params
-                      | epsilon
     '''
     printp(p)
 
@@ -271,7 +270,7 @@ def p_block_stat(p):
     '''block_stat   :   R_DEF
                     |   R_DCL
                     |   local_modifier_0 tmpl_def
-                    |   expr1'''
+                    |   expr'''
     printp(p)
                     
 def p_block(p):
@@ -445,8 +444,8 @@ def p_switch_labels_1(p):
     '''
     printp(p)
 
-def p_expr1(p):
-    ''' expr1 : R_IF LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND expression1
+def p_expr(p):
+    ''' expr : R_IF LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND expression1
               | R_WHILE LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN expr semi BLOCKEND R_WHILE LPARAN expr RPARAN
@@ -476,10 +475,6 @@ def p_literal_0(p):
     '''
     printp(p)
 
-def p_expr(p):
-    ''' expr : expr1
-    '''
-    printp(p)
 
 def p_argument_exprs(p):
     ''' argument_exprs : LPARAN exprs_1 RPARAN
@@ -603,6 +598,7 @@ def p_epsilon(p):
     ''' epsilon :
 
     '''
+    pass
 #    print(p)
 
 parser = yacc.yacc()
