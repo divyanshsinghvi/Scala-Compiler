@@ -253,7 +253,8 @@ def p_local_modifier(p):
 
 def p_access_modifier(p):
     '''access_modifier  :   R_PRIVATE
-                        |   R_PROTECTED'''
+                        |   R_PROTECTED
+                        |   R_PUBLIC'''
     printp(p)
 
 def p_path(p):
@@ -569,11 +570,12 @@ def p_asgn(p):
     printp(p)
 
 def p_basic_type(p):
-    ''' basic_type : INT
-                   | FLOAT
-                   | CHAR
-                   | STRING
-                   | BOOL
+    ''' basic_type : TYPE_INT
+                   | TYPE_FLOAT
+                   | TYPE_CHAR
+                   | TYPE_STRING
+                   | TYPE_BOOLEAN
+                   | R_NULL
     '''
     printp(p)
 
