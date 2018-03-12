@@ -6,46 +6,54 @@ tokens = lexer.tokens
 
 def printp(p):
     for i in range(0,len(p)):
-        print(p[0])
+        print(p[i])
+
 
 def p_compilation_unit(p):
     '''compilation_unit : compilation_unit_0 top_stat_seq
     '''
+    p[0] = "compilation_unit"
     printp(p)
     
 def p_compilation_unit_0(p):
     '''compilation_unit_0 : epsilon
                          | compilation_unit_0  R_PACKAGE qual_id semi  
     '''
+    p[0] = "compilation_unit_0"
     printp(p)
 
 def p_top_stat_seq(p):
     '''top_stat_seq : top_stat_seq_0
     '''
+    p[0] = "top_stat_seq"
     printp(p)
 
 def p_top_stat_seq_0(p):
     '''top_stat_seq_0 :  epsilon
                     | top_stat_seq_0 top_stat semi
     '''
+    p[0] = "top_stat_seq_0"
     printp(p)
 
 def p_top_stat(p):
     '''top_stat : local_modifier_0 tmpl_def
                 | import
     '''
+    p[0] = "top_stat"
     printp(p)
 
 def p_local_modifier_0(p):
     '''local_modifier_0 : epsilon 
                         | local_modifier_0 local_modifier
     '''
+    p[0] = "local_modifier"
     printp(p)
 
 def p_tmpl_def(p):
     ''' tmpl_def : R_CLASS class_def
                  | R_OBJECT object_def        
     '''
+    p[0] = "tmpl_def"
     printp(p)
 
 def p_class_def(p): 
@@ -592,6 +600,12 @@ def p_literal(p):
                 | FLOAT
     '''
     printp(p)
+
+def p_comment(p):
+    '''comment : MCOMMENT
+               | SCOMMENT
+    '''
+    print(p)
 
 def p_epsilon(p):
     ''' epsilon :

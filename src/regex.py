@@ -23,7 +23,6 @@ t_EQ = r'=='
 t_NEQ = r'!='
 t_AND = r'&&'
 t_OR = r'\|\|'
-t_NOT = r'!'
 t_XOR = r'\^'
 t_AND_BIT = '&'
 t_OR_BIT = '\|'
@@ -45,7 +44,7 @@ t_COLON = r':'
 t_SEMICOLON = r';'
 t_DOT = r'\.'
 t_COMMA = r'\,'
-t_UNDER = r'_'
+#t_UNDER = r'_'
 
 
 def t_FLOAT(t):
