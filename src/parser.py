@@ -173,8 +173,8 @@ def p_col_type_1(p) :
                     | epsilon
     '''
     printp(p)
-def p_funsig(p):
-    ''' funsig : id param_clause
+def p_fun_sig(p):
+    ''' fun_sig : id param_clause
     '''
     printp(p)
 def p_param_clause(p):
@@ -569,6 +569,7 @@ def p_epsilon(p):
     ''' epsilon :
 
     '''
+    print(p)
 
 parser = yacc.yacc()
 
