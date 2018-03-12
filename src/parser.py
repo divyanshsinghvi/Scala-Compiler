@@ -176,6 +176,7 @@ def p_col_type_1(p) :
 def p_funsig(p):
     ''' funsig : id param_clause
     '''
+    printp(p)
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
                       | LPARAM params RPARAN
@@ -207,15 +208,18 @@ def p_dcl(p):
 
 def p_val_dcl(p):
     '''val_dcl   :   id COLON type val_dcl_0'''
+    printp(p)
 
     printp(p)
 def p_val_dcl_0(p):
     '''val_dcl_0    :   epsilon
                     |   COMMA val_dcl'''
+    printp(p)
 
     printp(p)
 def p_var_dcl(p):
     '''var_dcl  :   id COLON type var_dcl_0'''
+    printp(p)
 
     printp(p)
 def p_var_dcl_0(p):
@@ -226,6 +230,7 @@ def p_var_dcl_0(p):
 def p_fun_dcl(p):
     '''fun_dcl  :   fun_sig COLON type 
                 |   fun_sig'''
+    printp(p)
 
     printp(p)
 #def fun_dcl_1(p):
