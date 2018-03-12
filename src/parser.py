@@ -12,7 +12,7 @@ def p_compilation_unit(p):
     printp(p)
     
 def p_compilation_unit_0(p):
-    '''compilation_unit_0 : empty
+    '''compilation_unit_0 : epsilon
                          | compilation_unit_0  R_PACKAGE qual_id semi  
     '''
     printp(p)
@@ -23,7 +23,7 @@ def p_top_stat_seq(p):
     printp(p)
 
 def p_top_stat_seq_0(p):
-    '''top_stat_seq_0 :  empty
+    '''top_stat_seq_0 :  epsilon
                     | top_stat_seq_0 top_stat semi
     '''
     printp(p)
@@ -35,7 +35,7 @@ def p_top_stat(p):
     printp(p)
 
 def p_local_modifier_0(p):
-    '''local_modifier_0 : empty 
+    '''local_modifier_0 : epsilon 
                         | local_modifier_0 local_modifier
     '''
     printp(p)
@@ -69,7 +69,7 @@ def p_class_params(p) :
     printp(p)
 
 def p_class_param_0(p):
-    ''' class_param_0 : empty
+    ''' class_param_0 : epsilon
                       | class_param_0 COMMA class_param
     '''
     printp(p)
@@ -101,17 +101,17 @@ def p_class_template_opt(p):
     printp(p)
 def p_class_template_opt_2(p):
     ''' class_template_opt_2 : R_EXTENDS id  class_template_opt_1
-                             | empty
+                             | epsilon
 
     '''
     printp(p)
 def p_class_template_opt_1(p):
     '''class_template_opt_1 : LPARAN id com_id_0 RPARAN
-                            | empty
+                            | epsilon
     '''
     printp(p)
 def p_com_id(p):
-    ''' com_id : empty
+    ''' com_id : epsilon
                 | com_id COMMA id 
     '''
     printp(p)
@@ -121,7 +121,7 @@ def p_template_body(p):
     printp(p)
 
 def p_template_body_0(p):
-    ''' template_body_0 : empty
+    ''' template_body_0 : epsilon
                         | template_body_0 template_stat semi
     '''
     printp(p)
@@ -132,7 +132,7 @@ def p_template_stat(p):
     '''
     printp(p)
 def p_modifier_0(p):
-    ''' modifier_0 : empty
+    ''' modifier_0 : epsilon
                     | modifier_0 modifier
     '''
     printp(p)
@@ -192,7 +192,7 @@ def p_param(p):
     '''
     printp(p)
 def p_eq_expr(p):
-    ''' eq_expr : empty
+    ''' eq_expr : epsilon
                 | EQUALASGN expr
     '''
     printp(p)
@@ -569,6 +569,11 @@ def p_literal(p):
     ''' literal : basic_type
     '''
     printp(p)
+
+def p_epsilon(p):
+    ''' epsilon :
+
+    '''
 
 parser = yacc.yacc()
 
