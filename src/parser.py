@@ -314,7 +314,7 @@ def p_simple_expr1(p):
                     |   LPARAN exprs_1 RPARAN
                     |   simple_expr DOT id
                     |   simple_expr type_args
-                    |   simple_expr1 arguement_exprs'''
+                    |   simple_expr1 argument_exprs'''
     printp(p)
 
 #def p_exprs_1(p):
@@ -324,9 +324,9 @@ def p_simple_expr1(p):
 
 def p_prefix_expr(p):
     '''prefix_expr  :   simple_expr
-                    |   OP_MINUS simple_exprs
-                    |   OP_PLUS simple_exprs
-                    |   OP_NOT simple_exprs'''
+                    |   OP_SUB simple_expr
+                    |   OP_ADD simple_expr
+                    |   OP_NOT simple_expr'''
     printp(p)
 
 
@@ -440,8 +440,8 @@ def p_expr1(p):
               | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
               | R_RETURN expr
               | post_fix_expr
-              | switch LPARAN expr RPARAN switch_block
-              | R_ARRAY LPARAN literal literal_0 RPARAN
+              | R_SWITCH LPARAN expr RPARAN switch_block
+              | TYPE_ARRAY LPARAN literal literal_0 RPARAN
     '''
     printp(p)
 
@@ -470,6 +470,11 @@ def p_expr(p):
 
 def p_argument_exprs(p):
     ''' argument_exprs : LPARAN exprs_1 RPARAN
+    '''
+    printp(p)
+
+def p_exprs(p):
+    ''' exprs : expr
     '''
     printp(p)
 
