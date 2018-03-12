@@ -487,7 +487,8 @@ def p_id_1(p):
     printp(p)
 
 def p_infix_expr(p):
-    ''' infix_expr : infix_expr id infix_expr
+    ''' infix_expr : infix_expr op infix_expr
+                   | infix_expr asgn infix_expr
                    | prefix_expr
     '''
     printp(p)
@@ -505,5 +506,57 @@ def p_comma_type_0(p):
 
 def p_type_args(p):
     ''' type_args : LSQRB types RSQRB
+    '''
+    printp(p)
+
+def p_op(p):
+    ''' op : OR
+           | AND
+           | AND_BIT
+           | OR_BIT
+           | XOR
+           | EQ
+           | NEQ
+           | LT
+           | LE
+           | GT
+           | GE
+           | LSHIFT
+           | RSHIFT
+           | RRSHIFT
+           | OP_ADD
+           | OP_DIV
+           | OP_MUL
+           | OP_SUB
+           | OP_MOD
+    '''
+    printp(p)
+
+def p_asgn(p):
+    ''' asgn : EQUALASGN
+             | ADDASGN
+             | SUBASGN
+             | MULASGN
+             | DIVASGN
+             | MODASGN
+             | LSHIFTASGN
+             | RSHIFTASGN
+             | ANDASGN
+             | ORASGN
+             | XORASGN
+    '''
+    printp(p)
+
+def p_basic_type(p):
+    ''' basic_type : INT
+                   | FLOAT
+                   | CHAR
+                   | STRING
+                   | BOOL
+    '''
+    printp(p)
+
+def p_id(p):
+    ''' id : ID
     '''
     printp(p)
