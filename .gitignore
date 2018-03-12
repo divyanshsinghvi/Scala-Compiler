@@ -7,3 +7,5 @@
 *.gdb_history
 *.txt
 /src/*.pyc
+/src/regex.pyc
+/src/parsetab.py

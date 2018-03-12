@@ -5,8 +5,9 @@ import lexer
 tokens = lexer.tokens
 
 def printp(p):
-    for i in range(0,len(p)):
-        print (p.slice)[i],
+    print (p.slice)
+   # for i in range(0,len(p)):
+   #     print (p.slice)[i],
 
     print "\n"
 
