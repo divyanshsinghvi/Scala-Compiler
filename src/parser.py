@@ -4,7 +4,7 @@ from tokens import tokens
 
 def printp(p):
     for i in range(0,len(p)):
-        print(p[0],end=' ')
+        print(p[0])
 
 def p_compilation_unit(p):
     '''compilation_unit : compilation_unit_0 top_stat_seq
@@ -385,18 +385,18 @@ def p_catch_clause_1(p):
     '''
     printp(p)
 
-def p_for_upd(p):           # to be done later, the for case
+#def p_for_upd(p):           # to be done later, the for case
 
-def p_for_logic(p):
-    ''' for_logic : for_upd semi_for_logic_1
-    '''
-    printp(p)
+#def p_for_logic(p):
+#    ''' for_logic : for_upd semi_for_logic_1
+#    '''
+#    printp(p)
 
-def p_semi_for_logic_1(p):
-    ''' semi_for_logic_1 : semi for_logic
-                    | epsilon
-    '''
-    printp(p)
+#def p_semi_for_logic_1(p):
+#    ''' semi_for_logic_1 : semi for_logic
+#| epsilon
+#    '''
+#    printp(p)
 
 def p_switch_labels(p):
     ''' switch_labels : R_CASE literal COLON
@@ -416,7 +416,7 @@ def p_switch_labels_0(p):
     printp(p)
 
 def p_switch_block(p):
-    '''  BLOCKBEGIN switch_block_statements_0 switch_labels_1 BLOCKEND
+    '''  switch_block : BLOCKBEGIN switch_block_statements_0 switch_labels_1 BLOCKEND
     '''
     printp(p)
 
@@ -564,3 +564,12 @@ def p_id(p):
     ''' id : ID
     '''
     printp(p)
+
+parser = yacc.yacc()
+
+f = open(sys.argv[1],"r")
+code_full = f.read()
+code_full=code_full+'\n'
+f.close()
+
+parser.parse(code_full)
