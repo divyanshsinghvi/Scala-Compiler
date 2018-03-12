@@ -184,7 +184,7 @@ def p_val_def(p):
     printp(p)
 #some ambiguity here ???
 def p_fun_def(p):
-    ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN expr semi BLOCKEND
+    ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN block BLOCKEND
     '''
     printp(p)
 def p_col_type_1(p) :
@@ -401,8 +401,8 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : for_init semi infix_expr semi for_upd
-                  | for_init semi epsilon semi for_upd
+    ''' for_logic : LPARAN for_init semi infix_expr semi for_upd
+                  | LPARAN for_init semi epsilon semi for_upd
     '''
     printp(p)
 
@@ -414,8 +414,8 @@ def p_for_init(p):
     printp(p)
 
 def p_for_upd(p):           # to be done later, the for case
-    ''' for_upd : epsilon
-                   | infix_expr
+    ''' for_upd : RPARAN
+                   | infix_expr RPARAN
     '''
     printp(p)
 
@@ -460,11 +460,11 @@ def p_switch_labels_1(p):
     printp(p)
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND expression1
-              | R_WHILE LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND
+    ''' expr : R_IF LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND expression1
+              | R_WHILE LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
-              | R_DO BLOCKBEGIN expr semi BLOCKEND R_WHILE LPARAN expr RPARAN
-              | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
+              | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN expr RPARAN
+              | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
               | R_RETURN expr
               | postfix_expr
               | R_SWITCH LPARAN expr RPARAN switch_block
@@ -473,13 +473,13 @@ def p_expr(p):
     printp(p)
 
 def p_expression1(p):
-    ''' expression1 : R_ELSE BLOCKBEGIN expr semi BLOCKEND
+    ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
                     | epsilon
     '''
     printp(p)
 
 def p_expression2(p):
-    ''' expression2 : R_FINALLY BLOCKBEGIN expr semi BLOCKEND
+    ''' expression2 : R_FINALLY BLOCKBEGIN block BLOCKEND
                     | epsilon
     '''
     printp(p)
