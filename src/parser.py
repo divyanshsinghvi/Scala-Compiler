@@ -1,5 +1,5 @@
 import sys
-import yacc
+import ply.yacc as yacc
 from tokens import tokens
 
 def printp(p):
