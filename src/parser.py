@@ -150,8 +150,8 @@ def p_def(p):
             | tmpl_def
     '''
     printp(p)
-def p_pat_var_def(p):
-    ''' pat_var_def : R_VAR var_def
+def p_path_var_def(p):
+    ''' path_var_def : R_VAR var_def
                     | R_VAL val_def
     '''
     printp(p)
@@ -173,8 +173,8 @@ def p_col_type_1(p) :
                     | epsilon
     '''
     printp(p)
-def p_funsig(p):
-    ''' funsig : id param_clause
+def p_fun_sig(p):
+    ''' fun_sig : id param_clause
     '''
     printp(p)
 def p_param_clause(p):
