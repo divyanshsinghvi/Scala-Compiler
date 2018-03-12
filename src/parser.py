@@ -281,16 +281,16 @@ def p_block(p):
     printp(p)
 
 def p_stable_id(p):
-    '''stable_id       :   id
-                |   path DOT id
-                |   id DOT R_SUPER DOT id
-                |   R_SUPER DOT id'''
+    '''stable_id :   id
+                 |   path DOT id
+                 |   id DOT R_SUPER DOT id
+                 |   R_SUPER DOT id'''
     printp(p)
 
 
 def p_simple_expr(p):
     '''simple_expr  :   R_NEW class_template
-                    |   block_expr
+                    |   block
                     |   simple_expr1'''
     printp(p)
 
@@ -308,9 +308,9 @@ def p_class_template_0(p):
                         |   epsilon'''
     printp(p)
 
-def p_block_expr(p):
-    '''block_expr   :   block'''
-    printp(p)
+#def p_block_expr(p):
+#    '''block_expr   :   block'''
+#    printp(p)
 
 def p_simple_expr1(p):
     '''simple_expr1 :   literal
@@ -346,7 +346,7 @@ def p_array_type(p):
 
 def p_simple_type(p):
     ''' simple_type : type
-                   | LPARAN type RPARAN
+                    | LPARAN type RPARAN
     '''
     printp(p)
 
