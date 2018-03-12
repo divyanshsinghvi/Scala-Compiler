@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-import lex
+import ply.lex as lex
 import yacc
 from tokens import *
 from regex import *
