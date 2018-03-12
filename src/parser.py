@@ -277,7 +277,7 @@ def p_block(p):
     printp(p)
 
 def p_stable_id(p):
-    '''id       :   id
+    '''stable_id       :   id
                 |   path DOT id
                 |   id DOT R_SUPER DOT id
                 |   R_SUPER DOT id'''
