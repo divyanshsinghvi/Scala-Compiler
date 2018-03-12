@@ -106,7 +106,7 @@ def p_class_template_opt_2(p):
     '''
     printp(p)
 def p_class_template_opt_1(p):
-    '''class_template_opt_1 : LPARAN id com_id_0 RPARAN
+    '''class_template_opt_1 : LPARAN id com_id RPARAN
                             | epsilon
     '''
     printp(p)
@@ -150,8 +150,8 @@ def p_def(p):
             | tmpl_def
     '''
     printp(p)
-def p_pat_var_def(p):
-    ''' pat_var_def : R_VAR var_def
+def p_path_var_def(p):
+    ''' path_var_def : R_VAR var_def
                     | R_VAL val_def
     '''
     printp(p)
@@ -277,7 +277,7 @@ def p_block(p):
     printp(p)
 
 def p_stable_id(p):
-    '''id       :   id
+    '''stable_id       :   id
                 |   path DOT id
                 |   id DOT R_SUPER DOT id
                 |   R_SUPER DOT id'''
@@ -435,7 +435,7 @@ def p_switch_labels_1(p):
 def p_expr1(p):
     ''' expr1 : R_IF LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND expression1
               | R_WHILE LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND
-              | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expressoin2
+              | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN expr semi BLOCKEND R_WHILE LPARAN expr RPARAN
               | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
               | R_RETURN expr
@@ -562,6 +562,11 @@ def p_basic_type(p):
 
 def p_id(p):
     ''' id : ID
+    '''
+    printp(p)
+
+def p_literal(p):
+    ''' literal : basic_type
     '''
     printp(p)
 
