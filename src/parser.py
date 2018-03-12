@@ -435,7 +435,7 @@ def p_switch_labels_1(p):
 def p_expr1(p):
     ''' expr1 : R_IF LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND expression1
               | R_WHILE LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND
-              | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expressoin2
+              | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN expr semi BLOCKEND R_WHILE LPARAN expr RPARAN
               | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
               | R_RETURN expr
@@ -562,6 +562,11 @@ def p_basic_type(p):
 
 def p_id(p):
     ''' id : ID
+    '''
+    printp(p)
+
+def p_literal(p):
+    ''' literal : basic_type
     '''
     printp(p)
 
