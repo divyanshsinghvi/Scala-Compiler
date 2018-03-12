@@ -222,12 +222,10 @@ def p_val_dcl_0(p):
                     |   COMMA val_dcl'''
     printp(p)
 
-    printp(p)
 def p_var_dcl(p):
     '''var_dcl  :   id COLON type var_dcl_0'''
     printp(p)
 
-    printp(p)
 def p_var_dcl_0(p):
     '''var_dcl_0    :   epsilon
                     |   COMMA var_dcl'''
@@ -238,7 +236,6 @@ def p_fun_dcl(p):
                 |   fun_sig'''
     printp(p)
 
-    printp(p)
 #def fun_dcl_1(p):
 #    '''fun_dcl_0    :   COLON type fun_dcl_0
 #                    |   epsilon'''
@@ -606,7 +603,7 @@ def p_epsilon(p):
     ''' epsilon :
 
     '''
-    print(p)
+#    print(p)
 
 parser = yacc.yacc()
 
