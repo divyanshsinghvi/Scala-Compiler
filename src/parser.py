@@ -329,16 +329,14 @@ def p_prefix_expr(p):
                     |   OP_NOT simple_expr'''
     printp(p)
 
-
-
-def p_array_type(p):
-    ''' type : id LSQRB type RSQRB
-    '''
-    printp(p)
-
 def p_type(p):                      # look at <T>
     ''' type : basic_type
              | array_type
+    '''
+    printp(p)
+
+def p_array_type(p):
+    ''' array_type : id LSQRB type RSQRB
     '''
     printp(p)
 
@@ -387,10 +385,13 @@ def p_catch_clause_1(p):
 
 #def p_for_upd(p):           # to be done later, the for case
 
-#def p_for_logic(p):
-#    ''' for_logic : for_upd semi_for_logic_1
-#    '''
-#    printp(p)
+def p_for_logic(p):
+    ''' for_logic : for_init semi infix_expr semi for_upd
+                  | for_init semi epsilon semi for_upd
+                  | for_init semi epsilon semi epsilon 
+                  | for_init semi infix_expr semi epsilon
+    '''
+    printp(p)
 
 #def p_semi_for_logic_1(p):
 #    ''' semi_for_logic_1 : semi for_logic
@@ -421,7 +422,7 @@ def p_switch_block(p):
     printp(p)
 
 def p_switch_block_statements_0(p):
-    ''' switch_block_satements_0 : epsilon
+    ''' switch_block_statements_0 : epsilon
                                  | switch_block_statements_0 switch_block_statements
     '''
     printp(p)
@@ -439,7 +440,7 @@ def p_expr1(p):
               | R_DO BLOCKBEGIN expr semi BLOCKEND R_WHILE LPARAN expr RPARAN
               | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
               | R_RETURN expr
-              | post_fix_expr
+              | postfix_expr
               | R_SWITCH LPARAN expr RPARAN switch_block
               | TYPE_ARRAY LPARAN literal literal_0 RPARAN
     '''
