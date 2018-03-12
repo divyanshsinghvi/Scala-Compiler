@@ -142,14 +142,16 @@ def p_template_body_0(p):
                         | template_body_0 template_stat semi
     '''
     printp(p)
+
 def p_template_stat(p):
-    ''' template_stat : expr
+    ''' template_stat : block_stat
                       | modifier_0 def
                       | modifier_0 dcl
     '''
     printp(p)
+
 def p_modifier_0(p):
-    ''' modifier_0 : epsilon
+    ''' modifier_0 : modifier
                     | modifier_0 modifier
     '''
     printp(p)
@@ -280,8 +282,8 @@ def p_path(p):
 #                |   epsilon'''
 
 def p_block_stat(p):
-    '''block_stat   :   R_DEF
-                    |   R_DCL
+    '''block_stat   :   def
+                    |   dcl
                     |   local_modifier_0 tmpl_def
                     |   expr'''
     printp(p)
