@@ -179,7 +179,7 @@ def p_fun_sig(p):
     printp(p)
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
-                      | LPARAM params RPARAN
+                      | LPARAN params RPARAN
     '''
     printp(p)
 def p_params(p):
@@ -295,7 +295,7 @@ def p_class_template(p):
     printp(p)
 
 def p_class_template_1(p):
-    '''class_template_1 :   LAPARAN id  class_template_0 RPARAN class_template_1
+    '''class_template_1 :   LPARAN id  class_template_0 RPARAN class_template_1
                         |   epsilon '''
     printp(p)
 
@@ -416,7 +416,7 @@ def p_switch_labels_0(p):
     printp(p)
 
 def p_switch_block(p):
-    '''  switch_block : BLOCKBEGIN switch_block_statements_0 switch_labels_1 BLOCKEND
+    ''' switch_block : BLOCKBEGIN switch_block_statements_0 switch_labels_1 BLOCKEND
     '''
     printp(p)
 
