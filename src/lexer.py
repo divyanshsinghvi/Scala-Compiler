@@ -9,17 +9,18 @@ from regex import *
 lexer = lex.lex()
 
 
+
+if __name__ == '__main__': 
 # Python Reading the file contents
-fileName = open(sys.argv[1],"r")
-code = fileName.read()
-fileName.close()
+    fileName = open(sys.argv[1],"r")
+    code = fileName.read()
+    fileName.close()
 
+    lexer.input(code)
 
-lexer.input(code)
+    tokens_d = {}
 
-tokens_d = {}
-
-while True:
+    while True:
 	token = lexer.token()
 	if not token:
 		break
@@ -31,9 +32,9 @@ while True:
 		else:
 			tokens_d[token.type] = (tokens_d[token.type][0]), tokens_d[token.type][1]+1
 
-print '%-20s%-20s%s' % ("Token", "Occurances", "Lexemes")
-print "____________________________________________________"
-for value in tokens_d:
+    print '%-20s%-20s%s' % ("Token", "Occurances", "Lexemes")
+    print "____________________________________________________"
+    for value in tokens_d:
 	print '%-20s%-20s%s' % (value, tokens_d[value][1], (tokens_d[value][0][0]))
 	for i in range(1,len(tokens_d[value][0])):
 		print '%-40s%s' %(" ", (tokens_d[value][0][i]))
