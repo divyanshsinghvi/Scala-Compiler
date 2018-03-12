@@ -106,7 +106,7 @@ def p_class_template_opt_2(p):
     '''
     printp(p)
 def p_class_template_opt_1(p):
-    '''class_template_opt_1 : LPARAN id com_id_0 RPARAN
+    '''class_template_opt_1 : LPARAN id com_id RPARAN
                             | epsilon
     '''
     printp(p)
@@ -150,8 +150,8 @@ def p_def(p):
             | tmpl_def
     '''
     printp(p)
-def p_pat_var_def(p):
-    ''' pat_var_def : R_VAR var_def
+def p_path_var_def(p):
+    ''' path_var_def : R_VAR var_def
                     | R_VAL val_def
     '''
     printp(p)
@@ -173,8 +173,8 @@ def p_col_type_1(p) :
                     | epsilon
     '''
     printp(p)
-def p_funsig(p):
-    ''' funsig : id param_clause
+def p_fun_sig(p):
+    ''' fun_sig : id param_clause
     '''
     printp(p)
 def p_param_clause(p):
@@ -277,7 +277,7 @@ def p_block(p):
     printp(p)
 
 def p_stable_id(p):
-    '''id       :   id
+    '''stable_id       :   id
                 |   path DOT id
                 |   id DOT R_SUPER DOT id
                 |   R_SUPER DOT id'''
@@ -579,6 +579,7 @@ def p_epsilon(p):
     ''' epsilon :
 
     '''
+    print(p)
 
 parser = yacc.yacc()
 
