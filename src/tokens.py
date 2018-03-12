@@ -103,6 +103,7 @@ reserved = {
 	'while' : 'R_WHILE',
 	'with' : 'R_WITH',
 	'yeild' : 'R_YIELD',
+        'default' : 'R_DEFAULT'
 }
 
 tokens = tokens + list(reserved.values())

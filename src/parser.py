@@ -179,7 +179,7 @@ def p_fun_sig(p):
     printp(p)
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
-                      | LPARAM params RPARAN
+                      | LPARAN params RPARAN
     '''
     printp(p)
 def p_params(p):
@@ -295,7 +295,7 @@ def p_class_template(p):
     printp(p)
 
 def p_class_template_1(p):
-    '''class_template_1 :   LAPARAN id  class_template_0 RPARAN class_template_1
+    '''class_template_1 :   LPARAN id  class_template_0 RPARAN class_template_1
                         |   epsilon '''
     printp(p)
 
@@ -314,7 +314,7 @@ def p_simple_expr1(p):
                     |   LPARAN exprs_1 RPARAN
                     |   simple_expr DOT id
                     |   simple_expr type_args
-                    |   simple_expr1 arguement_exprs'''
+                    |   simple_expr1 argument_exprs'''
     printp(p)
 
 #def p_exprs_1(p):
@@ -324,9 +324,9 @@ def p_simple_expr1(p):
 
 def p_prefix_expr(p):
     '''prefix_expr  :   simple_expr
-                    |   OP_MINUS simple_exprs
-                    |   OP_PLUS simple_exprs
-                    |   OP_NOT simple_exprs'''
+                    |   OP_SUB simple_expr
+                    |   OP_ADD simple_expr
+                    |   OP_NOT simple_expr'''
     printp(p)
 
 
