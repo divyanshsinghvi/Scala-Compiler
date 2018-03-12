@@ -11,6 +11,7 @@ tokens = [
 'RSQRB',
 'BLOCKBEGIN',
 'BLOCKEND',
+'OP_NOT',
 'OP_ADD',
 'OP_SUB',
 'OP_DIV',
