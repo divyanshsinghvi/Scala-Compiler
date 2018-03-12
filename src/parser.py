@@ -106,7 +106,7 @@ def p_class_template_opt_2(p):
     '''
     printp(p)
 def p_class_template_opt_1(p):
-    '''class_template_opt_1 : LPARAN id com_id_0 RPARAN
+    '''class_template_opt_1 : LPARAN id com_id RPARAN
                             | epsilon
     '''
     printp(p)
