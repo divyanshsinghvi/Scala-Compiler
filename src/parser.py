@@ -1,6 +1,8 @@
 import sys
 import ply.yacc as yacc
-from tokens import tokens
+import lexer
+
+tokens = lexer.tokens
 
 def printp(p):
     for i in range(0,len(p)):
