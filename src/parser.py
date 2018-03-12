@@ -3,7 +3,20 @@ import ply.yacc as yacc
 import lexer
 
 tokens = lexer.tokens
-
+precedence = (
+        ('right','XORASGN','ORASGN','ANDASGN','RSHIFTASGN','LSHIFTASGN','MODASGN','DIVASGN','MULASGN','SUBASGN','EQUALASGN'),
+        ('left','OR'),
+        ('left','AND'),
+        ('left','OR_BIT'),
+        ('left','XOR'),
+        ('left','AND'),
+        ('left','EQ','NEQ'),
+        ('left','LE','LT','GT','GE'),
+        ('left','RSHIFT','LSHIFT','RRSHIFT'),
+        ('left','OP_ADD','OP_SUB'),
+        ('left','OP_DIV','OP_MUL','OP_MOD')
+#        ('right','OP_NOT')
+)
 def printp(p):
     for i in range(0,len(p)):
         print (p.slice)[i],
