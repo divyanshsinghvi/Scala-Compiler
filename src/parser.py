@@ -440,8 +440,8 @@ def p_expr1(p):
               | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
               | R_RETURN expr
               | post_fix_expr
-              | switch LPARAN expr RPARAN switch_block
-              | R_ARRAY LPARAN literal literal_0 RPARAN
+              | R_SWITCH LPARAN expr RPARAN switch_block
+              | TYPE_ARRAY LPARAN literal literal_0 RPARAN
     '''
     printp(p)
 
@@ -470,6 +470,11 @@ def p_expr(p):
 
 def p_argument_exprs(p):
     ''' argument_exprs : LPARAN exprs_1 RPARAN
+    '''
+    printp(p)
+
+def p_exprs(p):
+    ''' exprs : expr
     '''
     printp(p)
 
