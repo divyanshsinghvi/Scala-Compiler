@@ -585,7 +585,11 @@ def p_id(p):
     printp(p)
 
 def p_literal(p):
-    ''' literal : basic_type
+    ''' literal : BOOL
+                | INT
+                | CHAR
+                | STRING
+                | FLOAT
     '''
     printp(p)
 
