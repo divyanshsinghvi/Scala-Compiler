@@ -1,4 +1,4 @@
-#import lex
+import sys
 import yacc
 from tokens import tokens
 
@@ -383,13 +383,22 @@ def p_catch_clause_1(p):
     '''
     printp(p)
 
-#def p_for_upd(p):           # to be done later, the for case
-
 def p_for_logic(p):
     ''' for_logic : for_init semi infix_expr semi for_upd
                   | for_init semi epsilon semi for_upd
-                  | for_init semi epsilon semi epsilon 
-                  | for_init semi infix_expr semi epsilon
+    '''
+    printp(p)
+
+def p_for_init(p):
+    ''' for_init : epsilon
+                 | var_def
+                 | var_dcl
+    '''
+    printp(p)
+
+def p_for_upd(p):           # to be done later, the for case
+    ''' for_upd : epsilon
+                   | infix_expr
     '''
     printp(p)
 
