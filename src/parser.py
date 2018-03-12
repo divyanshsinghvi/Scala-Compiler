@@ -187,7 +187,8 @@ def p_params(p):
     '''
     printp(p)
 def p_param(p):
-    ''' param : id COLON param_type eq_expr | id eq_expr
+    ''' param : id COLON param_type eq_expr 
+              | id eq_expr
     '''
     printp(p)
 def p_eq_expr(p):
@@ -316,10 +317,10 @@ def p_simple_expr1(p):
                     |   simple_expr1 arguement_exprs'''
     printp(p)
 
-def p_exprs_1(p):
-    '''exprs_1  :   exprs
-                |   epsilon'''
-    printp(p)
+#def p_exprs_1(p):
+#    '''exprs_1  :   exprs
+#                |   epsilon'''
+#    printp(p)
 
 def p_prefix_expr(p):
     '''prefix_expr  :   simple_expr
@@ -338,7 +339,6 @@ def p_array_type(p):
 def p_type(p):                      # look at <T>
     ''' type : basic_type
              | array_type
-             | <T>
     '''
     printp(p)
 
