@@ -71,7 +71,8 @@ def p_class_param_clause(p):
     printp(p)
 
 def p_class_params(p) :  
-    ''' class_params : class_param  class_param_0
+    ''' class_params : epsilon
+                     | class_param  class_param_0
     '''
     printp(p)
 
@@ -173,9 +174,24 @@ def p_path_var_def(p):
     '''
     printp(p)
 def p_var_def(p):
-    ''' var_def : id COLON type EQUALASGN val_var_init
-    '''
+    ''' var_def : id COLON id EQUALASGN val_var_init
+                | id COLON basic_type EQUALASGN val_var_init
+                | id COLON array_type array_size EQUALASGN val_var_init
+
+    ''' 
     printp(p)
+
+def p_array_size(p):
+    ''' array_size : epsilon
+                   | LPARAN ints RPARAN                           
+    '''   
+    printp(p)
+def p_ints(p):
+    ''' ints : INT
+             | COMMA ints
+    '''
+    # Array[Char](10,3,4)
+
 def p_val_def(p):
     ''' val_def : id COLON type EQUALASGN val_var_init
     '''
@@ -194,8 +210,9 @@ def p_array_init(p):
     printp(p)
 
 def p_array_init_0(p):
-    '''array_init_0 : COMMA val_var_init
-        
+    '''array_init_0 : val_var_init 
+                    | COMMA array_init_0
+                    | epsilon
     '''
     printp(p)
 
@@ -260,7 +277,10 @@ def p_val_dcl_0(p):
     printp(p)
 
 def p_var_dcl(p):
-    '''var_dcl  :   id COLON type var_dcl_0'''
+    '''var_dcl  :   id COLON basic_type var_dcl_0
+                |   id COLON array_type array_size var_dcl_0
+                |   id COLON id var_dcl_0
+    '''
     printp(p)
 
 def p_var_dcl_0(p):
@@ -436,10 +456,17 @@ def p_for_logic(p):
 
 def p_for_init(p):
     ''' for_init : epsilon
-                 | var_def
-                 | var_dcl
+                 | var_def for_inits
+                 | var_dcl for_inits
+                 | infix_expr for_inits
     '''
     printp(p)
+
+def p_for_inits(p):
+    '''for_inits : COMMA for_inits
+                 | for_init
+
+    '''
 
 def p_for_upd(p):           # to be done later, the for case
     ''' for_upd : RPARAN
