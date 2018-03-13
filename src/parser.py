@@ -66,24 +66,18 @@ def p_class_def(p):
     printp(p)
 
 def p_class_param_clause(p):
-    '''class_param_clause : LPARAN  class_params_1  RPARAN
-    '''
-    printp(p)
-
-def p_class_params_1(p):
-    '''class_params_1 : class_params
+    '''class_param_clause : LPARAN  class_params  RPARAN
     '''
     printp(p)
 
 def p_class_params(p) :  
-    ''' class_params : class_param
-                     | class_param_0
+    ''' class_params : class_param  class_param_0
     '''
     printp(p)
 
 def p_class_param_0(p):
     ''' class_param_0 : epsilon
-                      | class_param_0 COMMA class_param
+                      | COMMA class_param class_param_0
     '''
     printp(p)
 
