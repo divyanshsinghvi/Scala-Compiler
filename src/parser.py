@@ -526,12 +526,13 @@ def p_argument_exprs(p):
     printp(p)
 
 def p_exprs(p):
-    ''' exprs : expr
+    ''' exprs : COMMA exprs_1
+              | epsilon
     '''
     printp(p)
 
 def p_exprs_1(p):
-    ''' exprs_1 : exprs
+    ''' exprs_1 : expr exprs
                 | epsilon
     '''
     printp(p)
