@@ -175,13 +175,32 @@ def p_path_var_def(p):
     '''
     printp(p)
 def p_var_def(p):
-    ''' var_def : id COLON type EQUALASGN expr
+    ''' var_def : id COLON type EQUALASGN val_var_init
     '''
     printp(p)
 def p_val_def(p):
-    ''' val_def : id COLON type EQUALASGN expr
+    ''' val_def : id COLON type EQUALASGN val_var_init
     '''
     printp(p)
+
+def p_val_var_init(p):
+    '''val_var_init : array_init
+                | infix_expr
+    '''
+    printp(p)
+
+def p_array_init(p):
+    ''' array_init : BLOCKBEGIN epsilon BLOCKEND
+                   | BLOCKBEGIN val_var_init array_init_0 BLOCKEND
+    '''
+    printp(p)
+
+def p_array_init_0(p):
+    '''array_init_0 : COMMA val_var_init
+        
+    '''
+    printp(p)
+
 #some ambiguity here ???
 def p_fun_def(p):
     ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN block BLOCKEND
@@ -303,9 +322,9 @@ def p_stable_id(p):
 
 def p_simple_expr(p):
     '''simple_expr  :   R_NEW class_template
-                    |   block
                     |   simple_expr1'''
     printp(p)
+ #                   |   block
 
 def p_class_template(p):
     '''class_template   :   id class_template_1'''
