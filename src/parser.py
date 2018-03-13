@@ -9,7 +9,7 @@ precedence = (
         ('left','AND'),
         ('left','OR_BIT'),
         ('left','XOR'),
-        ('left','AND'),
+        ('left','AND_BIT'),
         ('left','EQ','NEQ'),
         ('left','LE','LT','GT','GE'),
         ('left','RSHIFT','LSHIFT','RRSHIFT'),
@@ -575,12 +575,105 @@ def p_id_1(p):
     '''
     printp(p)
 
+#def p_infix_expr(p):
+#    ''' infix_expr : infix_expr op infix_expr
+#                   | infix_expr asgn infix_expr
+#                   | prefix_expr
+#    '''
+#    printp(p)
+
 def p_infix_expr(p):
-    ''' infix_expr : infix_expr op infix_expr
-                   | infix_expr asgn infix_expr
-                   | prefix_expr
+    ''' infix_expr : assign
+                   | or_expression
     '''
     printp(p)
+
+def p_assign(p):
+    ''' assign : id asgn infix_expr
+    '''
+    printp(p)
+
+def p_or_expression(p):
+    ''' or_expression : and_expression
+                      | or_expression OR and_expression
+    '''
+    printp(p)
+
+def p_and_expression(p):
+    ''' and_expression : bit_or_expression 
+                       | and_expression AND bit_or_expression 
+    '''
+    printp(p)
+
+def p_bit_or_expression(p):
+    ''' bit_or_expression : xor_expression 
+                          | bit_or_expression OR_BIT xor_expression
+    '''
+    printp(p)
+
+def p_xor_expression(p):
+    ''' xor_expression : bit_and_expression
+                       | xor_expression XOR bit_and_expression
+    '''
+    printp(p)
+
+def p_bit_and_expression(p):
+    '''bit_and_expression : eq_expression
+                      | bit_and_expression AND_BIT eq_expression
+    '''
+    printp(p)
+
+def p_eq_expression(p):
+    '''eq_expression : comp_expression
+                      | eq_expression EQ comp_expression
+                      | eq_expression NEQ comp_expression
+    '''
+    printp(p)
+
+
+def p_comp_expression(p):
+    '''comp_expression : shift_expression
+                      | comp_expression LE shift_expression
+                      | comp_expression LT shift_expression
+                      | comp_expression GT shift_expression
+                      | comp_expression GE shift_expression
+    '''
+    printp(p)
+def p_shift_expression(p):
+    '''shift_expression : add_expression
+                      | shift_expression RSHIFT add_expression
+                      | shift_expression LSHIFT add_expression
+                      | shift_expression RRSHIFT add_expression
+    '''
+    printp(p)
+
+def p_add_expression(p):
+    '''add_expression : mul_expression
+                      | add_expression OP_ADD mul_expression
+                      | add_expression OP_SUB  mul_expression
+    '''
+    printp(p)
+
+def p_mul_expression(p):
+    '''mul_expression : unary_expression
+                      | mul_expression OP_MOD unary_expression
+                      | mul_expression OP_MUL  unary_expression
+                      | mul_expression OP_DIV  unary_expression
+    '''
+    printp(p)
+
+def p_unary_expression(p):
+    '''unary_expression : prefix_expr
+                        | LPARAN infix_expr RPARAN
+    '''
+    printp(p)
+
+def p_cast_expression(p):
+    '''cast_expression : LPARAN basic_type RPARAN unary_expression
+
+    '''
+    printp(p)
+
 
 def p_types(p):
     ''' types : type comma_type_0
@@ -600,12 +693,8 @@ def p_type_args(p):
 
 def p_op(p):
     ''' op : OR
-           | AND
            | AND_BIT
            | OR_BIT
-           | XOR
-           | EQ
-           | NEQ
            | LT
            | LE
            | GT
