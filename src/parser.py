@@ -164,7 +164,7 @@ def p_import_0(p):
     printp(p)
 
 def p_import_expr(p):
-    '''import_expr : stable_id DOT id
+    '''import_expr : path
     '''
     printp(p)
 def p_def(p):
@@ -301,9 +301,11 @@ def p_access_modifier(p):
     printp(p)
 
 def p_path(p):
-    '''path :   stable_id
-            |   id DOT R_THIS
-            |   R_THIS'''
+    '''path :   id
+            |   R_THIS
+            |   id DOT path
+            |   R_SUPER DOT path
+            '''
     printp(p)
 
 #def path_0(p):
@@ -322,12 +324,12 @@ def p_block(p):
                 |   block_stat semi block'''
     printp(p)
 
-def p_stable_id(p):
-    '''stable_id :   id
-                 |   path DOT id
-                 |   id DOT R_SUPER DOT id
-                 |   R_SUPER DOT id'''
-    printp(p)
+#def p_stable_id(p):
+#    '''stable_id :   id
+#                 |   path DOT id
+#                 |   id DOT R_SUPER DOT id
+#                 |   R_SUPER DOT id'''
+#    printp(p)
 
 
 def p_simple_expr(p):
@@ -341,12 +343,14 @@ def p_class_template(p):
     printp(p)
 
 def p_class_template_1(p):
-    '''class_template_1 :   LPARAN id  class_template_0 RPARAN class_template_1
+    '''class_template_1 :   LPARAN id  class_template_0 RPARAN
+                        |   LPARAN literal class_template_0 RPARAN
                         |   epsilon '''
     printp(p)
 
 def p_class_template_0(p):
     '''class_template_0 :   COMMA id class_template_0
+                        |   COMMA literal class_template_0
                         |   epsilon'''
     printp(p)
 
@@ -378,6 +382,7 @@ def p_prefix_expr(p):
 def p_type(p):                      # look at <T>
     ''' type : basic_type
              | array_type
+             | id
     '''
     printp(p)
 
@@ -646,9 +651,9 @@ def p_epsilon(p):
     '''
     pass
 #    print(p)
-def p_error(p):
-    print("Syntax error at '%s'" % p.value)
-    print("Syntax error at '%s'" % p.lineno)
+#def p_error(p):
+#    print("Syntax error at '%s'" % p.value)
+#    print("Syntax error at '%s'" % p.lineno)
     
 parser = yacc.yacc()
 
