@@ -3,6 +3,10 @@ def printa1(a1, out):
         print>>out, a1[i],
     print>>out, "<font color=\"red\">"+a1[-1]+"</font>",
 
+def printa1last(a1, out):
+    for i in range(0,len(a1)):
+        print>>out, a1[i],
+
 def printa2(a2, out):
     for i in range(0,len(a2)):
         print>>out, a2[i],
@@ -39,6 +43,9 @@ for line in inp:
     printa1(a1,out)
     printa2(a2,out)
     update(a1,a2,line)
+
+printa1last(a1,out)
+printa2(a2,out)
 
 print>>out, "</p>\n</body>\n</html>"
 out.close()
