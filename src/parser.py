@@ -8,7 +8,7 @@ def printp(p):
     for i in range(0,len(p)):
         print (p.slice)[i],
 
-    print "\n"
+    print "\n",
 
 
 def p_compilation_unit(p):
