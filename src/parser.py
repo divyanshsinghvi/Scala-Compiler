@@ -3,7 +3,20 @@ import ply.yacc as yacc
 import lexer
 
 tokens = lexer.tokens
-
+precedence = (
+        ('right','XORASGN','ORASGN','ANDASGN','RSHIFTASGN','LSHIFTASGN','MODASGN','DIVASGN','MULASGN','SUBASGN','EQUALASGN'),
+        ('left','OR'),
+        ('left','AND'),
+        ('left','OR_BIT'),
+        ('left','XOR'),
+        ('left','AND'),
+        ('left','EQ','NEQ'),
+        ('left','LE','LT','GT','GE'),
+        ('left','RSHIFT','LSHIFT','RRSHIFT'),
+        ('left','OP_ADD','OP_SUB'),
+        ('left','OP_DIV','OP_MUL','OP_MOD')
+#        ('right','OP_NOT')
+)
 def printp(p):
     for i in range(0,len(p)):
         print (p.slice)[i],
@@ -12,7 +25,7 @@ def printp(p):
 
 
 def p_compilation_unit(p):
-    '''compilation_unit : compilation_unit_0 top_stat_seq
+    '''compilation_unit : compilation_unit_0 top_stat_seq_0
     '''
     printp(p)
     
@@ -22,10 +35,6 @@ def p_compilation_unit_0(p):
     '''
     printp(p)
 
-def p_top_stat_seq(p):
-    '''top_stat_seq : top_stat_seq_0
-    '''
-    printp(p)
 
 def p_top_stat_seq_0(p):
     '''top_stat_seq_0 :  epsilon
@@ -57,25 +66,18 @@ def p_class_def(p):
     printp(p)
 
 def p_class_param_clause(p):
-    '''class_param_clause : LPARAN  class_params_1  RPARAN
-    '''
-    printp(p)
-
-def p_class_params_1(p):
-    '''class_params_1 : class_params
-                      | epsilon
+    '''class_param_clause : LPARAN  class_params  RPARAN
     '''
     printp(p)
 
 def p_class_params(p) :  
-    ''' class_params : class_param
-                     | class_param_0
+    ''' class_params : class_param  class_param_0
     '''
     printp(p)
 
 def p_class_param_0(p):
     ''' class_param_0 : epsilon
-                      | class_param_0 COMMA class_param
+                      | COMMA class_param class_param_0
     '''
     printp(p)
 
@@ -130,23 +132,33 @@ def p_template_body_0(p):
                         | template_body_0 template_stat semi
     '''
     printp(p)
+
 def p_template_stat(p):
-    ''' template_stat : expr
+    ''' template_stat : block_stat
                       | modifier_0 def
                       | modifier_0 dcl
     '''
     printp(p)
+
 def p_modifier_0(p):
-    ''' modifier_0 : epsilon
+    ''' modifier_0 : modifier
                     | modifier_0 modifier
     '''
     printp(p)
 def p_import(p):
-    ''' import : R_IMPORT import_expr COMMA import_expr
+    ''' import : R_IMPORT import_expr import_0
     '''
     printp(p)
+
+def p_import_0(p):
+    ''' import_0 : COMMA import_expr import_0
+                 | epsilon
+
+    '''
+    printp(p)
+
 def p_import_expr(p):
-    '''import_expr : stable_id DOT id
+    '''import_expr : path
     '''
     printp(p)
 def p_def(p):
@@ -161,16 +173,35 @@ def p_path_var_def(p):
     '''
     printp(p)
 def p_var_def(p):
-    ''' var_def : id COLON type EQUALASGN expr
+    ''' var_def : id COLON type EQUALASGN val_var_init
     '''
     printp(p)
 def p_val_def(p):
-    ''' val_def : id COLON type EQUALASGN expr
+    ''' val_def : id COLON type EQUALASGN val_var_init
     '''
     printp(p)
+
+def p_val_var_init(p):
+    '''val_var_init : array_init
+                | infix_expr
+    '''
+    printp(p)
+
+def p_array_init(p):
+    ''' array_init : BLOCKBEGIN epsilon BLOCKEND
+                   | BLOCKBEGIN val_var_init array_init_0 BLOCKEND
+    '''
+    printp(p)
+
+def p_array_init_0(p):
+    '''array_init_0 : COMMA val_var_init
+        
+    '''
+    printp(p)
+
 #some ambiguity here ???
 def p_fun_def(p):
-    ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN expr semi BLOCKEND
+    ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN block BLOCKEND
     '''
     printp(p)
 def p_col_type_1(p) :
@@ -188,7 +219,13 @@ def p_param_clause(p):
     '''
     printp(p)
 def p_params(p):
-    ''' params : param COMMA param
+    ''' params : param  param_0
+    '''
+    printp(p)
+
+def p_param_0(p):
+    '''param_0 :  epsilon
+               | COMMA param
     '''
     printp(p)
 def p_param(p):
@@ -258,9 +295,11 @@ def p_access_modifier(p):
     printp(p)
 
 def p_path(p):
-    '''path :   stable_id
-            |   id DOT R_THIS
-            |   R_THIS'''
+    '''path :   id
+            |   R_THIS
+            |   id DOT path
+            |   R_SUPER DOT path
+            '''
     printp(p)
 
 #def path_0(p):
@@ -268,10 +307,10 @@ def p_path(p):
 #                |   epsilon'''
 
 def p_block_stat(p):
-    '''block_stat   :   R_DEF
-                    |   R_DCL
+    '''block_stat   :   def
+                    |   dcl
                     |   local_modifier_0 tmpl_def
-                    |   expr1'''
+                    |   expr'''
     printp(p)
                     
 def p_block(p):
@@ -279,37 +318,39 @@ def p_block(p):
                 |   block_stat semi block'''
     printp(p)
 
-def p_stable_id(p):
-    '''stable_id       :   id
-                |   path DOT id
-                |   id DOT R_SUPER DOT id
-                |   R_SUPER DOT id'''
-    printp(p)
+#def p_stable_id(p):
+#    '''stable_id :   id
+#                 |   path DOT id
+#                 |   id DOT R_SUPER DOT id
+#                 |   R_SUPER DOT id'''
+#    printp(p)
 
 
 def p_simple_expr(p):
     '''simple_expr  :   R_NEW class_template
-                    |   block_expr
                     |   simple_expr1'''
     printp(p)
+ #                   |   block
 
 def p_class_template(p):
     '''class_template   :   id class_template_1'''
     printp(p)
 
 def p_class_template_1(p):
-    '''class_template_1 :   LPARAN id  class_template_0 RPARAN class_template_1
+    '''class_template_1 :   LPARAN id  class_template_0 RPARAN
+                        |   LPARAN literal class_template_0 RPARAN
                         |   epsilon '''
     printp(p)
 
 def p_class_template_0(p):
     '''class_template_0 :   COMMA id class_template_0
+                        |   COMMA literal class_template_0
                         |   epsilon'''
     printp(p)
 
-def p_block_expr(p):
-    '''block_expr   :   block'''
-    printp(p)
+#def p_block_expr(p):
+#    '''block_expr   :   block'''
+#    printp(p)
 
 def p_simple_expr1(p):
     '''simple_expr1 :   literal
@@ -335,17 +376,18 @@ def p_prefix_expr(p):
 def p_type(p):                      # look at <T>
     ''' type : basic_type
              | array_type
+             | id
     '''
     printp(p)
 
 def p_array_type(p):
-    ''' array_type : id LSQRB type RSQRB
+    ''' array_type : TYPE_ARRAY LSQRB type RSQRB
     '''
     printp(p)
 
 def p_simple_type(p):
     ''' simple_type : type
-                   | LPARAN type RPARAN
+                    | LPARAN type RPARAN
     '''
     printp(p)
 
@@ -387,8 +429,8 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : for_init semi infix_expr semi for_upd
-                  | for_init semi epsilon semi for_upd
+    ''' for_logic : LPARAN for_init semi infix_expr semi for_upd
+                  | LPARAN for_init semi epsilon semi for_upd
     '''
     printp(p)
 
@@ -400,8 +442,8 @@ def p_for_init(p):
     printp(p)
 
 def p_for_upd(p):           # to be done later, the for case
-    ''' for_upd : epsilon
-                   | infix_expr
+    ''' for_upd : RPARAN
+                   | infix_expr RPARAN
     '''
     printp(p)
 
@@ -445,27 +487,27 @@ def p_switch_labels_1(p):
     '''
     printp(p)
 
-def p_expr1(p):
-    ''' expr1 : R_IF LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND expression1
-              | R_WHILE LPARAN expr RPARAN BLOCKBEGIN expr semi BLOCKEND
+def p_expr(p):
+    ''' expr : R_IF LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND expression1
+              | R_WHILE LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
-              | R_DO BLOCKBEGIN expr semi BLOCKEND R_WHILE LPARAN expr RPARAN
-              | R_FOR LPARAN for_logic RPARAN BLOCKBEGIN expr semi BLOCKEND
+              | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN expr RPARAN
+              | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
               | R_RETURN expr
               | postfix_expr
               | R_SWITCH LPARAN expr RPARAN switch_block
-              | TYPE_ARRAY LPARAN literal literal_0 RPARAN
     '''
+              #| R_ARRAY LPARAN literal literal_0 RPARAN
     printp(p)
 
 def p_expression1(p):
-    ''' expression1 : R_ELSE BLOCKBEGIN expr semi BLOCKEND
+    ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
                     | epsilon
     '''
     printp(p)
 
 def p_expression2(p):
-    ''' expression2 : R_FINALLY BLOCKBEGIN expr semi BLOCKEND
+    ''' expression2 : R_FINALLY BLOCKBEGIN block BLOCKEND
                     | epsilon
     '''
     printp(p)
@@ -476,10 +518,6 @@ def p_literal_0(p):
     '''
     printp(p)
 
-def p_expr(p):
-    ''' expr : expr1
-    '''
-    printp(p)
 
 def p_argument_exprs(p):
     ''' argument_exprs : LPARAN exprs_1 RPARAN
@@ -487,18 +525,20 @@ def p_argument_exprs(p):
     printp(p)
 
 def p_exprs(p):
-    ''' exprs : expr
+    ''' exprs : COMMA exprs_1
+              | epsilon
     '''
     printp(p)
 
 def p_exprs_1(p):
-    ''' exprs_1 : exprs
+    ''' exprs_1 : expr exprs
                 | epsilon
     '''
     printp(p)
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
+                     | infix_expr
     '''
     printp(p)
 
@@ -603,8 +643,14 @@ def p_epsilon(p):
     ''' epsilon :
 
     '''
+    pass
 #    print(p)
-
+def p_error(p):
+    CRED = '\033[91m'
+    CEND = '\033[0m'
+    print(CRED+"Syntax error at '%s'" % p.value +CEND)
+    print(CRED+"Syntax error at '%s'" % p.lineno + CEND)
+    
 parser = yacc.yacc()
 
 f = open(sys.argv[1],"r")

@@ -1,8 +1,8 @@
 /* source : tutorailspoint.com*/                                                        
 
 object Demo {
-   def main(args: Array[String]) {
-      var x = 30;
+   def main(args: Array[String])={
+      var x:Int = 30;
 
       if( x < 20 ){
          println("This is if statement");
@@ -10,4 +10,4 @@ object Demo {
          println("This is else statement");
       };
    };
-}
+};
