@@ -225,7 +225,13 @@ def p_param_clause(p):
     '''
     printp(p)
 def p_params(p):
-    ''' params : param COMMA param
+    ''' params : param  param_0
+    '''
+    printp(p)
+
+def p_param_0(p):
+    '''param_0 :  epsilon
+               | COMMA param
     '''
     printp(p)
 def p_param(p):
@@ -532,6 +538,7 @@ def p_exprs_1(p):
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
+                     | infix_expr
     '''
     printp(p)
 
