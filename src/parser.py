@@ -25,7 +25,7 @@ def printp(p):
 
 
 def p_compilation_unit(p):
-    '''compilation_unit : compilation_unit_0 top_stat_seq
+    '''compilation_unit : compilation_unit_0 top_stat_seq_0
     '''
     printp(p)
     
@@ -35,10 +35,6 @@ def p_compilation_unit_0(p):
     '''
     printp(p)
 
-def p_top_stat_seq(p):
-    '''top_stat_seq : top_stat_seq_0
-    '''
-    printp(p)
 
 def p_top_stat_seq_0(p):
     '''top_stat_seq_0 :  epsilon
@@ -156,9 +152,17 @@ def p_modifier_0(p):
     '''
     printp(p)
 def p_import(p):
-    ''' import : R_IMPORT import_expr COMMA import_expr
+    ''' import : R_IMPORT import_expr import_0
     '''
     printp(p)
+
+def p_import_0(p):
+    ''' import_0 : COMMA import_expr import_0
+                 | epsilon
+
+    '''
+    printp(p)
+
 def p_import_expr(p):
     '''import_expr : stable_id DOT id
     '''
