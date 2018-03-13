@@ -645,7 +645,10 @@ def p_epsilon(p):
     '''
     pass
 #    print(p)
-
+def p_error(p):
+    print("Syntax error at '%s'" % p.value)
+    print("Syntax error at '%s'" % p.lineno)
+    
 parser = yacc.yacc()
 
 f = open(sys.argv[1],"r")
