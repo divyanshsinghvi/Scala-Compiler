@@ -382,7 +382,7 @@ def p_type(p):                      # look at <T>
     printp(p)
 
 def p_array_type(p):
-    ''' array_type : id LSQRB type RSQRB
+    ''' array_type : TYPE_ARRAY LSQRB type RSQRB
     '''
     printp(p)
 
@@ -497,8 +497,8 @@ def p_expr(p):
               | R_RETURN expr
               | postfix_expr
               | R_SWITCH LPARAN expr RPARAN switch_block
-              | TYPE_ARRAY LPARAN literal literal_0 RPARAN
     '''
+              #| R_ARRAY LPARAN literal literal_0 RPARAN
     printp(p)
 
 def p_expression1(p):
