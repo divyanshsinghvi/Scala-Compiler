@@ -651,9 +651,11 @@ def p_epsilon(p):
     '''
     pass
 #    print(p)
-#def p_error(p):
-#    print("Syntax error at '%s'" % p.value)
-#    print("Syntax error at '%s'" % p.lineno)
+def p_error(p):
+    CRED = '\033[91m'
+    CEND = '\033[0m'
+    print(CRED+"Syntax error at '%s'" % p.value +CEND)
+    print(CRED+"Syntax error at '%s'" % p.lineno + CEND)
     
 parser = yacc.yacc()
 
