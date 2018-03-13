@@ -1,6 +1,6 @@
 /* source : tutorailspoint.com*/                                                        
 
-import java.io; //Example of class 
+import java; //Example of class 
 
 class Point(val xc: Int, val yc: Int) {
    var x: Int = xc;

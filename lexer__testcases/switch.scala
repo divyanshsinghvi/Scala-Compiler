@@ -1,7 +1,6 @@
 package tr;
 object demo{
-def main(var na: Int, Array[Char] argv)
-{
+def main(var na: Int, var argv:Array[Char])={
     var wflg: Int = 0;
     var tflg: Int = 0;
     var dflg: Int = 0;
@@ -25,4 +24,4 @@ def main(var na: Int, Array[Char] argv)
     };
     return 0;
 };
-}
+};

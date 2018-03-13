@@ -1,7 +1,7 @@
 object Demo {
     def main(args: Array[String])={
     var i: Int = 0;
-    Array[Int] a={1,2,3};
+    var a: Array[Int] ={c,b};
     if (i<=3){
         a[i]=a[i]+1;
     };
@@ -11,4 +11,4 @@ object Demo {
         a[i] = 1;
     };
   };
-}
+};
