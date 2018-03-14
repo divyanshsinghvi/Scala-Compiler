@@ -14,14 +14,18 @@ def printa2(a2, out):
         print>>out, a2[i],
     print>>out, "<br/><br/>"
 
-def update(a1, a2,line):
+def update(a1, a2, line, out):
     a1.pop()
     for i in range(1, len(line)):
         a1.append(line[i])
     for i in reversed(a1):
-        if i == "epsilon" or i.startswith('LexToken'):
+        if i.startswith('LexToken'):
             word = a1.pop()
             a2.insert(0,word)
+        elif i == "epsilon":
+            printa1(a1, out)
+            printa2(a2, out)
+            a1.pop()
         else:
             break
 
@@ -43,7 +47,7 @@ for line in inp:
     line = shlex.split(line)
     printa1(a1,out)
     printa2(a2,out)
-    update(a1,a2,line)
+    update(a1,a2,line, out)
 
 printa1last(a1,out)
 printa2(a2,out)
