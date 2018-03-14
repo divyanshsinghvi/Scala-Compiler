@@ -1,3 +1,5 @@
+import shlex
+
 def printa1(a1, out):
     for i in range(0,len(a1)-1):
         print>>out, a1[i],
@@ -37,16 +39,14 @@ a1 = list(["compilation_unit"])
 a2 = list([])
 out = open("output.html", "wb")
 print>>out, "<!DOCTYPE html>\n<html>\n<head>\n<title>Derivation</title>\n</head>\n<body>\n<p>"
-
 for line in inp:
-    line = line.split()
+    line = shlex.split(line)
     printa1(a1,out)
     printa2(a2,out)
     update(a1,a2,line)
 
 printa1last(a1,out)
 printa2(a2,out)
-
 print>>out, "</p>\n</body>\n</html>"
 out.close()
 inp.close()
