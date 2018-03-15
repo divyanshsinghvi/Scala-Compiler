@@ -691,24 +691,24 @@ def p_type_args(p):
     '''
     printp(p)
 
-def p_op(p):
-    ''' op : OR
-           | AND_BIT
-           | OR_BIT
-           | LT
-           | LE
-           | GT
-           | GE
-           | LSHIFT
-           | RSHIFT
-           | RRSHIFT
-           | OP_ADD
-           | OP_DIV
-           | OP_MUL
-           | OP_SUB
-           | OP_MOD
-    '''
-    printp(p)
+#def p_op(p):
+#    ''' op : OR
+#           | AND_BIT
+#           | OR_BIT
+#           | LT
+#           | LE
+#           | GT
+#           | GE
+#           | LSHIFT
+#           | RSHIFT
+#           | RRSHIFT
+#           | OP_ADD
+#           | OP_DIV
+#           | OP_MUL
+#           | OP_SUB
+#           | OP_MOD
+#    '''
+#    printp(p)
 
 def p_asgn(p):
     ''' asgn : EQUALASGN
@@ -748,12 +748,6 @@ def p_literal(p):
                 | FLOAT
     '''
     printp(p)
-
-def p_comment(p):
-    '''comment : MCOMMENT
-               | SCOMMENT
-    '''
-    print(p)
 
 def p_epsilon(p):
     ''' epsilon :

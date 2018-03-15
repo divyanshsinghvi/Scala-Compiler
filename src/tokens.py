@@ -58,7 +58,6 @@ reserved = {
 	'class' : 'R_CLASS',
 	'do' : 'R_DO',
     'def': 'R_DEF',
-    'dcl': 'R_DCL',
     'else' : 'R_ELSE',
 	'extends' : 'R_EXTENDS',
 	'final' : 'R_FINAL',
