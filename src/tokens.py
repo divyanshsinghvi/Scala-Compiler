@@ -85,7 +85,9 @@ reserved = {
 	'val' : 'R_VAL',
 	'var' : 'R_VAR',
 	'while' : 'R_WHILE',
-        'default' : 'R_DEFAULT'
+        'default' : 'R_DEFAULT',
+        'break' : 'R_BREAK',
+        'continue': 'R_CONTINUE'
 }
 
 tokens = tokens + list(reserved.values())
