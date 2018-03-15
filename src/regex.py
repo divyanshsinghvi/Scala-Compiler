@@ -97,12 +97,10 @@ t_ignore = ' \t'
 def t_MCOMMENT(t):
     r'(/\*(\n|.)*?\*/)'
     t.lexer.lineno += t.value.count('\n')
-    pass
 
 def t_SCOMMENT(t):
     r'(//.*?\n)'
     t.lexer.lineno += t.value.count('\n')
-    pass
 
 # error handling 
 def t_error(t):

@@ -405,11 +405,11 @@ def p_array_type(p):
     '''
     printp(p)
 
-def p_simple_type(p):
-    ''' simple_type : type
-                    | LPARAN type RPARAN
-    '''
-    printp(p)
+#def p_simple_type(p):
+#    ''' simple_type : type
+#                    | LPARAN type RPARAN
+#    '''
+#    printp(p)
 
 def p_semi(p):
     ''' semi : SEMICOLON
@@ -539,11 +539,11 @@ def p_expression2(p):
     '''
     printp(p)
 
-def p_literal_0(p):
-    ''' literal_0 : epsilon
-                  | literal_0 COMMA literal
-    '''
-    printp(p)
+#def p_literal_0(p):
+#    ''' literal_0 : epsilon
+#                  | literal_0 COMMA literal
+#    '''
+#    printp(p)
 
 
 def p_argument_exprs(p):
@@ -668,11 +668,11 @@ def p_unary_expression(p):
     '''
     printp(p)
 
-def p_cast_expression(p):
-    '''cast_expression : LPARAN basic_type RPARAN unary_expression
-
-    '''
-    printp(p)
+#def p_cast_expression(p):
+#    '''cast_expression : LPARAN basic_type RPARAN unary_expression
+#
+#    '''
+#    printp(p)
 
 
 def p_types(p):
