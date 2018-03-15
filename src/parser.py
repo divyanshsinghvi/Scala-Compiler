@@ -516,12 +516,14 @@ def p_switch_block_statements_0(p):
 #    printp(p)
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND expression1
-              | R_WHILE LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND
+    ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND expression1
+              | R_WHILE LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
-              | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN expr RPARAN
+              | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
               | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
               | R_RETURN expr
+              | R_BREAK
+              | R_CONTINUE
               | postfix_expr
               | R_SWITCH LPARAN expr RPARAN switch_block
     '''
@@ -636,8 +638,8 @@ def p_comp_expression(p):
     '''comp_expression : shift_expression
                       | comp_expression LE shift_expression
                       | comp_expression LT shift_expression
-                      | comp_expression GT shift_expression
                       | comp_expression GE shift_expression
+                      | comp_expression GT shift_expression
     '''
     printp(p)
 def p_shift_expression(p):
@@ -738,6 +740,18 @@ def p_basic_type(p):
 
 def p_id(p):
     ''' id : ID
+           | ID LSQRB access RSQRB
+    '''
+    printp(p)
+
+def p_access(p):
+    ''' access : ID access_0
+    '''
+    printp(p)
+
+def p_access_0(p):
+    '''access_0 : COMMA access
+                | epsilon
     '''
     printp(p)
 
