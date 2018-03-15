@@ -29,28 +29,35 @@ def update(a1, a2, line, out):
         else:
             break
 
-f = open("input.txt", "rb")
-s = f.readlines()
-s.reverse()
-f.close()
+with open("input.txt", "rb") as f:
+    f.seek(0)
+    s = f.readlines()
+    s.reverse()
+#f.close()
 
-f = open("input.txt", "wb")
-for line in s:
-    print>>f, line,
-f.close()
-inp = open("input.txt", "rb")
-a1 = list(["compilation_unit"])
-a2 = list([])
-out = open("output.html", "wb")
-print>>out, "<!DOCTYPE html>\n<html>\n<head>\n<title>Derivation</title>\n</head>\n<body>\n<p>"
-for line in inp:
-    line = shlex.split(line)
-    printa1(a1,out)
+with open("new.txt", "wb+") as f:
+    f.seek(0)
+    for line in s:
+        print>>f, line,
+
+#f.close()
+with open("new.txt", "rb") as inp:
+    inp.seek(0)
+    a1 = list(["compilation_unit"])
+    a2 = list([])
+    out = open("output.html", "wb")
+    out.seek(0)
+    print>>out, "<!DOCTYPE html>\n<html>\n<head>\n<title>Derivation</title>\n</head>\n<body>\n<p>"
+    for line in inp:
+        line = shlex.split(line)
+        printa1(a1,out)
+        printa2(a2,out)
+        update(a1,a2,line, out)
+
+    printa1last(a1,out)
     printa2(a2,out)
-    update(a1,a2,line, out)
+    print>>out, "</p>\n</body>\n</html>"
 
-printa1last(a1,out)
-printa2(a2,out)
-print>>out, "</p>\n</body>\n</html>"
-out.close()
-inp.close()
+    out.close()
+
+#inp.close()
