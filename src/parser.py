@@ -247,7 +247,8 @@ def p_param_0(p):
     printp(p)
 def p_param(p):
     ''' param : id COLON param_type eq_expr 
-              | id eq_expr
+              | R_VAR id COLON param_type eq_expr
+              | R_VAL id COLON param_type eq_expr
     '''
     printp(p)
 def p_eq_expr(p):
@@ -487,7 +488,7 @@ def p_switch_labels(p):
     printp(p)
 
 def p_switch_block_statements(p):
-    ''' switch_block_statements : switch_labels_0 BLOCKBEGIN block BLOCKEND
+    ''' switch_block_statements : switch_labels_0 BLOCKBEGIN block BLOCKEND semi
     '''
     printp(p)
 
@@ -498,7 +499,7 @@ def p_switch_labels_0(p):
     printp(p)
 
 def p_switch_block(p):
-    ''' switch_block : BLOCKBEGIN switch_block_statements_0 switch_labels_1 BLOCKEND
+    ''' switch_block : BLOCKBEGIN switch_block_statements_0 BLOCKEND
     '''
     printp(p)
 
@@ -508,11 +509,11 @@ def p_switch_block_statements_0(p):
     '''
     printp(p)
 
-def p_switch_labels_1(p):
-    ''' switch_labels_1 : switch_labels
-                        | epsilon
-    '''
-    printp(p)
+#def p_switch_labels_1(p):
+#    ''' switch_labels_1 : switch_labels
+#                        | epsilon
+#    '''
+#    printp(p)
 
 def p_expr(p):
     ''' expr : R_IF LPARAN expr RPARAN BLOCKBEGIN block BLOCKEND expression1
