@@ -11,6 +11,7 @@ tokens = [
 'RSQRB',
 'BLOCKBEGIN',
 'BLOCKEND',
+'OP_NOT',
 'OP_ADD',
 'OP_SUB',
 'OP_DIV',
@@ -20,7 +21,6 @@ tokens = [
 'NEQ',
 'AND',
 'OR',
-'NOT',
 'XOR',
 'AND_BIT',
 'OR_BIT',
@@ -42,14 +42,11 @@ tokens = [
 'SEMICOLON',
 'DOT',
 'COMMA',
-'UNDER',
 'ID',
 'CHAR',
 'STRING',
 'INT',
-'FLOAT',
-'SCOMMENT',
-'MCOMMENT'
+'FLOAT'
 ]
 
 reserved = {
@@ -61,13 +58,10 @@ reserved = {
     'def': 'R_DEF',
     'else' : 'R_ELSE',
 	'extends' : 'R_EXTENDS',
-	'false' : 'R_FALSE',
 	'final' : 'R_FINAL',
 	'finally' : 'R_FINALLY',
 	'for' : 'R_FOR',
-#	'forSome' : 'R_FOR_SOME',
 	'if' : 'R_IF',
-	'implicit' : 'R_IMPLICIT',
 	'import' : 'R_IMPORT',
     'Int' : 'TYPE_INT',
     'String': 'TYPE_STRING',
@@ -75,10 +69,6 @@ reserved = {
     'Array':'TYPE_ARRAY',
     'Float':'TYPE_FLOAT',
     'Boolean':'TYPE_BOOLEAN',
-#	'lazy' : 'R_LAZY',
-    'long':'R_LONG', #long in reserved
-#    'macro' : 'R_MACRO',
-	'match' : 'R_MATCH',
 	'new' : 'R_NEW',
 	'null' : 'R_NULL',
 	'object' : 'R_OBJECT',
@@ -88,20 +78,16 @@ reserved = {
 	'protected' : 'R_PROTECTED',
     'public': 'R_PUBLIC',
     'return' : 'R_RETURN',
-#	'sealed' : 'R_SEALED',
 	'super' : 'R_SUPER',
     'switch': 'R_SWITCH',
 	'this' : 'R_THIS',
-	'throw' : 'R_THROW',
-	'trait' : 'R_TRAIT',
 	'try' : 'R_TRY',
-	'true' : 'R_TRUE',
-	'type' : 'R_TYPE',
 	'val' : 'R_VAL',
 	'var' : 'R_VAR',
 	'while' : 'R_WHILE',
-	'with' : 'R_WITH',
-	'yeild' : 'R_YIELD',
+        'default' : 'R_DEFAULT',
+        'break' : 'R_BREAK',
+        'continue': 'R_CONTINUE'
 }
 
 tokens = tokens + list(reserved.values())

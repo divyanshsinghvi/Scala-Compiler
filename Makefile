@@ -1,4 +1,16 @@
-.DEFAULT_GOAL := codegen
+.DEFAULT_GOAL := parser
+
+parser:
+	cp src/lexer.py bin/lexer.py
+	cp src/lex.py bin/lex.py
+	cp src/yacc.py bin/yacc.py
+	cp src/tokens.py bin/tokens.py
+	cp src/regex.py bin/regex.py
+	cp src/parsermain.py bin/parsermain.py
+	cp src/parser.sh bin/parser
+	chmod +x bin/parser
+	chmod -R 777 bin/
+
 
 codegen:
 	cp src/ir.py bin/ir.py

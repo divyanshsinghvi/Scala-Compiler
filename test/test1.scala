@@ -1,7 +1,7 @@
 object HelloWorld {
    def main(args: Array[String])={
    println("Hello, world!\t");
-   if(return 0){
+   if(a < 4){
 	return 0;
 	};
  };
