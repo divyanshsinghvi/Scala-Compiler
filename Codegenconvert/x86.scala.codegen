@@ -10,8 +10,8 @@ flabel,main
 =,a7,1
 =,t1,0
 >,t2,c,t1
-if,D.1736,t2
-goto,D.1735
+if,D.1735,t2
+goto,D.1736
 label,D.1735
 +,D.1737,a0,a1
 +,D.1738,D.1737,a2
@@ -34,4 +34,4 @@ label,D.1736
 label,D.1744
 printInt,b
 =,D.1742,0
-return,D.1742
+freturn,D.1742
