@@ -224,7 +224,7 @@ def p_array_init(p):
     printp(p)
 
 def p_array_init_0(p):
-    '''array_init_0 : val_var_init array_init_0 
+    '''array_init_0 : val_var_init 
                     | COMMA array_init_0
                     | epsilon
     '''

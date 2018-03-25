@@ -6,8 +6,8 @@ flabel,main
 *,c,a,t1
 =,t1,5
 >,t2,a,t1
-if,D.1739,t2
-goto,D.1738
+if,D.1738,t2
+goto,D.1739
 label,D.1738
 =,t1,40
 +,f,a,t1
@@ -32,6 +32,6 @@ label,D.1734
 +,k,t2,t1
 label,D.1735
 <,t1,k,b
-if,D.1736,t1
-goto,D.1734
+if,D.1734,t1
+goto,D.1736
 label,D.1736

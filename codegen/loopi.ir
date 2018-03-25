@@ -40,4 +40,4 @@ label,D2052
 if,D2051,t5
 goto,D2053
 label,D2053
-printInt,res
+printInt,re

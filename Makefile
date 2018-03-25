@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := parser
-
+.PHONY: parser codegen clean
 parser:
 	cp src/lexer.py bin/lexer.py
 	cp src/lex.py bin/lex.py
