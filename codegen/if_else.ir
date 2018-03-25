@@ -10,13 +10,12 @@ label,L2
 =,t3,0
 ==,t4,t2,t3
 if,L3,t4
-goto,L4
-label,L3
-printInt,j
-goto,L5
 label,L4
 +,t5,sum,i
 +,sum,t5,t3
+goto,L5
+label,L3
+printInt,j
 label,L5
 =,t6,1
 +,t7,i,t6
@@ -28,7 +27,6 @@ label,L1
 =,t10,99
 <=,t11,i,t10
 if,L2,t11
-goto,L6
 label,L6
 printInt,sum
 =,t12,0

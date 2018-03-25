@@ -19,20 +19,17 @@ label,L5
 =,t4,9
 <=,t5,k,t4
 if,L6,t5
-goto,L7
 label,L7
 +,t3,j,t2
 +,j,t3,t1
 label,L3
 <=,t5,j,t4
 if,L4,t5
-goto,L8
 label,L8
 +,t3,i,t2
 +,i,t3,t1
 label,L9
 <=,t5,i,t4
 if,L2,t4
-goto,L9
 label,L9
 //for line 32 and 33
