@@ -14,7 +14,7 @@ label,D2045
 +,t3,res,t2
 +,res,t3,t1
 +,t3,k,t2
-+,k,t3,t2
++,k,t3,t1
 label,D2046
 =,t4,9
 <=,t5,k,t4
