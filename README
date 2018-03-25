@@ -1,4 +1,11 @@
-global structures
+To run the parser use the following commands : 
+1) cd asgn3
+2) make
+3) bin/parser test/test1.scala (to execute the first test-case file test1.c)
+4) firefox output.html
+If the 3rd command gives an error of list index out of range it means that the given code is wrong and the testcase is not parseable
+To check the error run the following command 
 
-tacTable - table.py (instruction table)
+python bin/parsermain.py test/test1.scala
 
+The output will be on terminal

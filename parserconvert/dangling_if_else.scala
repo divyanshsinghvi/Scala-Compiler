@@ -1,0 +1,13 @@
+object Demo {
+    def main(args: Array[String])={
+    var i: Int = 0, a: Array[Int] ={c,b};
+    if (i<=3){
+        a[i]=a[i]+1;
+    };
+    if (i>=2){
+        a[i]=a[i]-1;
+    } else {
+        a[i] = 1;
+    };
+  };
+};
