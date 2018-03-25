@@ -2,6 +2,20 @@ import sys
 import ply.yacc as yacc
 import lexer
 
+class Node(object):
+    def __init__(self,name,children,data_type="Unit",value=None,size=0,argument_list=None):
+        self.name = name
+        self.children = children
+        self.datatType = dataType
+        self.value = value
+        self.size = size
+        self.argumentList = argumentList
+
+def create_leaf(name,value,data_type="Unit"):
+    leaf1 = Node(value,[],data_type)
+    leaf2 = Node(name,[leaf1],data_type)
+    return leaf2
+
 tokens = lexer.tokens
 precedence = (
         ('right','XORASGN','ORASGN','ANDASGN','RSHIFTASGN','LSHIFTASGN','MODASGN','DIVASGN','MULASGN','SUBASGN','EQUALASGN'),
