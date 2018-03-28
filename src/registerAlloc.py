@@ -127,7 +127,7 @@ def getRegIn(i,var): #getReg  8.6.3
     for regNo in range(noOfReg):#point 3.4
         if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
             #print(7,var,regNo)
-            printInstr('movl',address(registerDescr[regNo]),'Address',regName(regNo),'Register')
+            printInstr('movl',address(registerDescr[regNo]),'Memory',regName(regNo),'Register')
             #print('\tmov DWORD PTR '+address(registerDescr[regNo])+', '+regName(regNo))
             addressDescr[registerDescr[regNo]]['Memory'] = registerDescr[regNo]
             return regNo
@@ -175,7 +175,7 @@ def getRegOut(i,var): #getReg  8.6.3
     for regNo in range(noOfReg):#point 3.4
         if registerDescr[regNo]!= tacTable[i].in1 and registerDescr[regNo]!= tacTable[i].in2:
             #print(8,var,regNo)
-            printInstr('movl',address(registerDescr[regNo]),'Address',regName(regNo),'Register')
+            printInstr('movl',address(registerDescr[regNo]),'Memory',regName(regNo),'Register')
             #print('\tmov DWORD PTR '+address(registerDescr[regNo])+', '+regName(regNo)) ### make a spilling function here and above
             addressDescr[registerDescr[regNo]]['Memory'] = registerDescr[regNo]
             return regNo
