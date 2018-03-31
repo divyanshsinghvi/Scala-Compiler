@@ -70,7 +70,7 @@ class Env:
         return self.prev
 
     def goto(self, data):
-        for child in range(0, len(slef.children)):
+        for child in range(0, len(self.children)):
             if(self.children[child].name == data):
                 return self.children[child]
 
@@ -121,3 +121,25 @@ class Env:
             print 'Error: Object not present for updation - [' + name + ']'
         else:
             print "Attribute Missing"
+
+
+    def getCurrentSymbolTable(self):
+        return self.symbolTable.get_table()
+
+
+    def print_table(self):
+        env=self
+        i=0
+        while env!=None:
+            print "Ancestor ==========>",i
+            env.objectTable.print_table()
+            env = env.prev_env
+            i=i+1
+        def get_width(self):
+        return self.width
+
+    def incrementWidth(self, inc):  
+        self.width += inc
+
+    
+
