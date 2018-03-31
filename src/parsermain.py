@@ -1,20 +1,11 @@
 import sys
 import ply.yacc as yacc
 import lexer
+from symbolTable import *
 
-class Node(object):
-    def __init__(self,name,children,data_type="Unit",value=None,size=0,argument_list=None):
-        self.name = name
-        self.children = children
-        self.datatType = dataType
-        self.value = value
-        self.size = size
-        self.argumentList = argumentList
+def emit(op,in1,in2,out):
+    
 
-def create_leaf(name,value,data_type="Unit"):
-    leaf1 = Node(value,[],data_type)
-    leaf2 = Node(name,[leaf1],data_type)
-    return leaf2
 
 tokens = lexer.tokens
 precedence = (
