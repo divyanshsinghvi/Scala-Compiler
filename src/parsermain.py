@@ -8,7 +8,7 @@ y=0
 SCOPE=Env(None)
 
 class Node:
-    def __init__(self,dataType="Unit",size=None,arguementList=None,place=None,trueList=None,falseList=None,nextList=None):
+    def __init__(self,dataType="Unit",size=None,arguementList=None,place=None,trueList=None,falseList=None,nextList=None,name=None):
         self.dataType=dataType
         self.size=size
         self.arguementList=arguementList
@@ -16,14 +16,17 @@ class Node:
         self.trueList=trueList
         self.falseList=falseList
         self.nextList=nextList
+        self.name=name
 
 def newLabel():
+    global y
     y += 1
-    return "L"+y
+    return "L"+str(y)
 
 def newtmp():
+    global x
     x += 1
-    return "t$"+x
+    return "t$"+str(x)
 
 def emit(op,in1,in2,out):
     if(in1!=None and in2!=None and out!=None):
@@ -734,8 +737,8 @@ def p_assign(p):
     '''
     p[0] = Node()
 
-    if SCOPE.isPresent(p[1]['name']):
-        emit(op="=",out=p[1]['name'],in1=p[3].place,in2=None)
+    if SCOPE.symbolTable.isPresent(p[1].name):
+        emit(op="=",out=p[1].name,in1=p[3].place,in2=None)
     else:
         printp(p)
 
