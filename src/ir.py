@@ -12,10 +12,10 @@ LE='<='
 EQ='=='
 GE='>='
 GT='>'
-NE='!='
+NEQ='!='
 NOT='!'
 op = {}
-op['binop']=[PLUS, MINUS, TIMES, DIV, AND, OR, LT, LE, EQ, GE, GT, NE, MOD]
+op['binop']=[PLUS, MINUS, TIMES, DIV, AND, OR, LT, LE, EQ, GE, GT, NEQ, MOD]
 op['unop']=[NOT]
 op['assign']= ['=']
 op['goto']=['goto']

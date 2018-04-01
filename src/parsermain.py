@@ -3,7 +3,9 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import *
 
-def emit(op,in1,in2,out):
+SCOPE=Env(None)
+
+#def emit(op,in1,in2,out):
     
 
 
@@ -594,23 +596,37 @@ def p_infix_expr(p):
     ''' infix_expr : assign
                    | or_expression
     '''
+
     printp(p)
 
 def p_assign(p):
     ''' assign : id asgn infix_expr
     '''
-    printp(p)
+
+    if SCOPE.isPresent(p[1]['name']):
+        emit(op="=",out=p[1]['name'],in1=p[3]['place'],in2=None)
+    else
+        printp(p)
+
+
 
 def p_or_expression(p):
     ''' or_expression : and_expression
                       | or_expression OR and_expression
     '''
+    if len(p) == 4:
+        p[0]['place'] = newtmp()
+        emit(op="||",out=p[0].place,in1=p[1].place,in2=p[3].place)
+
     printp(p)
 
 def p_and_expression(p):
     ''' and_expression : bit_or_expression 
                        | and_expression AND bit_or_expression 
     '''
+    if len(p) == 4:
+        p[0]['place'] = newtmp()
+        emit(op="&&",out=p[0].place,in1=p[1].place,in2=p[3].place)
     printp(p)
 
 def p_bit_or_expression(p):
@@ -636,6 +652,12 @@ def p_eq_expression(p):
                       | eq_expression EQ comp_expression
                       | eq_expression NEQ comp_expression
     '''
+    if (p.slice)[2] == "EQ":
+        p[0]['place'] = newtmp()
+        emit(op="==",out=p[0].place,in1=p[1].place,in2=p[3].place)
+    if (p.slice)[2] == "NEQ":
+        p[0]['place'] = newtmp()
+        emit(op="!=",out=p[0].place,in1=p[1].place,in2=p[3].place)
     printp(p)
 
 
