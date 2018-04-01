@@ -3,11 +3,37 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import *
 
+var x=0
+var y=0
 SCOPE=Env(None)
 
-#def emit(op,in1,in2,out):
-    
+def newLabel():
+    y += 1
+    return "L"+y
 
+def newtmp():
+    x += 1
+    return "t$"+x
+
+def emit(op,in1,in2,out):
+    if(in1!=None and in2!=None and out!=None):
+        SCOPE.code.append([op,in1,in2,out])
+        print op, in1, in2, out
+    elif(in1!=None and in2!=None and out==None):
+        SCOPE.code.append([op,in1,in2])
+        print op, in1, in2
+    elif(in1!=None and in2==None and out==None):
+        SCOPE.code.append([op,in1])
+        print op, in1
+    elif(in1==None and in2!=None and out==None):
+        SCOPE.code.append([op,in2])
+        print op, in2
+    elif(in1=None and in2!=None and out!=None):
+        SCOPE.code.append([op,in2,out])
+        print op, in2, out
+    elif(in1==None and in2==None and out==None):
+        SCOPE.code.append([op])
+        print op
 
 tokens = lexer.tokens
 precedence = (
