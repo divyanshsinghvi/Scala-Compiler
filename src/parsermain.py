@@ -17,7 +17,10 @@ class Node:
         self.falseList=falseList
         self.nextList=nextList
 
-
+def createLeaf(name1,name2,dataType="Unit"):
+        leaf1 = Node(name2,[],dataType)
+        leaf2 = Node(name1,[leaf1],dataType)
+        return leaf2
 
 def newLabel():
     y += 1
@@ -638,6 +641,7 @@ def p_infix_expr(p):
                    | or_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
 
     printp(p)
@@ -658,9 +662,11 @@ def p_or_expression(p):
                       | or_expression OR and_expression
     '''
     if len(p) == 4:
+        p[0]=Node()
         p[0].place = newtmp()
         emit(op="||",out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     printp(p)
 
@@ -669,9 +675,11 @@ def p_and_expression(p):
                        | and_expression AND bit_or_expression 
     '''
     if len(p) == 4:
+        p[0]=Node()
         p[0].place = newtmp()
         emit(op="&&",out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     printp(p)
 
@@ -680,6 +688,7 @@ def p_bit_or_expression(p):
                           | bit_or_expression OR_BIT xor_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     printp(p)
 
@@ -688,6 +697,7 @@ def p_xor_expression(p):
                        | xor_expression XOR bit_and_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     printp(p)
 
@@ -696,6 +706,7 @@ def p_bit_and_expression(p):
                       | bit_and_expression AND_BIT eq_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     printp(p)
 
@@ -705,11 +716,14 @@ def p_eq_expression(p):
                       | eq_expression NEQ comp_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     elif (p.slice)[2].type == "EQ":
+        p[0]=Node()
         p[0].place = newtmp()
         emit(op="==",out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == "NEQ":
+        p[0]=Node()
         p[0].place = newtmp()
         emit(op="!=",out=p[0].place,in1=p[1].place,in2=p[3].place)
     printp(p)
@@ -723,17 +737,22 @@ def p_comp_expression(p):
                       | comp_expression GT shift_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     elif (p.slice)[2].type == 'LE':
+        p[0]=Node()
         p[0].place = newtemp()
         emit(op='<=',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == 'LT':
+        p[0]=Node()
         p[0].place = newtemp()
         emit(op='<',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == 'GE':
+        p[0]=Node()
         p[0].place = newtemp()
         emit(op='>=',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == 'GT':
+        p[0]=Node()
         p[0].place = newtemp()
         emit(op='>',out=p[0].place,in1=p[1].place,in2=p[3].place)
 
@@ -746,6 +765,7 @@ def p_shift_expression(p):
                       | shift_expression RRSHIFT add_expression
     '''
     if len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
     printp(p)
 
@@ -756,12 +776,15 @@ def p_add_expression(p):
     '''
     if len(p) == 4:
         if (p.slice)[1].type =='OP_ADD':
+            p[0]=Node()
             p[0].place = newtmp()
             emit(op='+',out=p[0].place,in1=p[1].place,in2=p[3].place)
         else:
+            p[0]=Node()
             p[0].place = newtmp()
             emit(op='-',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif len(p) == 2:
+        p[0]=Node()
         p[0].place == p[1].place
 
 #    printp(p)
@@ -774,15 +797,19 @@ def p_mul_expression(p):
     '''
     if len(p) == 4:
         if (p.slice)[1].type =='OP_MOD':
+            p[0]=Node()
             p[0].place = newtmp()
             emit(op='%',out=p[0].place,in1=p[1].place,in2=p[3].place)
         elif (p.slice)[1].type == 'OP_MUL':
+            p[0]=Node()
             p[0].place = newtmp()
             emit(op='*',out=p[0].place,in1=p[1].place,in2=p[3].place)
         elif (p.slice)[1].type == 'OP_DIV':
+            p[0]=Node()
             p[0].place = newtmp()
             emit(op='/',out=p[0].place,in1=p[1].place,in2=p[3].place) 
     elif len(p) == 2:
+        p[0]=Node()
         p[0].place = p[1].place
         #printp(p)
 
@@ -791,8 +818,10 @@ def p_unary_expression(p):
                         | LPARAN infix_expr RPARAN
     '''
     if len(p) == 4:
+        p[0]=Node()
         p[0].place = p[2].place
     elif len(p)==2:
+        p[0]=Node()
         p[0].place = p[1].place
     #printp(p)
 
