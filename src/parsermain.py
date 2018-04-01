@@ -17,11 +17,6 @@ class Node:
         self.falseList=falseList
         self.nextList=nextList
 
-def createLeaf(name1,name2,dataType="Unit"):
-        leaf1 = Node(name2,[],dataType)
-        leaf2 = Node(name1,[leaf1],dataType)
-        return leaf2
-
 def newLabel():
     y += 1
     return "L"+y
