@@ -647,7 +647,7 @@ def p_expr(p):
     p[0] = dict()
               #| R_ARRAY LPARAN literal literal_0 RPARAN
 
-    if (p.slice)[1].type == "R_IF":
+#    if (p.slice)[1].type == "R_IF":
     #printp(p)
 
 def p_ifmark1(p):
@@ -672,7 +672,7 @@ def p_ifmark3(p):
     '''
     l3 = newlabel()
     emit(op='goto',out=l3) #goto exit label 3 
-    emit(op='label',p[-5]['label'][1]) #deine label2
+    emit(op='label',out=p[-5]['label'][1]) #deine label2
     p[0]['label'] = [l3]
 
 def p_ifmark4(p):
