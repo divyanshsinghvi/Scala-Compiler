@@ -633,7 +633,7 @@ def p_switch_block_statements_0(p):
 
 def p_expr(p):
     ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND expression1
-              | R_WHILE LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND
+              | R_WHILE LPARAN wmark1 postfix_expr RPARAN BLOCKBEGIN wmark2 block wmark3 BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
               | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
@@ -647,21 +647,30 @@ def p_expr(p):
               #| R_ARRAY LPARAN literal literal_0 RPARAN
 
     if (p.slice)[1].type == "R_IF":
-       # p[0].label['start']=newlabel()
-       # p[0].label['else']=newlabel()
-       # p[0].label['after']=newlabel()
-       # p[0].code.append(p[3].code)
-       # p[0].code.append(emit(op="if",out=p[0].label['start'],in1= p[3]['place']))
-       # p[0].code.append(emit(op="goto",out=p[0].label['else']))
-       # p[0].code.append(emit(op="label",out=p[0].label['start']))
-       # p[0].code.append(p[6].code)
-       # p[0].code.append(emit(op="label",out=p[0].label['after']))
-       # p[0].code.append(emit(op="label",out=p[0].label['else']))
-       # p[0].code.append()
-
-
-
     #printp(p)
+
+def p_wmark1(p):
+    '''wmark1 : epsilon
+    '''
+    l1 = newlabel()
+    l2 = newlabel()
+    l3 = newlabel()
+    emit(op='label',out=l1) #define label 1 here
+    p[0]['label'] = [l1,l2,l3]
+
+def p_wmark2(p):
+    '''wmark2 : epsilon
+    '''
+    emit(op='if',out=p[-4]['label'][1],in1=p[-3]['place']) #if given expr is true go to l2
+    emit(op='goto',out=p[-4]['label'][2]) # else goto exit label 3
+    emit(op='label',out=p[-4]['label'][1]) #define label 2 here
+
+def p_wmark3(p):
+    '''wmark3 : epsilon
+    '''
+    emit(op='goto',out=p[-6]['label'][0]) #define goto label1
+    emit(op='label',out=p[-6]['label'][2]) #define exit label label 3 here
+
 
 def p_expression1(p):
     ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
