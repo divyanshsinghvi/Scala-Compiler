@@ -632,7 +632,7 @@ def p_switch_block_statements_0(p):
 #    #printp(p)
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND expression1
+    ''' expr : R_IF LPARAN postfix_expr RPARAN if_mark1 BLOCKBEGIN block BLOCKEND expression1
               | R_WHILE LPARAN wmark1 postfix_expr RPARAN BLOCKBEGIN wmark2 block wmark3 BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
@@ -673,11 +673,41 @@ def p_wmark3(p):
 
 
 def p_expression1(p):
-    ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
-                    | epsilon
+    ''' expression1 : R_ELSE if_mark3 BLOCKBEGIN block BLOCKEND if_mark4
+                    | if_mark2 epsilon
     '''
     p[0] = dict()
     #printp(p)
+
+def p_if_mark1():
+    '''if_mark1: epsilon
+    '''
+    l1 = newlabel()
+    l2 = newlabel()
+    emit('if',l1,p[-2]['place'])
+    emit('goto',l2)
+    emit('label',l1)
+    #ST.newScope()
+    p[0]=[l1,l2]
+
+def p_if_mark2():
+    '''if_mark2 : epsilon
+    '''
+    #ST.endScope()
+    emit('label',p[-4][1])
+
+def p_if_mark3():
+    '''if_mark3 : epsilon
+    '''
+    l3 = newlabel()
+    emit('goto',l3)
+    emit('label',p[-5][1])
+    p[0]=[l3]
+
+def p_if_mark4():
+    '''if_mark4 : epsilon
+    '''
+    emit('label',p[-4][0])
 
 def p_expression2(p):
     ''' expression2 : R_FINALLY BLOCKBEGIN block BLOCKEND
