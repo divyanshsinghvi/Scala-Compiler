@@ -618,7 +618,7 @@ def p_or_expression(p):
     '''
     if len(p) == 4:
         p[0]['place'] = newtmp()
-        emit(op="||",out=p[0].place,in1=p[1].place,in2=p[3].place)
+        emit(op="||",out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
     elif len(p) == 2:
         p[0]['place'] = p[1]['place']
     printp(p)
@@ -629,7 +629,7 @@ def p_and_expression(p):
     '''
     if len(p) == 4:
         p[0]['place'] = newtmp()
-        emit(op="&&",out=p[0].place,in1=p[1].place,in2=p[3].place)
+        emit(op="&&",out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
     elif len(p) == 2:
         p[0]['place'] = p[1]['place']
     printp(p)
@@ -667,10 +667,10 @@ def p_eq_expression(p):
         p[0]['place'] = p[1]['place']
     elif (p.slice)[2] == "EQ":
         p[0]['place'] = newtmp()
-        emit(op="==",out=p[0].place,in1=p[1].place,in2=p[3].place)
+        emit(op="==",out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
     elif (p.slice)[2] == "NEQ":
         p[0]['place'] = newtmp()
-        emit(op="!=",out=p[0].place,in1=p[1].place,in2=p[3].place)
+        emit(op="!=",out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 
