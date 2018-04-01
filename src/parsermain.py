@@ -3,8 +3,8 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import *
 
-var x=0
-var y=0
+x=0
+y=0
 SCOPE=Env(None)
 
 class Node:
@@ -38,7 +38,7 @@ def emit(op,in1,in2,out):
     elif(in1==None and in2!=None and out==None):
         SCOPE.code.append([op,in2])
         print op, in2
-    elif(in1=None and in2!=None and out!=None):
+    elif(in1==None and in2!=None and out!=None):
         SCOPE.code.append([op,in2,out])
         print op, in2, out
     elif(in1==None and in2==None and out==None):
@@ -647,7 +647,7 @@ def p_assign(p):
 
     if SCOPE.isPresent(p[1]['name']):
         emit(op="=",out=p[1]['name'],in1=p[3].place,in2=None)
-    else
+    else:
         printp(p)
 
 

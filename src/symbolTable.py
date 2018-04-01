@@ -41,11 +41,11 @@ class HashTable:
             
 class Env:
     tableNo = 0
-    def __inti__(self, prev=None):
+    def __init__(self, prev=None):
         self.symbolTable = HashTable()
         self.functionTable = HashTable()
         self.objectTable = HashTable()
-        self.name = "Table" + str(env.tableNo)
+        self.name = "Table" + str(Env.tableNo)
         self.children = []
         self.width = 0
         self.prevEnv = prev
@@ -97,11 +97,11 @@ class Env:
 
     # update entry in the most recent hash table in case not found in the most recent goes to the parent and then to next parent and 
     # successive goes up till the time entry is found if not found found printf error (Checks if the variable used is previously declared)
-    def updateEntry(self, name, attributeName attributeValue, updateField = "symbol"):
+    def updateEntry(self, name, attributeName, attributeValue, updateField = "symbol"):
     	if updateField=="symbol":
             env=self
             while env!=None:
-                if env.symbolTable.updateEntry(name, attributeName, attributeNalue) == True:
+                if env.symbolTable.updateEntry(name, attributeName, attributeValue) == True:
                     return
                 env=env.prevEnv
             print 'Error: Variable not present for updation - [' + name + ']'
@@ -135,7 +135,7 @@ class Env:
             env.objectTable.print_table()
             env = env.prev_env
             i=i+1
-        def get_width(self):
+    def get_width(self):
         return self.width
 
     def incrementWidth(self, inc):  
