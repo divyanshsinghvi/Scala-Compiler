@@ -29,6 +29,7 @@ def newtmp():
     return "t$"+str(x)
 
 def emit(op,in1,in2,out):
+    print op,out,in1,in2
     if(in1!=None and in2!=None and out!=None):
         SCOPE.code.append([op,in1,in2,out])
         print op, in1, in2, out
@@ -872,9 +873,10 @@ def p_add_expression(p):
     '''
     p[0] = Node()
     if len(p) == 4:
-        if (p.slice)[1].type =='OP_ADD':
+        if (p.slice)[2].type =='OP_ADD':
             p[0]=Node()
             p[0].place = newtmp()
+            #print p[0].place
             emit(op='+',out=p[0].place,in1=p[1].place,in2=p[3].place)
         else:
             p[0]=Node()
