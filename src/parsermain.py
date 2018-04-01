@@ -490,6 +490,15 @@ def p_prefix_expr(p):
                     |   OP_ADD simple_expr
                     |   OP_NOT simple_expr'''
     p[0] = dict()
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
+    elif p.slice[1].type == 'OP_SUB':
+        p[0]['place'] = -p[2]['place']
+    elif p.slice[1].type == 'OP_ADD':
+        p[0]['place'] = p[2]['place']
+    elif p.slice[1].type == 'OP_NOT':
+        p[0]['place'] = p[2]['place']
+
     #printp(p)
 
 def p_type(p):                      # look at <T>
@@ -622,6 +631,7 @@ def p_switch_block_statements_0(p):
     ''' switch_block_statements_0 : epsilon
                                  | switch_block_statements_0 switch_block_statements
     '''
+
     p[0] = dict()
     #printp(p)
 
@@ -632,8 +642,7 @@ def p_switch_block_statements_0(p):
 #    #printp(p)
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN ifmark1 block ifmark2 BLOCKEND %prec
-              | R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN ifmark1 block BLOCKEND R_ELSE BLOCKBEGIN ifmark3 block  ifmark4 BLOCKEND
+    ''' expr : R_IF LPARAN postfix_expr RPARAN if_mark1 BLOCKBEGIN block BLOCKEND expr expression1
               | R_WHILE LPARAN wmark1 postfix_expr RPARAN BLOCKBEGIN wmark2 block wmark3 BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
@@ -650,36 +659,36 @@ def p_expr(p):
 #    if (p.slice)[1].type == "R_IF":
     #printp(p)
 
-def p_ifmark1(p):
-    '''ifmark1 : epsilon
-    '''
-    l1 = newlabel()
-    l2 = newlabel()
-    emit(op='if',in1=p[-2]['palce'],out=l1) #if expr is true goto label1
-    emit(op='goto',out=l2) #else goto label 2
-    emit(op='label',out=l1) #declare label1
-    ST.newScope()
-    p[0] = [l1,l2]
-
-def p_ifmark2(p):
-    '''ifmark2 : epsilon
-    '''
-    ST.endScope()
-    emit(op='label',out=p[-2]['label'][1])#deinf label 2 here
-
-def p_ifmark3(p):
-    '''ifmark3 : epsilon
-    '''
-    l3 = newlabel()
-    emit(op='goto',out=l3) #goto exit label 3 
-    emit(op='label',out=p[-5]['label'][1]) #deine label2
-    p[0]['label'] = [l3]
-
-def p_ifmark4(p):
-    '''ifmark4 : epsilon
-    '''
-    ST.endScope()
-    emit(op='label',out=p[-2][label][0]) #define label 3
+#def p_ifmark1(p):
+#    '''ifmark1 : epsilon
+#    '''
+#    l1 = newlabel()
+#    l2 = newlabel()
+#    emit(op='if',in1=p[-2]['palce'],out=l1) #if expr is true goto label1
+#    emit(op='goto',out=l2) #else goto label 2
+#    emit(op='label',out=l1) #declare label1
+#    ST.newScope()
+#    p[0] = [l1,l2]
+#
+#def p_ifmark2(p):
+#    '''ifmark2 : epsilon
+#    '''
+#    ST.endScope()
+#    emit(op='label',out=p[-2]['label'][1])#deinf label 2 here
+#
+#def p_ifmark3(p):
+#    '''ifmark3 : epsilon
+#    '''
+#    l3 = newlabel()
+#    emit(op='goto',out=l3) #goto exit label 3 
+#    emit(op='label',p[-5]['label'][1]) #deine label2
+#    p[0]['label'] = [l3]
+#
+#def p_ifmark4(p):
+#    '''ifmark4 : epsilon
+#    '''
+#    ST.endScope()
+#    emit(op='label',out=p[-2][label][0]) #define label 3
 
 
 def p_wmark1(p):
@@ -716,6 +725,11 @@ def p_fmark1(p):
     emit(op='label',out=l1) #define label 1 here
     p[0]['label'] = [l1,l2,l3]
 
+def p_expression1(p):
+    ''' expression1 : R_ELSE if_mark3 BLOCKBEGIN block BLOCKEND if_mark4
+                    | if_mark2 epsilon
+    '''
+
 def p_fmark2(p):
     '''fmark2 : epsilon
     '''
@@ -735,6 +749,37 @@ def p_fmark3(p):
 #    '''
 #    p[0] = dict()
 #    #printp(p)
+
+def p_if_mark1(p):
+    '''if_mark1 : epsilon
+    '''
+    l1 = newlabel()
+    l2 = newlabel()
+    emit('if',l1,p[-2]['place'])
+    emit('goto',l2)
+    emit('label',l1)
+    ST.newScope()
+    p[0]['label']=[l1,l2]
+
+def p_if_mark2(p):
+    '''if_mark2 : epsilon
+    '''
+    ST.endScope(p)
+    emit('label',p[-4]['label'][1])
+
+def p_if_mark3(p):
+    '''if_mark3 : epsilon
+    '''
+    l3 = newlabel()
+    emit('goto',l3)
+    emit('label',p[-5]['label'][1])
+    p[0]['label']=[l3]
+
+def p_if_mark4(p):
+    '''if_mark4 : epsilon
+    '''
+    ST.endScope()
+    emit('label',p[-4]['label'][0])
 
 def p_expression2(p):
     ''' expression2 : R_FINALLY BLOCKBEGIN block BLOCKEND
