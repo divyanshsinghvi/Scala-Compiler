@@ -835,19 +835,19 @@ def p_comp_expression(p):
         p[0].place = p[1].place
     elif (p.slice)[2].type == 'LE':
         p[0]=Node()
-        p[0].place = newtemp()
+        p[0].place = newtmp()
         emit(op='<=',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == 'LT':
         p[0]=Node()
-        p[0].place = newtemp()
+        p[0].place = newtmp()
         emit(op='<',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == 'GE':
         p[0]=Node()
-        p[0].place = newtemp()
+        p[0].place = newtmp()
         emit(op='>=',out=p[0].place,in1=p[1].place,in2=p[3].place)
     elif (p.slice)[2].type == 'GT':
         p[0]=Node()
-        p[0].place = newtemp()
+        p[0].place = newtmp()
         emit(op='>',out=p[0].place,in1=p[1].place,in2=p[3].place)
 
     
