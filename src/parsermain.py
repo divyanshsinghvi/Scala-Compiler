@@ -3,8 +3,7 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import *
 
-def emit(op,in1,in2,out):
-    
+SCOPE = Env(None)
 
 
 tokens = lexer.tokens
@@ -660,6 +659,15 @@ def p_add_expression(p):
                       | add_expression OP_ADD mul_expression
                       | add_expression OP_SUB  mul_expression
     '''
+    if len(p) == 2:
+        if (p.slice)[1] =='OP_ADD':
+            p[0]['place'] = newtmp()
+            emit(op='+',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+        else:
+            p[0]['place'] = newtmp()
+            emit(op='-',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+
+
     printp(p)
 
 def p_mul_expression(p):
@@ -668,12 +676,23 @@ def p_mul_expression(p):
                       | mul_expression OP_MUL  unary_expression
                       | mul_expression OP_DIV  unary_expression
     '''
-    printp(p)
+    if len(p) == 2:
+        if (p.slice)[1] =='OP_MOD':
+            p[0]['place'] = newtmp()
+            emit(op='%',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+        elif (p.slice)[1] == 'OP_MUL':
+            p[0]['place'] = newtmp()
+            emit(op='*',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+        elif (p.slice)[1] == 'OP_DIV':
+            p[0]['place'] = newtmp()
+            emit(op='/',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])           printp(p)
 
 def p_unary_expression(p):
     '''unary_expression : prefix_expr
                         | LPARAN infix_expr RPARAN
     '''
+    if len(p) == 3:
+        p[0]['place'] = p[2]['place']
     printp(p)
 
 #def p_cast_expression(p):
