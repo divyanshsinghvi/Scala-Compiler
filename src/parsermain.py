@@ -596,6 +596,8 @@ def p_infix_expr(p):
     ''' infix_expr : assign
                    | or_expression
     '''
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
 
     printp(p)
 
@@ -617,7 +619,8 @@ def p_or_expression(p):
     if len(p) == 4:
         p[0]['place'] = newtmp()
         emit(op="||",out=p[0].place,in1=p[1].place,in2=p[3].place)
-
+    elif len(p) == 2:
+        p[0]['place'] = p[1]['place']
     printp(p)
 
 def p_and_expression(p):
@@ -627,24 +630,32 @@ def p_and_expression(p):
     if len(p) == 4:
         p[0]['place'] = newtmp()
         emit(op="&&",out=p[0].place,in1=p[1].place,in2=p[3].place)
+    elif len(p) == 2:
+        p[0]['place'] = p[1]['place']
     printp(p)
 
 def p_bit_or_expression(p):
     ''' bit_or_expression : xor_expression 
                           | bit_or_expression OR_BIT xor_expression
     '''
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
     printp(p)
 
 def p_xor_expression(p):
     ''' xor_expression : bit_and_expression
                        | xor_expression XOR bit_and_expression
     '''
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
     printp(p)
 
 def p_bit_and_expression(p):
     '''bit_and_expression : eq_expression
                       | bit_and_expression AND_BIT eq_expression
     '''
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
     printp(p)
 
 def p_eq_expression(p):
@@ -652,10 +663,12 @@ def p_eq_expression(p):
                       | eq_expression EQ comp_expression
                       | eq_expression NEQ comp_expression
     '''
-    if (p.slice)[2] == "EQ":
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
+    elif (p.slice)[2] == "EQ":
         p[0]['place'] = newtmp()
         emit(op="==",out=p[0].place,in1=p[1].place,in2=p[3].place)
-    if (p.slice)[2] == "NEQ":
+    elif (p.slice)[2] == "NEQ":
         p[0]['place'] = newtmp()
         emit(op="!=",out=p[0].place,in1=p[1].place,in2=p[3].place)
     printp(p)
@@ -675,6 +688,8 @@ def p_shift_expression(p):
                       | shift_expression LSHIFT add_expression
                       | shift_expression RRSHIFT add_expression
     '''
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
     printp(p)
 
 def p_add_expression(p):
