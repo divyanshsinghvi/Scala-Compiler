@@ -535,6 +535,9 @@ def p_expr(p):
               | R_SWITCH LPARAN expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
+
+    #if (p.slice)[1].type == "R_IF"
+
     printp(p)
 
 def p_expression1(p):
@@ -665,10 +668,10 @@ def p_eq_expression(p):
     '''
     if len(p) == 2:
         p[0]['place'] = p[1]['place']
-    elif (p.slice)[2] == "EQ":
+    elif (p.slice)[2].type == "EQ":
         p[0]['place'] = newtmp()
         emit(op="==",out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
-    elif (p.slice)[2] == "NEQ":
+    elif (p.slice)[2].type == "NEQ":
         p[0]['place'] = newtmp()
         emit(op="!=",out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
@@ -683,16 +686,16 @@ def p_comp_expression(p):
     '''
     if len(p) == 2:
         p[0]['place'] = p[1]['place']
-    elif (p.slice)[2] == 'LE':
+    elif (p.slice)[2].type == 'LE':
         p[0]['place'] = newtemp()
         emit(op='<=',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
-    elif (p.slice)[2] == 'LT':
+    elif (p.slice)[2].type == 'LT':
         p[0]['place'] = newtemp()
         emit(op='<',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
-    elif (p.slice)[2] == 'GE':
+    elif (p.slice)[2].type == 'GE':
         p[0]['place'] = newtemp()
         emit(op='>=',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
-    elif (p.slice)[2] == 'GT':
+    elif (p.slice)[2].type == 'GT':
         p[0]['place'] = newtemp()
         emit(op='>',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
 
@@ -714,7 +717,7 @@ def p_add_expression(p):
                       | add_expression OP_SUB  mul_expression
     '''
     if len(p) == 4:
-        if (p.slice)[1] =='OP_ADD':
+        if (p.slice)[1].type =='OP_ADD':
             p[0]['place'] = newtmp()
             emit(op='+',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
         else:
@@ -732,13 +735,13 @@ def p_mul_expression(p):
                       | mul_expression OP_DIV  unary_expression
     '''
     if len(p) == 4:
-        if (p.slice)[1] =='OP_MOD':
+        if (p.slice)[1].type =='OP_MOD':
             p[0]['place'] = newtmp()
             emit(op='%',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
-        elif (p.slice)[1] == 'OP_MUL':
+        elif (p.slice)[1].type == 'OP_MUL':
             p[0]['place'] = newtmp()
             emit(op='*',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
-        elif (p.slice)[1] == 'OP_DIV':
+        elif (p.slice)[1].type == 'OP_DIV':
             p[0]['place'] = newtmp()
             emit(op='/',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place']) 
     elif len(p) == 2:
