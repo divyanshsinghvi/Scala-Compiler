@@ -7,6 +7,18 @@ var x=0
 var y=0
 SCOPE=Env(None)
 
+class Node:
+    def __init__(self,dataType="Unit",size=None,arguementList=None,place=None,trueList=None,falseList=None,nextList=None):
+        self.dataType=dataType
+        self.size=size
+        self.arguementList=arguementList
+        self.place=place
+        self.trueList=trueList
+        self.falseList=falseList
+        self.nextList=nextList
+
+
+
 def newLabel():
     y += 1
     return "L"+y
