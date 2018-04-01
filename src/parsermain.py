@@ -681,7 +681,23 @@ def p_comp_expression(p):
                       | comp_expression GE shift_expression
                       | comp_expression GT shift_expression
     '''
-    printp(p)
+    if len(p) == 2:
+        p[0]['place'] = p[1]['place']
+    elif (p.slice)[2] == 'LE':
+        p[0]['place'] = newtemp()
+        emit(op='<=',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+    elif (p.slice)[2] == 'LT':
+        p[0]['place'] = newtemp()
+        emit(op='<',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+    elif (p.slice)[2] == 'GE':
+        p[0]['place'] = newtemp()
+        emit(op='>=',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+    elif (p.slice)[2] == 'GT':
+        p[0]['place'] = newtemp()
+        emit(op='>',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+
+    
+ #   printp(p)
 def p_shift_expression(p):
     '''shift_expression : add_expression
                       | shift_expression RSHIFT add_expression
@@ -697,16 +713,17 @@ def p_add_expression(p):
                       | add_expression OP_ADD mul_expression
                       | add_expression OP_SUB  mul_expression
     '''
-    if len(p) == 2:
+    if len(p) == 4:
         if (p.slice)[1] =='OP_ADD':
             p[0]['place'] = newtmp()
             emit(op='+',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
         else:
             p[0]['place'] = newtmp()
             emit(op='-',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
+    elif len(p) == 2:
+        p[0]['place'] == p[1]['place']
 
-
-    printp(p)
+#    printp(p)
 
 def p_mul_expression(p):
     '''mul_expression : unary_expression
@@ -714,7 +731,7 @@ def p_mul_expression(p):
                       | mul_expression OP_MUL  unary_expression
                       | mul_expression OP_DIV  unary_expression
     '''
-    if len(p) == 2:
+    if len(p) == 4:
         if (p.slice)[1] =='OP_MOD':
             p[0]['place'] = newtmp()
             emit(op='%',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
@@ -723,15 +740,20 @@ def p_mul_expression(p):
             emit(op='*',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])
         elif (p.slice)[1] == 'OP_DIV':
             p[0]['place'] = newtmp()
-            emit(op='/',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place'])           printp(p)
+            emit(op='/',out=p[0]['place'],in1=p[1]['place'],in2=p[3]['place']) 
+    elif len(p) == 2:
+        p[0]['place'] = p[1]['place']
+        #printp(p)
 
 def p_unary_expression(p):
     '''unary_expression : prefix_expr
                         | LPARAN infix_expr RPARAN
     '''
-    if len(p) == 3:
+    if len(p) == 4:
         p[0]['place'] = p[2]['place']
-    printp(p)
+    elif len(p)==2:
+        p[0]['place'] = p[1]['place']
+    #printp(p)
 
 #def p_cast_expression(p):
 #    '''cast_expression : LPARAN basic_type RPARAN unary_expression
