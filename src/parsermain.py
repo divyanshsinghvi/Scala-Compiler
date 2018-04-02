@@ -599,9 +599,11 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : LPARAN for_init semi infix_expr semi for_upd
-                  | LPARAN for_init semi epsilon semi for_upd
+    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd
     '''
+    ST.newScope()
+    p[0] = p[6]
+    #Check Scope
     printp(p)
 
 def p_for_init(p):
@@ -665,11 +667,11 @@ def p_switch_block_statements_0(p):
 #    printp(p)
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND expression1
+    ''' expr : R_IF LPARAN postfix_expr  RPARAN if_mark1 BLOCKBEGIN block BLOCKEND expression1
               | R_WHILE LPARAN WhMark1 postfix_expr RPARAN WhMark2 BLOCKBEGIN block WhMark3  BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
-              | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
+              | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
               | R_RETURN expr
               | R_BREAK
               | R_CONTINUE
@@ -677,8 +679,38 @@ def p_expr(p):
               | R_SWITCH LPARAN expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
-
     printp(p)
+
+
+def p_f_mark1(p):
+    ''' f_mark1 : epsilon
+    '''
+    l1 = newLabel()
+    l2 = newLabel()
+    l3 = newLabel()
+#    ST.stackbegin.append(l1)
+#    ST.stackend.append(l3)
+    emit(op='label',out=l1) #emit label 1 
+    p[0]=[l1,l2,l3]
+    
+def p_f_mark2(p):
+    ''' f_mark2 : epsilon
+    '''
+    print p[-2]
+    print p[-1]
+    emit(op='if',in1=p[-1]['place'],out=p[-2][1]) #if true goto l2 
+    emit(op='goto',out=p[-2][2]) #goto exit l3
+    emit(op='label',out=p[-2][1],) # emit label l2
+    p[0] = [p[-2][0],p[-2][1],p[-2][2]]
+
+def p_f_mark3(p):
+    ''' f_mark3 : epsilon
+    '''
+    emit(op='goto',out=p[-3][0]) #goto l1
+    emit(op='label',out=p[-3][2]) #exit label
+    ST.endScope()
+#    ST.stackbegin.pop()
+#    ST.stackend.pop()
 
 def p_WhMark1(p):
     '''WhMark1 : '''
@@ -693,8 +725,6 @@ def p_WhMark1(p):
 
 def p_WhMark2(p):
     '''WhMark2 : '''
-    print p[-3]
-    print p[-2]
     emit(op='if',in1=p[-2]['place'],out=p[-3][1]) #if true goto l2 
     emit(op='goto',out=p[-3][2]) #goto exit l3
     emit(op='label',out=p[-3][1],) # emit label l2
@@ -709,10 +739,46 @@ def p_WhMark3(p):
 
 
 def p_expression1(p):
-    ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
-                    | epsilon
+    ''' expression1 : R_ELSE if_mark3 BLOCKBEGIN block BLOCKEND if_mark4
+                    | if_mark2
     '''
     printp(p)
+
+
+def p_if_mark1(p):
+    '''if_mark1 : epsilon
+    '''
+    p[0]={}
+    l1 = newLabel()
+    l2 = newLabel()
+    emit('if',l1,p[-2]['place'])
+    emit('goto',l2)
+    emit('label',l1)
+    ST.newScope()
+    p[0]['label']=[l1,l2]
+
+def p_if_mark2(p):
+    '''if_mark2 : epsilon
+    '''
+    ST.endScope()
+    emit('label',p[-4]['label'][1])
+
+def p_if_mark3(p):
+    '''if_mark3 : epsilon
+    '''
+    p[0]={}
+    l3 = newLabel()
+    emit('goto',l3)
+    emit('label',p[-5]['label'][1])
+    p[0]['label']=[l3]
+
+def p_if_mark4(p):
+    '''if_mark4 : epsilon
+    '''
+    ST.endScope()
+    emit('label',p[-4]['label'][0])
+
+
 
 def p_expression2(p):
     ''' expression2 : R_FINALLY BLOCKBEGIN block BLOCKEND
