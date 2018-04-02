@@ -3,9 +3,17 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import SymbolTable
 ST=SymbolTable()
-
+x=1
+def newLabel():
+    global x
+    x=x+1
+    return "label"+str(x)
 def emit(op=None,out=None,in1=None,in2=None):
+    CRED = '\033[91m'
+    CEND = '\033[0m'
+    print(CRED+"")
     print op,out,in1,in2
+    print(""+CEND)
 
 tokens = lexer.tokens
 precedence = (
@@ -230,7 +238,6 @@ def p_val_var_init(p):
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
     else:
-        print "chapu"
         p[0] = {
                 'isArray' : True
                 }
@@ -659,7 +666,7 @@ def p_switch_block_statements_0(p):
 
 def p_expr(p):
     ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND expression1
-              | R_WHILE LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND
+              | R_WHILE LPARAN WhMark1 postfix_expr RPARAN WhMark2 BLOCKBEGIN block WhMark3  BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
               | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
@@ -670,7 +677,36 @@ def p_expr(p):
               | R_SWITCH LPARAN expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
+
     printp(p)
+
+def p_WhMark1(p):
+    '''WhMark1 : '''
+    l1 = newLabel()
+    l2 = newLabel()
+    l3 = newLabel()
+#    ST.stackbegin.append(l1)
+#    ST.stackend.append(l3)
+    ST.newScope()
+    emit(op='label',out=l1) #emit label 1 
+    p[0]=[l1,l2,l3]
+
+def p_WhMark2(p):
+    '''WhMark2 : '''
+    print p[-3]
+    print p[-2]
+    emit(op='if',in1=p[-2]['place'],out=p[-3][1]) #if true goto l2 
+    emit(op='goto',out=p[-3][2]) #goto exit l3
+    emit(op='label',out=p[-3][1],) # emit label l2
+
+def p_WhMark3(p):
+    '''WhMark3 : '''
+    emit(op='goto',out=p[-6][0]) #goto l1
+    emit(op='label',out=p[-6][2]) #exit label
+    ST.endScope()
+#    ST.stackbegin.pop()
+#    ST.stackend.pop()
+
 
 def p_expression1(p):
     ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
@@ -710,6 +746,8 @@ def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
                      | infix_expr
     '''
+    if len(p)==2:
+        p[0]=p[1]
     printp(p)
 
 def p_id_1(p):
@@ -841,9 +879,6 @@ def p_comp_expression(p):
         p[0] = {
                     'place' : temp
                 }
-        print "============="
-        print p[1]
-        print p[3]
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
         emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
@@ -874,9 +909,6 @@ def p_add_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        print "ds chapu"
-        print p[1]
-        print p[3]
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp
