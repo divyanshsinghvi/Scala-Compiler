@@ -186,20 +186,23 @@ def p_var_def(p):
     if('isArray' in p[5].keys() and p[5]['isArray']):
         emit('array','a','n')
     else:
-        emit('=',p[5]['place'],p[1][0])
+        emit('=',p[5]['place'],p[1])
 
 
     #printp(p)
 
 def p_array_size(p):
-    ''' array_size : epsilon
-                   | LPARAN ints RPARAN                           
-    '''   
-    printp(p)
+    ''' array_size : LPARAN ints RPARAN                           
+    '''
+    p[0] = dict()
+    p[0]['place'] = p[2] 
+    #printp(p)
 def p_ints(p):
     ''' ints : INT
              | COMMA ints
     '''
+    if(len(p)==2):
+        p[0] = p[1]
     # Array[Char](10,3,4)
 
 def p_val_def(p):
@@ -282,7 +285,7 @@ def p_dcl(p):
 
 def p_val_dcl(p):
     '''val_dcl   :   id COLON type val_dcl_0'''
-    printp(p)
+    #printp(p)
 
     printp(p)
 def p_val_dcl_0(p):
@@ -291,16 +294,16 @@ def p_val_dcl_0(p):
     printp(p)
 
 def p_var_dcl(p):
-    '''var_dcl  :   id COLON basic_type var_dcl_0
-                |   id COLON array_type array_size var_dcl_0
-                |   id COLON id var_dcl_0
+    '''var_dcl  :   id COLON type
     '''
-    printp(p)
+    ST.addEntry(p[1],p[1],p[3]['type'])
 
-def p_var_dcl_0(p):
-    '''var_dcl_0    :   epsilon
-                    |   COMMA var_dcl'''
-    printp(p)
+    #printp(p)
+
+#def p_var_dcl_0(p):
+#    '''var_dcl_0    :   epsilon
+#                    |   COMMA var_dcl'''
+#    printp(p)
 
 def p_fun_dcl(p):
     '''fun_dcl  :   fun_sig COLON type 
@@ -345,7 +348,7 @@ def p_block_stat(p):
                     |   dcl
                     |   local_modifier_0 tmpl_def
                     |   expr'''
-    printp(p)
+    #printp(p)
                     
 def p_block(p):
     '''block    :   epsilon
@@ -388,12 +391,34 @@ def p_class_template_0(p):
 
 def p_simple_expr1(p):
     '''simple_expr1 :   literal
+                    |   ID LSQRB access RSQRB
                     |   path
                     |   LPARAN exprs_1 RPARAN
                     |   simple_expr DOT id
-                    |   simple_expr type_args
                     |   simple_expr1 argument_exprs'''
-    printp(p)
+    p[0] = dict()
+
+    if len(p)== 2:
+        p[0] = p[1]
+    elif len(p)==5:
+        p[0]['idVal'] = p[1]
+        p[0]['isArrayAccess'] = True
+        p[0]['type'] = ST.getAttribute(p[0]['idVal'],'type')
+        p[0]['place'] = ST.getAttribute(p[0]['idVal'],'place')
+        p[0]['index_place'] = p[3]['place']
+        del p[0]['idVal'] 
+    #Check
+    elif p.slice[1]=='LPARAN':
+        p[0] = p[2]
+    elif p.slice[2] == 'argument_exprs':
+        x = p[1]['idVal'].split('.')
+        if(p[1]['idVal'] == 'PrintInt'):
+            emit('PrintInt',p[2]['place'])
+        else:
+            emit('call',None,p[1]['idVal'],1)
+    
+    #printp(p)
+    #                |   simple_expr type_args
 
 #def p_exprs_1(p):
 #    '''exprs_1  :   exprs
@@ -412,15 +437,31 @@ def p_type(p):                      # look at <T>
              | array_type
              | id
     '''
-    p[0] = {
-            'type' : p[1]['idVal'].upper()
-            }
-    printp(p)
+    #print p[1]
+    if p.slice[1].type == 'basic_type':
+        p[0] = {
+                'type' : p[1]['idVal'].upper()
+                }
+    elif p.slice[1].type == 'array_type':
+        p[0] = {
+                'type' : p[1]['type']
+                }
+    else:
+        p[0] = {
+                'type' : p[1].upper()
+                }
+    #printp(p)
 
 def p_array_type(p):
     ''' array_type : TYPE_ARRAY LSQRB type RSQRB array_size
     '''
-    printp(p)
+    p[0] = {
+            'type' : p[3]['type'],
+            'place' : p[5]['place'],
+            'isarray' :  True
+            
+            }
+    #printp(p)
 
 #def p_simple_type(p):
 #    ''' simple_type : type
@@ -579,19 +620,17 @@ def p_expression2(p):
 def p_argument_exprs(p):
     ''' argument_exprs : LPARAN exprs_1 RPARAN
     '''
-    printp(p)
+    p[0] = p[2]
+    #printp(p)
 
-def p_exprs(p):
-    ''' exprs : COMMA exprs_1
-              | epsilon
-    '''
-    printp(p)
 
 def p_exprs_1(p):
-    ''' exprs_1 : expr exprs
-                | epsilon
+    ''' exprs_1 : expr
+                | exprs_1 COMMA expr
     '''
-    printp(p)
+    if(len(p)==2):
+        p[0]=p[1]
+    #printp(p)
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
@@ -705,21 +744,16 @@ def p_unary_expression(p):
 #    printp(p)
 
 
-def p_types(p):
-    ''' types : type comma_type_0
-    '''
-    printp(p)
+#def p_types(p):
+#    ''' types : type
+#              | types COMMA type
+#    '''
+#    printp(p)
 
-def p_comma_type_0(p):
-    ''' comma_type_0 : epsilon
-                     | comma_type_0 COMMA type
-    '''
-    printp(p)
-
-def p_type_args(p):
-    ''' type_args : LSQRB types RSQRB
-    '''
-    printp(p)
+#def p_type_args(p):
+#    ''' type_args : LSQRB types RSQRB
+#    '''
+#    printp(p)
 
 #def p_op(p):
 #    ''' op : OR
@@ -775,20 +809,19 @@ def p_basic_type(p):
 
 def p_id(p):
     ''' id : ID
-           | ID LSQRB access RSQRB
     '''
+    if len(p)==2:
+        p[0]=p[1]
+        
     printp(p)
 
 def p_access(p):
-    ''' access : ID access_0
+    ''' access : ID
+               | INT
+               | access COMMA ID
+               | access  COMMA INT
     '''
-    printp(p)
-
-def p_access_0(p):
-    '''access_0 : COMMA access
-                | epsilon
-    '''
-    printp(p)
+    #printp(p)
 
 def p_literal(p):
     ''' literal : BOOL
@@ -797,7 +830,12 @@ def p_literal(p):
                 | STRING
                 | FLOAT
     '''
-    printp(p)
+    p[0] = {
+            'type' : p.slice[1].type,
+            'place' : p[1]
+                }
+
+    #printp(p)
 
 def p_epsilon(p):
     ''' epsilon :
