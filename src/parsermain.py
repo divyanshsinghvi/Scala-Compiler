@@ -300,7 +300,7 @@ def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
                       | LPARAN params RPARAN
     '''
-    if(len(p)==2):
+    if(len(p)==3):
         p[0]=[]
     else:
         p[0]=p[2]
@@ -672,7 +672,8 @@ def p_expr(p):
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
               | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
-              | R_RETURN expr
+              | R_RETURN postfix_expr
+              | R_RETURN
               | R_BREAK
               | R_CONTINUE
               | postfix_expr
@@ -683,6 +684,11 @@ def p_expr(p):
         emit("goto",ST.stackend[-1])
     if(p[1]=="continue"):
         emit("goto",ST.stackbegin[-1])
+    if(p[1]=="return" and len(p)==2):
+        emit("return")
+    if(p[1]=="return" and len(p)==3):
+        emit("freturn",p[2]["place"])  # freturn,-,x,- , won't be able to get x easily in this case
+
     printp(p)
 
 
