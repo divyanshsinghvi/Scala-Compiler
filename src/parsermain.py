@@ -182,9 +182,11 @@ def p_var_def(p):
     ''' var_def : id COLON type EQUALASGN val_var_init
 
     '''
+
     ST.addEntry(p[1],p[1],p[3]['type']) 
     if('isArray' in p[5].keys() and p[5]['isArray']):
-        emit('array','a','n')
+        print "oops array" 
+        #emit('array','a','n')
     else:
         emit('=',p[5]['place'],p[1])
 
@@ -216,19 +218,23 @@ def p_val_var_init(p):
     '''
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
+    else:
+        print "chapu"
+        p[0] = {
+                'isArray' : True
+                }
 
     #printp(p)
 
 def p_array_init(p):
     ''' array_init : BLOCKBEGIN epsilon BLOCKEND
-                   | BLOCKBEGIN val_var_init array_init_0 BLOCKEND
+                   | BLOCKBEGIN array_init_0 BLOCKEND
     '''
     printp(p)
 
 def p_array_init_0(p):
-    '''array_init_0 : val_var_init array_init_0 
-                    | COMMA array_init_0
-                    | epsilon
+    '''array_init_0 : val_var_init 
+                    | array_init_0 COMMA val_var_init
     '''
     printp(p)
 
@@ -241,77 +247,77 @@ def p_fun_def(p):
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
-    if(p[-5]==False):
-        ST.function[p[-6][1]]["return"]=False
-    if(p[-6][1]!="main@0"):
-        emit("freturn")
+    #if(p[-5]==False):
+    #    ST.function[p[-6][1]]["return"]=False
+    #if(p[-6][1]!="main@0"):
+    #    emit("freturn")
 
 def p_col_type_1(p) :
     ''' col_type_1 : COLON type
                     | epsilon
     '''
-    if(len(p)==2):
-        p[0]=False
-    printp(p)
+    #if(len(p)==2):
+    #    p[0]=False
+    #printp(p)
 
 def p_fun_sig(p):
     ''' fun_sig : id param_clause
     '''
-    p[0] = ["func"]+[p[1]]+p[2]
-    arg = len(p[2])
-    name = p[1]+"@"+str(arg)
-    p[0][1]=name
-    if name in ST.function:
-        error("Error: function with same name and same number of arguments already defined.")
-    else:
-        ST.function[name]={
-                "name":p[1],
-                "args":arg,
-                "return":True
-            }
-        emit("flabel",p[1])
-    printp(p)
+    #p[0] = ["func"]+[p[1]]+p[2]
+    #arg = len(p[2])
+    #name = p[1]+"@"+str(arg)
+    #p[0][1]=name
+    #if name in ST.function:
+    #    error("Error: function with same name and same number of arguments already defined.")
+    #else:
+    #    ST.function[name]={
+    #            "name":p[1],
+    #            "args":arg,
+    #            "return":True
+    #        }
+    #    emit("flabel",p[1])
+    #printp(p)
 
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
                       | LPARAN params RPARAN
     '''
-    if(len(p)==2):
-        p[0]=[]
-    else:
-        p[0]=p[2]
-    printp(p)
+    #if(len(p)==2):
+    #    p[0]=[]
+    #else:
+    #    p[0]=p[2]
+    #printp(p)
 
 def p_params(p):
     ''' params : param
                | params COMMA param
     '''
-    if(len(p)==2):
-        l = []
-        l = l + p[1]["place"] + [p[1]["type"]]
-        p[0]=[l]
-    else:
-        l = []
-        l = l + p[3]["place"] + [p[3]["type"]]
-        p[0]=p[1] + [l]
-    printp(p)
+    #if(len(p)==2):
+    #    l = []
+    #    l = l + p[1]["place"] + [p[1]["type"]]
+    #    p[0]=[l]
+    #else:
+    #    l = []
+    #    l = l + p[3]["place"] + [p[3]["type"]]
+    #    p[0]=p[1] + [l]
+    #printp(p)
 
 def p_param(p):
     ''' param : id COLON param_type eq_expr 
               | R_VAR id COLON param_type eq_expr
               | R_VAL id COLON param_type eq_expr
     '''
-    if(len(p)==5):
-        p[0]={
-                "type" : p[3]["type"],
-                "place" : p[1]
-            }
-    else:
-        p[0]={
-                "type" : p[4]["type"],
-                "place" : p[2]
-            }
-    printp(p)
+    #if(len(p)==5):
+    #    p[0]={
+    #            "type" : p[3]["type"],
+    #            "place" : p[1]
+    #        }
+    #else:
+    #    p[0]={
+    #            "type" : p[4]["type"],
+    #            "place" : p[2]
+    #        }
+    #printp(p)
 def p_eq_expr(p):
     ''' eq_expr : epsilon
                 | EQUALASGN expr
