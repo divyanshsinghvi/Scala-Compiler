@@ -48,7 +48,7 @@ class SymbolTable:
         else:
             return scope
 
-    def getATtribute(self, idVal, Name):
+    def getAttribute(self, idVal, Name):
         scope = self.getScope(idVal)
         if scope != None:
             return  self.SymbolTable[scope]["identifiers"][idVal].get(Name)
