@@ -649,6 +649,7 @@ def p_expr(p):
               | R_SWITCH LPARAN expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
+
     printp(p)
 
 def p_expression1(p):
