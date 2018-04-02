@@ -23,10 +23,10 @@ precedence = (
 #        ('right','OP_NOT')
 )
 def printp(p):
-    for i in range(0,len(p)):
-        print (p.slice)[i],
+    #for i in range(0,len(p)):
+    #    print (p.slice)[i],
 
-    print "\n",
+    print "",
 
 
 def p_compilation_unit(p):
@@ -236,7 +236,7 @@ def p_array_init_0(p):
 def p_fun_def(p):
     ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark1
     '''
-    printp(p)
+    #printp(p)
 
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
@@ -252,7 +252,7 @@ def p_col_type_1(p) :
     '''
     if(len(p)==2):
         p[0]=False
-    printp(p)
+    #printp(p)
 
 def p_fun_sig(p):
     ''' fun_sig : id param_clause
@@ -270,7 +270,7 @@ def p_fun_sig(p):
                 "return":True
             }
         emit("flabel",p[1])
-    printp(p)
+    #printp(p)
 
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
@@ -280,7 +280,7 @@ def p_param_clause(p):
         p[0]=[]
     else:
         p[0]=p[2]
-    printp(p)
+    #printp(p)
 
 def p_params(p):
     ''' params : param
@@ -288,13 +288,13 @@ def p_params(p):
     '''
     if(len(p)==2):
         l = []
-        l = l + p[1]["place"] + [p[1]["type"]]
+        l = l + [p[1]["place"]] + [p[1]["type"]]
         p[0]=[l]
     else:
         l = []
-        l = l + p[3]["place"] + [p[3]["type"]]
+        l = l + [p[3]["place"]] + [p[3]["type"]]
         p[0]=p[1] + [l]
-    printp(p)
+    #printp(p)
 
 def p_param(p):
     ''' param : id COLON param_type eq_expr 
@@ -311,7 +311,8 @@ def p_param(p):
                 "type" : p[4]["type"],
                 "place" : p[2]
             }
-    printp(p)
+    #printp(p)
+
 def p_eq_expr(p):
     ''' eq_expr : epsilon
                 | EQUALASGN expr
@@ -321,7 +322,8 @@ def p_param_type(p):
     ''' param_type : type
     '''
     p[0]=p[1]
-    printp(p)
+    #printp(p)
+
 def p_dcl(p):
     '''dcl  :   R_VAL val_dcl
             |   R_VAR var_dcl
