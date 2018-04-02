@@ -14,8 +14,8 @@ class SymbolTable:
         self.tNo = -1
         self.scopeNo = -1
         self.function = {}
-        self.stackBegin = []
-        self.stackEnd = []
+        self.stackbegin = []
+        self.stackend = []
 
     def newScope(self):
         scope = self.newScopeName()

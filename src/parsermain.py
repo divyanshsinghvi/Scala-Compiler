@@ -679,7 +679,10 @@ def p_expr(p):
               | R_SWITCH LPARAN expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
-
+    if(p[1]=="break"):
+        emit("goto",ST.stackend[-1])
+    if(p[1]=="continue"):
+        emit("goto",ST.stackbegin[-1])
     printp(p)
 
 
@@ -689,8 +692,8 @@ def p_f_mark1(p):
     l1 = newLabel()
     l2 = newLabel()
     l3 = newLabel()
-#    ST.stackbegin.append(l1)
-#    ST.stackend.append(l3)
+    ST.stackbegin.append(l1)
+    ST.stackend.append(l3)
     emit(op='label',out=l1) #emit label 1 
     p[0]=[l1,l2,l3]
     
@@ -710,16 +713,16 @@ def p_f_mark3(p):
     emit(op='goto',out=p[-3][0]) #goto l1
     emit(op='label',out=p[-3][2]) #exit label
     ST.endScope()
-#    ST.stackbegin.pop()
-#    ST.stackend.pop()
+    ST.stackbegin.pop()
+    ST.stackend.pop()
 
 def p_WhMark1(p):
     '''WhMark1 : '''
     l1 = newLabel()
     l2 = newLabel()
     l3 = newLabel()
-#    ST.stackbegin.append(l1)
-#    ST.stackend.append(l3)
+    ST.stackbegin.append(l1)
+    ST.stackend.append(l3)
     ST.newScope()
     emit(op='label',out=l1) #emit label 1 
     p[0]=[l1,l2,l3]
@@ -735,8 +738,8 @@ def p_WhMark3(p):
     emit(op='goto',out=p[-6][0]) #goto l1
     emit(op='label',out=p[-6][2]) #exit label
     ST.endScope()
-#    ST.stackbegin.pop()
-#    ST.stackend.pop()
+    ST.stackbegin.pop()
+    ST.stackend.pop()
 
 
 def p_expression1(p):
