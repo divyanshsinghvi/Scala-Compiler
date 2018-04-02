@@ -13,7 +13,7 @@ class SymbolTable:
         self.currScope = "main"
         self.tNo = -1
         self.scopeNo = -1
-
+        self.function ={}
     def newScope(self):
         scope = self.newScopeName()
         self.SymbolTable[scope] = {
