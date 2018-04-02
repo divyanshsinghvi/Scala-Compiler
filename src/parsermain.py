@@ -238,13 +238,17 @@ def p_fun_def(p):
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
-    if(p[-6][1]!="main"):
+    if(p[-5]==False):
+        ST.function[p[-6][1]]["return"]=False
+    if(p[-6][1]!="main@0"):
         emit("freturn")
 
 def p_col_type_1(p) :
     ''' col_type_1 : COLON type
                     | epsilon
     '''
+    if(len(p)==2):
+        p[0]=False
     printp(p)
 
 def p_fun_sig(p):
@@ -252,10 +256,16 @@ def p_fun_sig(p):
     '''
     p[0] = ["func"]+[p[1]]+p[2]
     arg = len(p[2])
-    if (p[1],arg) in ST.function:
+    name = p[1]+"@"+str(arg)
+    p[0][1]=name
+    if name in ST.function:
         error("Error: function with same name and same number of arguments already defined.")
     else:
-        function.append((p[1],arg))
+        ST.function[name]={
+                "name":p[1],
+                "args":arg,
+                "return":True
+            }
         emit("flabel",p[1])
     printp(p)
 
