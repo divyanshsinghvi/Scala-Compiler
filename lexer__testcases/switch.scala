@@ -1,6 +1,6 @@
 package tr;
 object demo{
-def main(var na: Int,var argv:Array[Char])={
+def main(var na: Int,var argv:Array[Char](1))={
     var wflg: Int = 0;
     var tflg: Int = 0;
     var dflg: Int = 0;

@@ -636,28 +636,51 @@ def p_switch_labels(p):
     ''' switch_labels : R_CASE literal COLON
                       | R_DEFAULT COLON
     '''
+    if p.slice[1].type == 'R_CASE':
+        l1=newLabel()
+        emit(op='label',out=l1)
+        print "huolaksldk----$%%%%%%%%%%%%%%%%%%%%%%%" 
+        p[0] = {}
+        p[0]['label'] = l1
+        p[0]['place'] = p[2]['place']
     printp(p)
 
 def p_switch_block_statements(p):
-    ''' switch_block_statements : switch_labels_0 BLOCKBEGIN block BLOCKEND semi
+    ''' switch_block_statements : switch_labels BLOCKBEGIN block BLOCKEND semi
     '''
+    p[0] = p[1]
     printp(p)
 
-def p_switch_labels_0(p):
-    ''' switch_labels_0 : epsilon
-                        | switch_labels_0 switch_labels
-    '''
-    printp(p)
+#def p_switch_labels_0(p):
+#    ''' switch_labels_0 : switch_labels
+#                        | switch_labels_0 switch_labels
+#    '''
+#    printp(p)
 
 def p_switch_block(p):
-    ''' switch_block : BLOCKBEGIN switch_block_statements_0 BLOCKEND
+    ''' switch_block : BLOCKBEGIN s_mark1 switch_block_statements_0 BLOCKEND
     '''
-    printp(p)
+    #test=newLabel()
+    exit=newLabel()
+    print "------------------------------------------------"
+    emit('goto',exit)
+    emit('label',p[2]['label'])
+    for d in p[3]:
+        temp =ST.getTemp()
+        emit(op='==',out=temp,in1=d['place'],in2=p[2]['idVal']['place'])
+        emit('if',d['label'],temp)
+    emit('label',exit) 
 
 def p_switch_block_statements_0(p):
-    ''' switch_block_statements_0 : epsilon
+    ''' switch_block_statements_0 : switch_block_statements
                                  | switch_block_statements_0 switch_block_statements
     '''
+
+    if len(p)==2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1]+[p[2]]
+        print p[0]
     printp(p)
 
 #def p_switch_labels_1(p):
@@ -672,14 +695,24 @@ def p_expr(p):
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
               | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
-              | R_RETURN expr
+              | R_RETURN postfix_expr
+              | R_RETURN
               | R_BREAK
               | R_CONTINUE
               | postfix_expr
-              | R_SWITCH LPARAN expr RPARAN switch_block
+              | R_SWITCH LPARAN postfix_expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
-    printp(p)
+
+def p_s_mark1(p):
+    '''s_mark1 : epsilon
+    '''
+    test = newLabel()
+    emit('goto',test)
+    p[0] = {   'label' : test, 
+                'idVal' :    p[-3]
+                }
+     
 
 
 def p_f_mark1(p):
