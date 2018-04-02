@@ -23,10 +23,10 @@ precedence = (
 #        ('right','OP_NOT')
 )
 def printp(p):
-    #for i in range(0,len(p)):
-    #    print (p.slice)[i],
+    for i in range(0,len(p)):
+        print (p.slice)[i],
 
-    print "",
+    print "\n",
 
 
 def p_compilation_unit(p):
@@ -182,9 +182,11 @@ def p_var_def(p):
     ''' var_def : id COLON type EQUALASGN val_var_init
 
     '''
+
     ST.addEntry(p[1],p[1],p[3]['type']) 
     if('isArray' in p[5].keys() and p[5]['isArray']):
-        emit('array','a','n')
+        print "oops array" 
+        #emit('array','a','n')
     else:
         emit('=',p[5]['place'],p[1])
 
@@ -216,19 +218,23 @@ def p_val_var_init(p):
     '''
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
+    else:
+        print "chapu"
+        p[0] = {
+                'isArray' : True
+                }
 
     #printp(p)
 
 def p_array_init(p):
     ''' array_init : BLOCKBEGIN epsilon BLOCKEND
-                   | BLOCKBEGIN val_var_init array_init_0 BLOCKEND
+                   | BLOCKBEGIN array_init_0 BLOCKEND
     '''
     printp(p)
 
 def p_array_init_0(p):
-    '''array_init_0 : val_var_init array_init_0 
-                    | COMMA array_init_0
-                    | epsilon
+    '''array_init_0 : val_var_init 
+                    | array_init_0 COMMA val_var_init
     '''
     printp(p)
 
@@ -241,10 +247,10 @@ def p_fun_def(p):
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
-    if(p[-5]==False):
-        ST.function[p[-6][1]]["return"]=False
-    if(p[-6][1]!="main@0"):
-        emit("freturn")
+    #if(p[-5]==False):
+    #    ST.function[p[-6][1]]["return"]=False
+    #if(p[-6][1]!="main@0"):
+    #    emit("freturn")
 
 def p_col_type_1(p) :
     ''' col_type_1 : COLON type
