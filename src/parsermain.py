@@ -3,13 +3,20 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import SymbolTable
 ST=SymbolTable()
-
+x=1
+def newLabel():
+    global x
+    x=x+1
+    return "label"+str(x)
 def emit(op=None,out=None,in1=None,in2=None):
+    CRED = '\033[91m'
+    CEND = '\033[0m'
+    print(CRED+"")
     print op,out,in1,in2
+    print(""+CEND)
 
 tokens = lexer.tokens
 precedence = (
-        ('right','XORASGN','ORASGN','ANDASGN','RSHIFTASGN','LSHIFTASGN','MODASGN','DIVASGN','MULASGN','SUBASGN','EQUALASGN'),
         ('left','OR'),
         ('left','AND'),
         ('left','OR_BIT'),
@@ -22,6 +29,18 @@ precedence = (
         ('left','OP_DIV','OP_MUL','OP_MOD')
 #        ('right','OP_NOT')
 )
+
+def evalArray(temp):
+    if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
+        t1 = ST.getTemp()
+        emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
+        r = {
+                'place' : t1,
+                'type' : temp['type']
+                }
+        return r
+    return temp
+
 def printp(p):
     for i in range(0,len(p)):
         print (p.slice)[i],
@@ -182,7 +201,7 @@ def p_var_def(p):
     ''' var_def : id COLON type EQUALASGN val_var_init
 
     '''
-
+    print p[5]
     ST.addEntry(p[1],p[1],p[3]['type']) 
     if('isArray' in p[5].keys() and p[5]['isArray']):
         print "oops array" 
@@ -219,7 +238,6 @@ def p_val_var_init(p):
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
     else:
-        print "chapu"
         p[0] = {
                 'isArray' : True
                 }
@@ -390,6 +408,7 @@ def p_path(p):
             |   id DOT path
             |   R_SUPER DOT path
             '''
+    p[0] = p[1]
     printp(p)
 
 #def path_0(p):
@@ -419,6 +438,8 @@ def p_block(p):
 def p_simple_expr(p):
     '''simple_expr  :   R_NEW class_template
                     |   simple_expr1'''
+    if len(p) == 2:
+        p[0] = p[1]
     printp(p)
  #                   |   block
 
@@ -451,8 +472,12 @@ def p_simple_expr1(p):
                     |   simple_expr1 argument_exprs'''
     p[0] = dict()
 
-    if len(p)== 2:
+    if p.slice[1].type == 'literal':
         p[0] = p[1]
+    elif p.slice[1].type == 'path':
+        p[0] = {
+                'place' : p[1]
+                }
     elif len(p)==5:
         p[0]['idVal'] = p[1]
         p[0]['isArrayAccess'] = True
@@ -483,6 +508,9 @@ def p_prefix_expr(p):
                     |   OP_SUB simple_expr
                     |   OP_ADD simple_expr
                     |   OP_NOT simple_expr'''
+    if len(p) ==2 :
+        p[0]=p[1]
+
     printp(p)
 
 def p_type(p):                      # look at <T>
@@ -571,9 +599,11 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : LPARAN for_init semi infix_expr semi for_upd
-                  | LPARAN for_init semi epsilon semi for_upd
+    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd
     '''
+    ST.newScope()
+    p[0] = p[6]
+    #Check Scope
     printp(p)
 
 def p_for_init(p):
@@ -637,11 +667,11 @@ def p_switch_block_statements_0(p):
 #    printp(p)
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND expression1
-              | R_WHILE LPARAN postfix_expr RPARAN BLOCKBEGIN block BLOCKEND
+    ''' expr : R_IF LPARAN postfix_expr  RPARAN if_mark1 BLOCKBEGIN block BLOCKEND expression1
+              | R_WHILE LPARAN WhMark1 postfix_expr RPARAN WhMark2 BLOCKBEGIN block WhMark3  BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
-              | R_FOR  for_logic  BLOCKBEGIN block BLOCKEND
+              | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
               | R_RETURN expr
               | R_BREAK
               | R_CONTINUE
@@ -652,11 +682,104 @@ def p_expr(p):
 
     printp(p)
 
+
+def p_f_mark1(p):
+    ''' f_mark1 : epsilon
+    '''
+    l1 = newLabel()
+    l2 = newLabel()
+    l3 = newLabel()
+#    ST.stackbegin.append(l1)
+#    ST.stackend.append(l3)
+    emit(op='label',out=l1) #emit label 1 
+    p[0]=[l1,l2,l3]
+    
+def p_f_mark2(p):
+    ''' f_mark2 : epsilon
+    '''
+    print p[-2]
+    print p[-1]
+    emit(op='if',in1=p[-1]['place'],out=p[-2][1]) #if true goto l2 
+    emit(op='goto',out=p[-2][2]) #goto exit l3
+    emit(op='label',out=p[-2][1],) # emit label l2
+    p[0] = [p[-2][0],p[-2][1],p[-2][2]]
+
+def p_f_mark3(p):
+    ''' f_mark3 : epsilon
+    '''
+    emit(op='goto',out=p[-3][0]) #goto l1
+    emit(op='label',out=p[-3][2]) #exit label
+    ST.endScope()
+#    ST.stackbegin.pop()
+#    ST.stackend.pop()
+
+def p_WhMark1(p):
+    '''WhMark1 : '''
+    l1 = newLabel()
+    l2 = newLabel()
+    l3 = newLabel()
+#    ST.stackbegin.append(l1)
+#    ST.stackend.append(l3)
+    ST.newScope()
+    emit(op='label',out=l1) #emit label 1 
+    p[0]=[l1,l2,l3]
+
+def p_WhMark2(p):
+    '''WhMark2 : '''
+    emit(op='if',in1=p[-2]['place'],out=p[-3][1]) #if true goto l2 
+    emit(op='goto',out=p[-3][2]) #goto exit l3
+    emit(op='label',out=p[-3][1],) # emit label l2
+
+def p_WhMark3(p):
+    '''WhMark3 : '''
+    emit(op='goto',out=p[-6][0]) #goto l1
+    emit(op='label',out=p[-6][2]) #exit label
+    ST.endScope()
+#    ST.stackbegin.pop()
+#    ST.stackend.pop()
+
+
 def p_expression1(p):
-    ''' expression1 : R_ELSE BLOCKBEGIN block BLOCKEND
-                    | epsilon
+    ''' expression1 : R_ELSE if_mark3 BLOCKBEGIN block BLOCKEND if_mark4
+                    | if_mark2
     '''
     printp(p)
+
+
+def p_if_mark1(p):
+    '''if_mark1 : epsilon
+    '''
+    p[0]={}
+    l1 = newLabel()
+    l2 = newLabel()
+    emit('if',l1,p[-2]['place'])
+    emit('goto',l2)
+    emit('label',l1)
+    ST.newScope()
+    p[0]['label']=[l1,l2]
+
+def p_if_mark2(p):
+    '''if_mark2 : epsilon
+    '''
+    ST.endScope()
+    emit('label',p[-4]['label'][1])
+
+def p_if_mark3(p):
+    '''if_mark3 : epsilon
+    '''
+    p[0]={}
+    l3 = newLabel()
+    emit('goto',l3)
+    emit('label',p[-5]['label'][1])
+    p[0]['label']=[l3]
+
+def p_if_mark4(p):
+    '''if_mark4 : epsilon
+    '''
+    ST.endScope()
+    emit('label',p[-4]['label'][0])
+
+
 
 def p_expression2(p):
     ''' expression2 : R_FINALLY BLOCKBEGIN block BLOCKEND
@@ -690,6 +813,8 @@ def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
                      | infix_expr
     '''
+    if len(p)==2:
+        p[0]=p[1]
     printp(p)
 
 def p_id_1(p):
@@ -709,49 +834,102 @@ def p_infix_expr(p):
     ''' infix_expr : assign
                    | or_expression
     '''
+    print "infix ininnnnnnnn"
+    p[0] = p[1]
     printp(p)
 
 def p_assign(p):
-    ''' assign : id asgn infix_expr
+    ''' assign : simple_expr1  asgn infix_expr
     '''
+    temp = ST.getTemp()
+    p[0] = {
+            'place' : temp,
+            'isarray' : False,
+            'type': 'Not defined'
+            }
+    if p[2] == '=':
+        p[3]=evalArray(p[3])
+        if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
+            emit(op='star',out=p[1]['place'],in1=p[1]['index'],in2=p[3]['place'])
+        else:
+            emit(op='=',out=p[1]['place'],in1=p[3]['place'])
+    ##Check
     printp(p)
 
 def p_or_expression(p):
     ''' or_expression : and_expression
                       | or_expression OR and_expression
     '''
-    printp(p)
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op='||',out=temp,in1=p[1]['place'],in2=p[3]['place'])
+    #print "-----"
+    #print p[0]
+    #printp(p)
 
 def p_and_expression(p):
     ''' and_expression : bit_or_expression 
                        | and_expression AND bit_or_expression 
     '''
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op='&&',out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 def p_bit_or_expression(p):
     ''' bit_or_expression : xor_expression 
                           | bit_or_expression OR_BIT xor_expression
     '''
+    if len(p)==2:
+        p[0] = p[1]
     printp(p)
 
 def p_xor_expression(p):
     ''' xor_expression : bit_and_expression
                        | xor_expression XOR bit_and_expression
     '''
+    if len(p)==2:
+        p[0] = p[1]
     printp(p)
 
 def p_bit_and_expression(p):
     '''bit_and_expression : eq_expression
                       | bit_and_expression AND_BIT eq_expression
     '''
-    printp(p)
+    if len(p)==2:
+        p[0] = p[1]
+    #printp(p)
 
 def p_eq_expression(p):
     '''eq_expression : comp_expression
                       | eq_expression EQ comp_expression
                       | eq_expression NEQ comp_expression
     '''
-    printp(p)
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
+    #printp(p)
 
 
 def p_comp_expression(p):
@@ -761,6 +939,16 @@ def p_comp_expression(p):
                       | comp_expression GE shift_expression
                       | comp_expression GT shift_expression
     '''
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 def p_shift_expression(p):
     '''shift_expression : add_expression
@@ -768,6 +956,16 @@ def p_shift_expression(p):
                       | shift_expression LSHIFT add_expression
                       | shift_expression RRSHIFT add_expression
     '''
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 def p_add_expression(p):
@@ -775,6 +973,16 @@ def p_add_expression(p):
                       | add_expression OP_ADD mul_expression
                       | add_expression OP_SUB  mul_expression
     '''
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 def p_mul_expression(p):
@@ -783,13 +991,28 @@ def p_mul_expression(p):
                       | mul_expression OP_MUL  unary_expression
                       | mul_expression OP_DIV  unary_expression
     '''
+    print p[1]
+    if len(p) == 2:
+        p[0]=p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 def p_unary_expression(p):
     '''unary_expression : prefix_expr
                         | LPARAN infix_expr RPARAN
     '''
-    printp(p)
+    if len(p)==2:
+        p[0] = p[1]
+    else:
+        p[0] = p[2]
+#    printp(p)
 
 #def p_cast_expression(p):
 #    '''cast_expression : LPARAN basic_type RPARAN unary_expression
@@ -841,6 +1064,8 @@ def p_asgn(p):
              | ORASGN
              | XORASGN
     '''
+    print p[1]
+    p[0] = p[1]
     printp(p)
 
 def p_basic_type(p):

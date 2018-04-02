@@ -1,8 +1,8 @@
 /* source : tutorailspoint.com*/                                                        
   
 object Demo {
-   def main(args: Array[String])= {
-      println( "Returned Value : " + addInt(5,7) );
+   def main(args: Array[String](1))= {
+     // println( "Returned Value : " + addInt(5,7) );
    };
    
    def addInt( a:Int) : Int = {
