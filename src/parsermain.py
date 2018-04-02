@@ -732,17 +732,17 @@ def p_infix_expr(p):
     printp(p)
 
 def p_assign(p):
-    ''' assign : id asgn infix_expr
+    ''' assign : simple_expr1  asgn infix_expr
     '''
-    var = ST.getTemp()
+    temp = ST.getTemp()
     p[0] = {
-            'place' : var,
+            'place' : temp,
             'isarray' : False,
             'type': 'Not defined'
             }
     if p[2] == '=':
         p[3]=evalArray(p[3])
-        if type(p[1]) == type({}) and p[1]['arrAccess'] :
+        if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
             emit(op='star',out=p[1]['place'],in1=p[1]['index'],in2=p[3]['place'])
         else:
             emit(op='=',out=p[1]['place'],in1=p[3]['place'])
@@ -872,6 +872,9 @@ def p_add_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
+        print "ds chapu"
+        print p[1]
+        print p[3]
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp
@@ -887,6 +890,7 @@ def p_mul_expression(p):
                       | mul_expression OP_MUL  unary_expression
                       | mul_expression OP_DIV  unary_expression
     '''
+    print p[1]
     if len(p) == 2:
         p[0]=p[1]
     else:
