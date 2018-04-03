@@ -11,9 +11,19 @@ def newLabel():
 def emit(op=None,out=None,in1=None,in2=None):
     CRED = '\033[91m'
     CEND = '\033[0m'
-    print(CRED+"")
-    print op,out,in1,in2
-    print(""+CEND)
+   # print(CRED+"")
+    l = []
+    if op != None:
+        l += [op]
+    if out != None:
+        l += [out]
+    if in1 != None:
+        l += [in1]
+    if in2 != None:
+        l += [in2]
+    myList = ','.join(map(str, l)) 
+    print myList
+    #print(""+CEND)
 
 tokens = lexer.tokens
 precedence = (
