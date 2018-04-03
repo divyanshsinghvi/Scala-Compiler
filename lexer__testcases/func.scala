@@ -7,8 +7,8 @@ def foo()={
 };
 
 object Demo{
-def main(args: Array[String])={
-    Foo.foo();
+def main(args: Array[String](0))={
+    foo();
     return 0;
 };
 };

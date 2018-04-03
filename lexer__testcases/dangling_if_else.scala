@@ -7,16 +7,19 @@ object Demo {
     var e: Int = 3;
     var f: Int = 2;
 
-    //var a: Array[Int](2) = {1,2};
+    var a: Array[Int](2) = {d,c};
     if (i<=e){
 	b = b + f;
-        //a[i]=a[i]+1;
+        a[i]=a[i]+d;
+	println(a[i]);
     };
     if (i>=f){
 	b = b + c*f;
-        //a[i]=a[i]-1;
+        a[i]=a[i]-d;
+	println(a[i]);
     } else {
         b = d;
+	println(b);
     };
   };
 };
