@@ -278,13 +278,26 @@ def p_array_init_0(p):
 
 #some ambiguity here ???
 def p_fun_def(p):
-    ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark1
+    ''' fun_def : fun_sig col_type_1 FunMark1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark2
     '''
     #printp(p)
+    
 
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
+    if p[-2][1] in ST.SymbolTable[ST.currScope]["function"].keys():
+        error("Error: function with same name and same number of arguments already defined.")
+    else:
+        ST.addFunc(p[-2][1])
+        ST.setRType(p[-1])
+    print ST.SymbolTable
+    print ST.currScope
+
+def p_FunMark2(p):
+    ''' FunMark2 : epsilon
+    '''
+    ST.endFunc()
     #if(p[-5]==False):
     #    ST.function[p[-6][1]]["return"]=False
     #if(p[-6][1]!="main@0"):
@@ -295,25 +308,27 @@ def p_col_type_1(p) :
                     | epsilon
     '''
     if(len(p)==2):
-        p[0]=False
+        p[0]="void"
+    else:
+        p[0]=p[2]
     #printp(p)
 
-def p_fun_sig(p):
-    ''' fun_sig : id param_clause
+def p_fun_sig(p):           # function is named id@no.of args
+    ''' fun_sig : id param_clause  
     '''
     p[0] = ["func"]+[p[1]]+p[2]
     arg = len(p[2])
     name = p[1]+"@"+str(arg)
     p[0][1]=name
-    if name in ST.function:
-        error("Error: function with same name and same number of arguments already defined.")
-    else:
-        ST.function[name]={
-                "name":p[1],
-                "args":arg,
-                "return":True
-            }
-        emit("flabel",p[1])
+    #if name in ST.function:
+    #    error("Error: function with same name and same number of arguments already defined.")
+    #else:
+    #    ST.function[name]={
+    #            "name":p[1],
+    #            "args":arg,
+    #            "return":True
+    #        }
+    #    emit("flabel",p[1])
     #printp(p)
 
 def p_param_clause(p):
@@ -510,7 +525,7 @@ def p_simple_expr1(p):
     elif p.slice[2].type == 'argument_exprs':
  #       x = p[1]['idVal'].split('.')
         if(p[1]['place'] == 'println'):
-            emit('PrintInt',p[2]['place'])
+            emit('PrintInt',p[2][0]['place'])
         elif(p[1]['place'] == 'readInt'):
             temp = ST.getTemp()
             emit('ScanInt',temp)
@@ -518,10 +533,21 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
-            p[0] = {
-                    'place' : ST.getTemp()
-                    }
-            emit('call',None,p[1]['place'],1)
+#<<<<<<< HEAD
+#            p[0] = {
+#                    'place' : ST.getTemp()
+#                    }
+#            emit('call',None,p[1]['place'],1)
+#=======
+            name=p[1]["place"]+"@"+str(len(p[2]))
+            rtype = ST.getRType(name)
+            if(rtype!="void"):
+                temp = ST.getTemp()
+                p[0]["place"]=temp
+                emit("fcall",temp,p[1]["place"],len(p[2]))
+            else:
+                emit('call',None,p[1]['place'],len(p[2]))
+#>>>>>>> 5bed0d20ef1dddea4aa5ab8bfa8ddb3d991e4b9c
     printp(p)
     #                |   simple_expr type_args
 
@@ -784,10 +810,10 @@ def p_f_mark2(p):
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    for i in range(7):
-        print i*-1
-    emit(op='goto',out=p[-5][0]) #goto l1
-    emit(op='label',out=p[-5][2]) #exit label
+    #for i in range(7):
+    #    print i*-1
+    emit(op='goto',out=p[-3][0]) #goto l1
+    emit(op='label',out=p[-3][2]) #exit label
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
@@ -886,7 +912,10 @@ def p_exprs_1(p):
                 | exprs_1 COMMA postfix_expr
     '''
     if(p.slice[1].type == 'postfix_expr'):
-        p[0]=p[1]
+        p[0]=[p[1]]
+    elif(len(p)==4):
+        p[0]=p[1]+[p[3]]
+    #print "YEHE", p[0]
     #printp(p)
 
 def p_postfix_expr(p):

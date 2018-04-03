@@ -65,13 +65,14 @@ class SymbolTable:
         else:
             return scope
 
-    def addFun(self, fun):
+    def addFunc(self, fun):
         self.SymbolTable[fun] = {
                 "name" : fun,
                 "type" : "function",
+                "identifiers" : {},
                 "variables" : {},
                 "function" : {},
-                "rtype" : "undefined",
+                "rType" : "undefined",
                 "parent" : self.currScope,
                 "arguments" : []
                 }
@@ -79,6 +80,9 @@ class SymbolTable:
                 "fname" : fun
                 }
         self.currScope = fun
+    
+    def endFunc(self):
+        self.currScope = self.SymbolTable[self.currScope]["parent"]
 
     def getId(self,idVal):
         scope = self.getScope(idVal)
@@ -87,6 +91,11 @@ class SymbolTable:
         else:
             sys.exit("Symbol not defined")
 
+    def setRType(self,dataType):
+        self.SymbolTable[self.currScope]["rType"] = dataType
+    
+    def getRType(self, scope):
+        return self.SymbolTable[scope]['rType']
 
     def getAttribute(self, idVal, Name):
         scope = self.getScope(idVal)
