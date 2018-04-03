@@ -266,8 +266,11 @@ def p_fun_def(p):
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
-    ST.addFunc(p[-2][1])
-    ST.setRType(p[-1])
+    if p[-2][1] in ST.SymbolTable[ST.currScope]["function"].keys():
+        error("Error: function with same name and same number of arguments already defined.")
+    else:
+        ST.addFunc(p[-2][1])
+        ST.setRType(p[-1])
     print ST.SymbolTable
     print ST.currScope
 
@@ -297,15 +300,15 @@ def p_fun_sig(p):           # function is named id@no.of args
     arg = len(p[2])
     name = p[1]+"@"+str(arg)
     p[0][1]=name
-    if name in ST.function:
-        error("Error: function with same name and same number of arguments already defined.")
-    else:
-        ST.function[name]={
-                "name":p[1],
-                "args":arg,
-                "return":True
-            }
-        emit("flabel",p[1])
+    #if name in ST.function:
+    #    error("Error: function with same name and same number of arguments already defined.")
+    #else:
+    #    ST.function[name]={
+    #            "name":p[1],
+    #            "args":arg,
+    #            "return":True
+    #        }
+    #    emit("flabel",p[1])
     #printp(p)
 
 def p_param_clause(p):
