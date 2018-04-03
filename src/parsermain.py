@@ -202,9 +202,9 @@ def p_var_def(p):
 
     '''
     print p[5]
-    ST.addEntry(p[1],p[1],p[3]['type']) 
+    ST.addVar(p[1],p[1],p[3]['type']) 
     #if('isArray' in p[5].keys() and p[5]['isArray']):
-    if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
+    if type(p[1]) == type({}) and 'arrAccess' in p[1] and p[1]['arrAccess']:
         print "oops array" 
         #emit('array','a','n')
     else:
@@ -368,7 +368,7 @@ def p_val_dcl_0(p):
 def p_var_dcl(p):
     '''var_dcl  :   id COLON type
     '''
-    ST.addEntry(p[1],p[1],p[3]['type'])
+    ST.addVar(p[1],p[1],p[3]['type'])
 
     #printp(p)
 
@@ -602,10 +602,14 @@ def p_catch_clause_1(p):
 def p_for_logic(p):
     ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd
     '''
-    ST.newScope()
     p[0] = p[6]
     #Check Scope
     printp(p)
+
+#def p_f_scope_mark(p):
+#    '''f_scope_mark : epsilon
+#    '''
+#    ST.newScope()
 
 def p_for_init(p):
     ''' for_init : epsilon
@@ -695,7 +699,7 @@ def p_expr(p):
               | R_WHILE LPARAN WhMark1 postfix_expr RPARAN WhMark2 BLOCKBEGIN block WhMark3  BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
-              | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
+              | R_FOR f_scope_mark for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
               | R_RETURN postfix_expr
               | R_RETURN
               | R_BREAK
@@ -727,7 +731,10 @@ def p_s_mark1(p):
                 'idVal' :    p[-3]
                 }
      
-
+def p_f_scope_mark(p):
+    '''f_scope_mark : epsilon
+    '''
+    ST.newScope()
 
 def p_f_mark1(p):
     ''' f_mark1 : epsilon
@@ -753,8 +760,10 @@ def p_f_mark2(p):
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    emit(op='goto',out=p[-3][0]) #goto l1
-    emit(op='label',out=p[-3][2]) #exit label
+    for i in range(7):
+        print i*-1
+    emit(op='goto',out=p[-5][0]) #goto l1
+    emit(op='label',out=p[-5][2]) #exit label
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
