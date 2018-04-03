@@ -85,6 +85,9 @@ class SymbolTable:
 
     def setRType(self,dataType):
         self.SymbolTable[self.currScope]["rType"] = dataType
+    
+    def getRType(self, scope):
+        return self.SymbolTable[scope]['rType']
 
     def getAttribute(self, idVal, Name):
         scope = self.getScope(idVal)

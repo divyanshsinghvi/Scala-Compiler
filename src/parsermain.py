@@ -268,6 +268,8 @@ def p_FunMark1(p):
     '''
     ST.addFunc(p[-2][1])
     ST.setRType(p[-1])
+    print ST.SymbolTable
+    print ST.currScope
 
 def p_FunMark2(p):
     ''' FunMark2 : epsilon
@@ -499,7 +501,7 @@ def p_simple_expr1(p):
     elif p.slice[2].type == 'argument_exprs':
  #       x = p[1]['idVal'].split('.')
         if(p[1]['place'] == 'println'):
-            emit('PrintInt',p[2]['place'])
+            emit('PrintInt',p[2][0]['place'])
         elif(p[1]['place'] == 'readInt'):
             temp = ST.getTemp()
             emit('ScanInt',temp)
@@ -507,7 +509,14 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
-            emit('call',None,p[1]['place'],1)
+            name=p[1]["place"]+"@"+str(len(p[2]))
+            rtype = ST.getRType(name)
+            if(rtype!="void"):
+                temp = ST.getTemp()
+                p[0]["place"]=temp
+                emit("fcall",temp,p[1]["place"],len(p[2]))
+            else:
+                emit('call',None,p[1]['place'],len(p[2]))
     printp(p)
     #                |   simple_expr type_args
 
@@ -874,7 +883,10 @@ def p_exprs_1(p):
                 | exprs_1 COMMA postfix_expr
     '''
     if(p.slice[1].type == 'postfix_expr'):
-        p[0]=p[1]
+        p[0]=[p[1]]
+    elif(len(p)==4):
+        p[0]=p[1]+[p[3]]
+    #print "YEHE", p[0]
     #printp(p)
 
 def p_postfix_expr(p):
