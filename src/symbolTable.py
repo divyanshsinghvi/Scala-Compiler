@@ -7,6 +7,7 @@ class SymbolTable:
                     "name" : "main",
                     "identifiers" : {},
                     "function" :{},
+                    "variables" : {},
                     "type" : "main",
                     "parent" : None,
                     }
@@ -23,6 +24,8 @@ class SymbolTable:
         self.SymbolTable[scope] = {
                 "name" : scope,
                 "identifiers" : {},
+                "function" : {},
+                "variables" : {},
                 "type" : "scope",
                 "parent" : self.currScope,
                 }
