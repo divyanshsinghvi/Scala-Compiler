@@ -668,7 +668,8 @@ def p_switch_block(p):
         temp =ST.getTemp()
         emit(op='==',out=temp,in1=d['place'],in2=p[2]['idVal']['place'])
         emit('if',d['label'],temp)
-    emit('label',p[2]['label'][1]) 
+    emit('label',p[2]['label'][1])
+    ST.endScope()
 
 def p_switch_block_statements_0(p):
     ''' switch_block_statements_0 : switch_block_statements
@@ -710,12 +711,14 @@ def p_expr(p):
         emit("return")
     if(p[1]=="return" and len(p)==3):
         emit("freturn",p[2]["place"])  # freturn,-,x,- , won't be able to get x easily in this case
+                                        #Check
 
     printp(p)
 
 def p_s_mark1(p):
     '''s_mark1 : epsilon
     '''
+    ST.newScope()
     test = newLabel()
     exit=newLabel()
     emit('goto',test)
