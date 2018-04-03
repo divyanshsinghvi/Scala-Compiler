@@ -258,13 +258,21 @@ def p_array_init_0(p):
 
 #some ambiguity here ???
 def p_fun_def(p):
-    ''' fun_def : fun_sig col_type_1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark1
+    ''' fun_def : fun_sig col_type_1 FunMark1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark2
     '''
     #printp(p)
+    
 
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
+    ST.addFunc(p[-2][1])
+    ST.setRType(p[-1])
+
+def p_FunMark2(p):
+    ''' FunMark2 : epsilon
+    '''
+    ST.endFunc()
     #if(p[-5]==False):
     #    ST.function[p[-6][1]]["return"]=False
     #if(p[-6][1]!="main@0"):
@@ -275,11 +283,13 @@ def p_col_type_1(p) :
                     | epsilon
     '''
     if(len(p)==2):
-        p[0]=False
+        p[0]="void"
+    else:
+        p[0]=p[2]
     #printp(p)
 
-def p_fun_sig(p):
-    ''' fun_sig : id param_clause
+def p_fun_sig(p):           # function is named id@no.of args
+    ''' fun_sig : id param_clause  
     '''
     p[0] = ["func"]+[p[1]]+p[2]
     arg = len(p[2])
@@ -497,7 +507,7 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
-            emit('call',None,p[1]['idVal'],1)
+            emit('call',None,p[1]['place'],1)
     printp(p)
     #                |   simple_expr type_args
 
