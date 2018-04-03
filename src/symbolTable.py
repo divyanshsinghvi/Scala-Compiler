@@ -20,11 +20,11 @@ class SymbolTable:
         self.stackend = []
     
     def printSymbolTable(self,S,b):
-       for i in self.SymbolTable:
-           print i
-           print self.SymbolTable[i]
-#        print "ds the awesomest of awesome"
-#        print "---------------------------"
+        print "ds the awesomest of awesome"
+        print "---------------------------"
+        for i in self.SymbolTable:
+            print i
+            print self.SymbolTable[i]
 #        for i in self.SymbolTable:
 #            print i
     
