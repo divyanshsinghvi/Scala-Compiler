@@ -498,7 +498,7 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
-            emit('call',None,p[1]['idVal'],1)
+            emit('call',None,p[1]['place'],1)
     printp(p)
     #                |   simple_expr type_args
 
@@ -763,10 +763,10 @@ def p_f_mark2(p):
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    for i in range(7):
-        print i*-1
-    emit(op='goto',out=p[-5][0]) #goto l1
-    emit(op='label',out=p[-5][2]) #exit label
+    #for i in range(7):
+    #    print i*-1
+    emit(op='goto',out=p[-3][0]) #goto l1
+    emit(op='label',out=p[-3][2]) #exit label
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
