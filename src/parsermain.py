@@ -207,7 +207,7 @@ def p_var_def(p):
         print "oops array" 
         #emit('array','a','n')
     else:
-        emit('=',p[5]['place'],p[1])
+        emit('=',in1=p[5]['place'],out=p[1])
 
 
     #printp(p)
@@ -471,7 +471,6 @@ def p_simple_expr1(p):
                     |   simple_expr DOT id
                     |   simple_expr1 argument_exprs'''
     p[0] = dict()
-
     if p.slice[1].type == 'literal':
         p[0] = p[1]
     elif p.slice[1].type == 'path':
@@ -485,17 +484,21 @@ def p_simple_expr1(p):
         p[0]['place'] = ST.getAttribute(p[0]['idVal'],'place')
         p[0]['index_place'] = p[3]['place']
         del p[0]['idVal'] 
-    #Check
-    elif p.slice[1]=='LPARAN':
+    elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
-    elif p.slice[2] == 'argument_exprs':
-        x = p[1]['idVal'].split('.')
-        if(p[1]['idVal'] == 'PrintInt'):
+    elif p.slice[2].type == 'argument_exprs':
+ #       x = p[1]['idVal'].split('.')
+        if(p[1]['place'] == 'println'):
             emit('PrintInt',p[2]['place'])
+        elif(p[1]['place'] == 'readInt'):
+            temp = ST.getTemp()
+            emit('ScanInt',temp)
+            p[0] = {
+                    'place': temp
+                    }
         else:
             emit('call',None,p[1]['idVal'],1)
-    
-    #printp(p)
+    printp(p)
     #                |   simple_expr type_args
 
 #def p_exprs_1(p):
@@ -849,10 +852,11 @@ def p_argument_exprs(p):
 
 
 def p_exprs_1(p):
-    ''' exprs_1 : expr
-                | exprs_1 COMMA expr
+    ''' exprs_1 : postfix_expr
+                | epsilon
+                | exprs_1 COMMA postfix_expr
     '''
-    if(len(p)==2):
+    if(p.slice[1].type == 'postfix_expr'):
         p[0]=p[1]
     #printp(p)
 
