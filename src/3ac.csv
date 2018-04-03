@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 =,i,6
 =,i,3
 label,label2
@@ -22,3 +23,33 @@ label,label7
 goto,label2
 label,label4
 freturn,0
+=======
+flabel,main
+=,i,0
+=,b,3
+=,c,2
+=,d,1
+=,e,3
+=,f,2
+<=,t0,i,e
+if,label2,t0
+goto,label3
+label,label2
++,t1,b,i
+=,b,t1
+printInt,b
+label,label3
+>=,t3,i,f
+if,label4,t3
+goto,label5
+label,label4
+*,t4,c,i
++,t5,b,t4
+=,b,t5
+printInt,b
+goto,label6
+label,label5
+=,b,d
+printInt,b
+label,label6
+>>>>>>> 2a574d050c1b218da5d00a464c0c3941f695fabf

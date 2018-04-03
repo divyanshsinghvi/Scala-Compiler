@@ -44,7 +44,7 @@ precedence = (
 def evalArray(temp):
     if temp['type'] == 'Array':
         t1 = ST.getTemp()
-        print "I am here"
+        #print "I am here"
         emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
         r = {
                 'place' : t1,
@@ -332,7 +332,7 @@ def p_fun_sig(p):           # function is named id@no.of args
     #            "args":arg,
     #            "return":True
     #        }
-    #    emit("flabel",p[1])
+    emit("flabel",p[1])
     #printp(p)
 
 def p_param_clause(p):
@@ -904,6 +904,17 @@ def p_assign(p):
             emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
         else:
             emit(op='=',out=p[1]['place'],in1=p[3]['place'])
+    else:
+        #print "ds is awesome"
+        p[3]=evalArray(p[3])
+        t1 = ST.getTemp()
+        t2 = evalArray(p[1])
+        #print p[2][0]
+        emit(p[2][0],t1,t2['place'],p[3]['place'])
+        if p[1]['type'] == 'Array':
+            emit('star',p[1]['place'],p[1]['index'],t1)
+        else:
+            emit('=',p[1]['place'],t1)
     ##Check
     printp(p)
 
