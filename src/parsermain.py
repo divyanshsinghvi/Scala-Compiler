@@ -43,6 +43,15 @@ def evalArray(temp):
         return r
     return temp
 
+def makeIndex(size,place):
+    t=getTemp()
+    old=t
+    for i in range(0,len(place)):
+        for j i range(i+1,len(size)):
+            if(i==0 and j==1):
+                if(place['
+                emit("*",t,place[
+
 def printp(p):
     for i in range(0,len(p)):
         print (p.slice)[i],
@@ -211,7 +220,10 @@ def p_var_def(p):
         ST.addAttribute(p[1],'type','Array')  
         ST.addAttribute(p[1],'typeArray',p[3]['type'])
         ST.addAttribute(p[1],'size',p[3]['size'])
-        emit('array',p[1],p[3]['size'])
+        size=1
+        for x in p[3]["size"]:
+            size*=x
+        emit('array',p[1],size)
         i = 0 
         for d in p[5]['values']:
             emit('star',p[1],i,d['place'])
@@ -231,10 +243,12 @@ def p_array_size(p):
     #printp(p)
 def p_ints(p):
     ''' ints : INT
-             | COMMA ints
+             | INT COMMA ints
     '''
     if(len(p)==2):
-        p[0] = p[1]
+        p[0] = [p[1]]
+    else:
+        p[0]=[p[1]]+p[3]
     # Array[Char](10,3,4)
 
 def p_val_def(p):
@@ -514,11 +528,15 @@ def p_simple_expr1(p):
     elif len(p)==5:
         print "--------------"
         print p[3]
+        print "In simpl expr1",p[3]
         p[0]['idVal'] = p[1]
         p[0]['arrAccess'] = True
         p[0]['type'] = ST.getAttribute(p[0]['idVal'],'type')
         p[0]['place'] = p[1]
-        p[0]['index'] = p[3]['place']
+        size=ST.getId(p[1])['size'] #a,b,c size
+        place=p[3]          # i,j,k access index
+        temp=makeIndex(size,place)
+        p[0]['index'] = temp
         print p[0] 
     elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
@@ -1219,14 +1237,28 @@ def p_access(p):
                | access COMMA ID
                | access  COMMA INT
     '''
-    if len(p) == 2:
-        p[0] = {
-                'place' : p[1]
-                }
-    if p.slice[1].type == 'INT':
-        p[0]['type'] = 'INT'
+    if len(p) == 2 and p.slice[1].type =="INT":
+        p[0] = [{
+            'place' : p[1],
+            'type' : "INT"
+            }]
+    elif len(p)==2 and p.slice[1].type =="ID":
+        p[0] = [{
+            'place' : p[1],
+            'type' : "INT"
+            }]
+    elif p.slice[3]=="INT":
+        p[0]=p[1]+[{
+            'place' : p[3],
+            'type' : "INT"
+            }]
+    elif p.slice[3]=="ID":
+        p[0]=p[1]+[{
+            'place':p[3],
+            'type':"ID"
+            }]
+
     print "JJJJJJJJJJJ",p[0]
-    #printp(p)
 
 def p_literal(p):
     ''' literal : BOOL
