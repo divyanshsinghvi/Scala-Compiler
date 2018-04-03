@@ -3,7 +3,9 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import SymbolTable
 ST=SymbolTable()
+ST.newScope()
 ST.addFunc('println')
+ST.endScope()
 x=1
 def newLabel():
     global x
