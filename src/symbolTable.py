@@ -23,10 +23,6 @@ class SymbolTable:
         for i in self.SymbolTable:
             print i
             print self.SymbolTable[i]
-        print "ds the awesomest of awesome"
-        print "---------------------------"
-            #for i in self.SymbolTable:
-            #print i
     
     def newScope(self):
         scope = self.newScopeName()
@@ -55,7 +51,7 @@ class SymbolTable:
                     }
         else:
             sys.exit("Variable "+idVal+" is already initialised in this scope")
-        print(self.SymbolTable[self.currScope]["identifiers"])
+        #print(self.SymbolTable[self.currScope]["identifiers"])
 
     def searchEntry(self, idVal):
         scope = self.getScope(idVal)

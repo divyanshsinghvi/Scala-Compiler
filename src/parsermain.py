@@ -31,7 +31,6 @@ precedence = (
 )
 
 def evalArray(temp):
-    print "+++++++",temp
     if temp['type'] == 'Array':
         t1 = ST.getTemp()
         print "I am here"
@@ -44,10 +43,9 @@ def evalArray(temp):
     return temp
 
 def printp(p):
-    for i in range(0,len(p)):
-        print (p.slice)[i],
-
-    print "\n",
+#    for i in range(0,len(p)):
+#        print (p.slice)[i],
+#    print "\n",
     a=2
 
 def p_compilation_unit(p):
@@ -204,8 +202,6 @@ def p_var_def(p):
 
     '''
     ST.addVar(p[1],p[1],p[3]['type']) 
-    print "========================"
-    print p[3]
     #if('isArray' in p[5].keys() and p[5]['isArray']):
     if type(p[5]) == type({}) and 'isArray' in p[5] and p[5]['isArray']:
         ST.addAttribute(p[1],'type','Array')  
@@ -259,7 +255,6 @@ def p_array_init(p):
     ''' array_init : BLOCKBEGIN epsilon BLOCKEND
                    | BLOCKBEGIN array_init_0 BLOCKEND
     '''
-    print "JJJJJ" ,p[2]
     if p.slice[2].type == "epsilon":
         p[0]=[]
     else:
@@ -291,8 +286,6 @@ def p_FunMark1(p):
     else:
         ST.addFunc(p[-2][1])
         ST.setRType(p[-1])
-    print ST.SymbolTable
-    print ST.currScope
 
 def p_FunMark2(p):
     ''' FunMark2 : epsilon
@@ -512,14 +505,11 @@ def p_simple_expr1(p):
     elif p.slice[1].type == 'path':
         p[0] = p[1]
     elif len(p)==5:
-        print "--------------"
-        print p[3]
         p[0]['idVal'] = p[1]
         p[0]['arrAccess'] = True
         p[0]['type'] = ST.getAttribute(p[0]['idVal'],'type')
         p[0]['place'] = p[1]
         p[0]['index'] = p[3]['place']
-        print p[0] 
     elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
     elif p.slice[2].type == 'argument_exprs':
@@ -533,12 +523,6 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
-#<<<<<<< HEAD
-#            p[0] = {
-#                    'place' : ST.getTemp()
-#                    }
-#            emit('call',None,p[1]['place'],1)
-#=======
             name=p[1]["place"]+"@"+str(len(p[2]))
             rtype = ST.getRType(name)
             if(rtype!="void"):
@@ -547,14 +531,7 @@ def p_simple_expr1(p):
                 emit("fcall",temp,p[1]["place"],len(p[2]))
             else:
                 emit('call',None,p[1]['place'],len(p[2]))
-#>>>>>>> 5bed0d20ef1dddea4aa5ab8bfa8ddb3d991e4b9c
     printp(p)
-    #                |   simple_expr type_args
-
-#def p_exprs_1(p):
-#    '''exprs_1  :   exprs
-#                |   epsilon'''
-#    printp(p)
 
 def p_prefix_expr(p):
     '''prefix_expr  :   simple_expr
@@ -571,7 +548,6 @@ def p_type(p):                      # look at <T>
              | array_type
              | id
     '''
-    #print p[1]
     if p.slice[1].type == 'basic_type':
         p[0] = {
                 'type' : p[1]['idVal'].upper()
@@ -586,7 +562,6 @@ def p_array_type(p):
     ''' array_type : TYPE_ARRAY LSQRB type RSQRB array_size
     '''
 
-    print "-----------",p[5]
     p[0] = {
             'type' : p[3]['type'],
            # 'place' : p[5]['place'],
@@ -620,13 +595,6 @@ def p_qual_id(p):
                 'idVal' : p[1]['idVal']+"." +p[3]
                 }
 
-    #printp(p)
-
-#def p_dot_id_0(p):
-#    ''' dot_id_0 : epsilon
-#             | dot_id_0 DOT id
-#    '''
-#    printp(p)
 
 def p_object_def(p):
     ''' object_def : id class_template_opt
@@ -656,11 +624,6 @@ def p_for_logic(p):
     #Check Scope
     printp(p)
 
-#def p_f_scope_mark(p):
-#    '''f_scope_mark : epsilon
-#    '''
-#    ST.newScope()
-
 def p_for_init(p):
     ''' for_init : epsilon
                  | path_var_def for_inits
@@ -681,11 +644,6 @@ def p_for_upd(p):           # to be done later, the for case
     '''
     printp(p)
 
-#def p_semi_for_logic_1(p):
-#    ''' semi_for_logic_1 : semi for_logic
-#| epsilon
-#    '''
-#    printp(p)
 
 def p_switch_labels(p):
     ''' switch_labels : R_CASE literal COLON
@@ -694,7 +652,6 @@ def p_switch_labels(p):
     if p.slice[1].type == 'R_CASE':
         l1=newLabel()
         emit(op='label',out=l1)
-        print "huolaksldk----$%%%%%%%%%%%%%%%%%%%%%%%" 
         p[0] = {}
         p[0]['label'] = l1
         p[0]['place'] = p[2]['place']
@@ -715,8 +672,6 @@ def p_switch_block_statements(p):
 def p_switch_block(p):
     ''' switch_block : BLOCKBEGIN s_mark1 switch_block_statements_0 BLOCKEND
     '''
-    #test=newLabel()
-    print "------------------------------------------------"
     emit('goto',p[2]['label'][1])
     emit('label',p[2]['label'][0])
     for d in p[3]:
@@ -735,14 +690,8 @@ def p_switch_block_statements_0(p):
         p[0] = [p[1]]
     else:
         p[0] = p[1]+[p[2]]
-        print p[0]
     printp(p)
 
-#def p_switch_labels_1(p):
-#    ''' switch_labels_1 : switch_labels
-#                        | epsilon
-#    '''
-#    printp(p)
 
 def p_expr(p):
     ''' expr : R_IF LPARAN postfix_expr  RPARAN if_mark1 BLOCKBEGIN block BLOCKEND expression1
@@ -800,8 +749,6 @@ def p_f_mark1(p):
 def p_f_mark2(p):
     ''' f_mark2 : epsilon
     '''
-    print p[-2]
-    print p[-1]
     emit(op='if',in1=p[-1]['place'],out=p[-2][1]) #if true goto l2 
     emit(op='goto',out=p[-2][2]) #goto exit l3
     emit(op='label',out=p[-2][1],) # emit label l2
@@ -810,8 +757,6 @@ def p_f_mark2(p):
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    #for i in range(7):
-    #    print i*-1
     emit(op='goto',out=p[-3][0]) #goto l1
     emit(op='label',out=p[-3][2]) #exit label
     ST.endScope()
@@ -892,11 +837,6 @@ def p_expression2(p):
     '''
     printp(p)
 
-#def p_literal_0(p):
-#    ''' literal_0 : epsilon
-#                  | literal_0 COMMA literal
-#    '''
-#    printp(p)
 
 
 def p_argument_exprs(p):
@@ -915,8 +855,6 @@ def p_exprs_1(p):
         p[0]=[p[1]]
     elif(len(p)==4):
         p[0]=p[1]+[p[3]]
-    #print "YEHE", p[0]
-    #printp(p)
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
@@ -932,18 +870,11 @@ def p_id_1(p):
     '''
     printp(p)
 
-#def p_infix_expr(p):
-#    ''' infix_expr : infix_expr op infix_expr
-#                   | infix_expr asgn infix_expr
-#                   | prefix_expr
-#    '''
-#    printp(p)
 
 def p_infix_expr(p):
     ''' infix_expr : assign
                    | or_expression
     '''
-    print "infix ininnnnnnnn"
     p[0] = p[1]
     printp(p)
 
@@ -957,11 +888,7 @@ def p_assign(p):
             'type': 'Not defined'
             }
     if p[2] == '=':
-        print "TTTTTTTTT",p[3]
         p[3]=evalArray(p[3])
-        print "-----------"
-        print p[1]
-        print p[3]
         if p[1]['type'] == 'Array' :
             emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
         else:
@@ -983,9 +910,6 @@ def p_or_expression(p):
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
         emit(op='||',out=temp,in1=p[1]['place'],in2=p[3]['place'])
-    #print "-----"
-    #print p[0]
-    #printp(p)
 
 def p_and_expression(p):
     ''' and_expression : bit_or_expression 
@@ -1109,7 +1033,6 @@ def p_mul_expression(p):
                       | mul_expression OP_MUL  unary_expression
                       | mul_expression OP_DIV  unary_expression
     '''
-    print p[1]
     if len(p) == 2:
         p[0]=p[1]
     else:
@@ -1133,42 +1056,6 @@ def p_unary_expression(p):
         p[0] = p[2]
 #    printp(p)
 
-#def p_cast_expression(p):
-#    '''cast_expression : LPARAN basic_type RPARAN unary_expression
-#
-#    '''
-#    printp(p)
-
-
-#def p_types(p):
-#    ''' types : type
-#              | types COMMA type
-#    '''
-#    printp(p)
-
-#def p_type_args(p):
-#    ''' type_args : LSQRB types RSQRB
-#    '''
-#    printp(p)
-
-#def p_op(p):
-#    ''' op : OR
-#           | AND_BIT
-#           | OR_BIT
-#           | LT
-#           | LE
-#           | GT
-#           | GE
-#           | LSHIFT
-#           | RSHIFT
-#           | RRSHIFT
-#           | OP_ADD
-#           | OP_DIV
-#           | OP_MUL
-#           | OP_SUB
-#           | OP_MOD
-#    '''
-#    printp(p)
 
 def p_asgn(p):
     ''' asgn : EQUALASGN
@@ -1183,7 +1070,6 @@ def p_asgn(p):
              | ORASGN
              | XORASGN
     '''
-    print p[1]
     p[0] = p[1]
     printp(p)
 
@@ -1196,9 +1082,6 @@ def p_basic_type(p):
                    | R_NULL
     '''
     
-    #CRED = '\033[91m'
-    #CEND = '\033[0m'
-    #print(CRED+p[1]+CEND)
     p[0] = {
             'idVal': p[1],
             'type' : p[1].upper()
@@ -1225,7 +1108,6 @@ def p_access(p):
                 }
     if p.slice[1].type == 'INT':
         p[0]['type'] = 'INT'
-    print "JJJJJJJJJJJ",p[0]
     #printp(p)
 
 def p_literal(p):
@@ -1262,4 +1144,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
-print ST.printSymbolTable(ST,1)
+#print ST.printSymbolTable(ST,1)
