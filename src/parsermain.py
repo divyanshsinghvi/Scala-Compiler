@@ -207,7 +207,7 @@ def p_var_def(p):
         print "oops array" 
         #emit('array','a','n')
     else:
-        emit('=',p[5]['place'],p[1])
+        emit('=',in1=p[5]['place'],out=p[1])
 
 
     #printp(p)
@@ -471,7 +471,6 @@ def p_simple_expr1(p):
                     |   simple_expr DOT id
                     |   simple_expr1 argument_exprs'''
     p[0] = dict()
-
     if p.slice[1].type == 'literal':
         p[0] = p[1]
     elif p.slice[1].type == 'path':
@@ -485,17 +484,21 @@ def p_simple_expr1(p):
         p[0]['place'] = ST.getAttribute(p[0]['idVal'],'place')
         p[0]['index_place'] = p[3]['place']
         del p[0]['idVal'] 
-    #Check
-    elif p.slice[1]=='LPARAN':
+    elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
-    elif p.slice[2] == 'argument_exprs':
-        x = p[1]['idVal'].split('.')
-        if(p[1]['idVal'] == 'PrintInt'):
+    elif p.slice[2].type == 'argument_exprs':
+ #       x = p[1]['idVal'].split('.')
+        if(p[1]['place'] == 'println'):
             emit('PrintInt',p[2]['place'])
+        elif(p[1]['place'] == 'readInt'):
+            temp = ST.getTemp()
+            emit('ScanInt',temp)
+            p[0] = {
+                    'place': temp
+                    }
         else:
             emit('call',None,p[1]['idVal'],1)
-    
-    #printp(p)
+    printp(p)
     #                |   simple_expr type_args
 
 #def p_exprs_1(p):
@@ -601,14 +604,18 @@ def p_catch_clause_1(p):
 def p_for_logic(p):
     ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd
     '''
-    ST.newScope()
     p[0] = p[6]
     #Check Scope
     printp(p)
 
+#def p_f_scope_mark(p):
+#    '''f_scope_mark : epsilon
+#    '''
+#    ST.newScope()
+
 def p_for_init(p):
     ''' for_init : epsilon
-                 | var_def for_inits
+                 | path_var_def for_inits
                  | var_dcl for_inits
                  | infix_expr for_inits
     '''
@@ -694,7 +701,7 @@ def p_expr(p):
               | R_WHILE LPARAN WhMark1 postfix_expr RPARAN WhMark2 BLOCKBEGIN block WhMark3  BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
-              | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
+              | R_FOR f_scope_mark for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
               | R_RETURN postfix_expr
               | R_RETURN
               | R_BREAK
@@ -726,7 +733,10 @@ def p_s_mark1(p):
                 'idVal' :    p[-3]
                 }
      
-
+def p_f_scope_mark(p):
+    '''f_scope_mark : epsilon
+    '''
+    ST.newScope()
 
 def p_f_mark1(p):
     ''' f_mark1 : epsilon
@@ -752,8 +762,10 @@ def p_f_mark2(p):
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    emit(op='goto',out=p[-3][0]) #goto l1
-    emit(op='label',out=p[-3][2]) #exit label
+    for i in range(7):
+        print i*-1
+    emit(op='goto',out=p[-5][0]) #goto l1
+    emit(op='label',out=p[-5][2]) #exit label
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
@@ -847,10 +859,11 @@ def p_argument_exprs(p):
 
 
 def p_exprs_1(p):
-    ''' exprs_1 : expr
-                | exprs_1 COMMA expr
+    ''' exprs_1 : postfix_expr
+                | epsilon
+                | exprs_1 COMMA postfix_expr
     '''
-    if(len(p)==2):
+    if(p.slice[1].type == 'postfix_expr'):
         p[0]=p[1]
     #printp(p)
 
@@ -1181,3 +1194,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
+print ST.printSymbolTable(ST,1)
