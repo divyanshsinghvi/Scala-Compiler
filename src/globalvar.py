@@ -12,11 +12,11 @@ tacBB = ir.irTable(filename)
 tacTable = tacBB.arr
 basicBlock=tacBB.leadList
 
-#from table import symbolTable
-#ST = symbolTable
+from table import symbolTable
+ST = symbolTable
 
-from symbolTable import *
-ST = HashTable
+#from symbolTable import *
+#ST = HashTable
 
 
 addressDescr = {}

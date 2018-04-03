@@ -1,14 +1,20 @@
 object demo{
 def main(args: Array[Strings](2))={
-    var i: Int =6;
-    for (var i:Int = 3;i<= 8 && i>= 6 && i!= 7; i=i+1){
-        if (i>=0){
+    var i: Int =1;
+    var j: Int = 8;
+    var d: Int =0;
+    for (i= 0;i<= j && j>= i; i=i+j){
+        if (i>=j){
+		var a:Int =3;
+		var b:Int =2;
+		a+= b;
      //       printf("yes\n");
         }
-        else{ 
+        else{
+		d  += i;
        //     printf("no\n");
         };
     };
-    return 0;
+    return j;
 };
 };
