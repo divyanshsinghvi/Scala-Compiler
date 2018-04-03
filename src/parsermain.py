@@ -42,11 +42,11 @@ def evalArray(temp):
     return temp
 
 def printp(p):
-    for i in range(0,len(p)):
-        print (p.slice)[i],
+    #for i in range(0,len(p)):
+    #    print (p.slice)[i],
 
-    print "\n",
-
+    #print "\n",
+    a=2
 
 def p_compilation_unit(p):
     '''compilation_unit : compilation_unit_0 top_stat_seq_0
@@ -203,7 +203,8 @@ def p_var_def(p):
     '''
     print p[5]
     ST.addEntry(p[1],p[1],p[3]['type']) 
-    if('isArray' in p[5].keys() and p[5]['isArray']):
+    #if('isArray' in p[5].keys() and p[5]['isArray']):
+    if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
         print "oops array" 
         #emit('array','a','n')
     else:
