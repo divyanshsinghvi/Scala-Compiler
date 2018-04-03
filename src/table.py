@@ -3,7 +3,7 @@
 #code.And calculate next use of each of following
 
 import ir
-from symbolTable import SymbolTable
+from symbolTableOld import SymbolTable
 from nextUse import NextUse
 #from basicBlock import basicBlock
 from  globalvar import *
