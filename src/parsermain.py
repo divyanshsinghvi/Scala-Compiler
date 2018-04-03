@@ -447,6 +447,7 @@ def p_path(p):
             |   id DOT path
             |   R_SUPER DOT path
             '''
+    ST.printSymbolTable(ST,1)
     if(p.slice[1].type == 'id'):
         p[0] = ST.getId(p[1])
     printp(p)
@@ -629,7 +630,7 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd
+    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd f_mark4
     '''
     p[0] = p[6]
     #Check Scope
@@ -752,27 +753,35 @@ def p_f_mark1(p):
     l1 = newLabel()
     l2 = newLabel()
     l3 = newLabel()
+    l4 = newLabel()
     ST.stackbegin.append(l1)
-    ST.stackend.append(l3)
+    ST.stackend.append(l4)
     emit(op='label',out=l1) #emit label 1 
-    p[0]=[l1,l2,l3]
+    p[0]=[l1,l2,l3,l4]
     
 def p_f_mark2(p):
     ''' f_mark2 : epsilon
     '''
-    emit(op='if',in1=p[-1]['place'],out=p[-2][1]) #if true goto l2 
-    emit(op='goto',out=p[-2][2]) #goto exit l3
+    emit(op='if',in1=p[-1]['place'],out=p[-2][2]) #if true goto l2 
+    emit(op='goto',out=p[-2][3]) #goto exit l3
     emit(op='label',out=p[-2][1],) # emit label l2
-    p[0] = [p[-2][0],p[-2][1],p[-2][2]]
+    p[0] = [p[-2][0],p[-2][1],p[-2][2],p[-2][3]]
 
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    emit(op='goto',out=p[-3][0]) #goto l1
-    emit(op='label',out=p[-3][2]) #exit label
+    emit(op='goto',out=p[-3][1]) #goto l2
+    emit(op='label',out=p[-3][3]) #exit label
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
+
+def p_f_mark4(p):
+    '''f_mark4 : epsilon
+    '''
+    emit('goto',p[-5][0])
+    emit('label',p[-5][2])
+
 
 def p_WhMark1(p):
     '''WhMark1 : '''
@@ -1166,4 +1175,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
-#print ST.printSymbolTable(ST,1)
+print ST.printSymbolTable(ST,1)
