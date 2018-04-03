@@ -6,6 +6,8 @@ class SymbolTable:
                 "main" : {
                     "name" : "main",
                     "identifiers" : {},
+                    "function" :{},
+                    "variables" : {},
                     "type" : "main",
                     "parent" : None,
                     }
@@ -31,6 +33,8 @@ class SymbolTable:
         self.SymbolTable[scope] = {
                 "name" : scope,
                 "identifiers" : {},
+                "function" : {},
+                "variables" : {},
                 "type" : "scope",
                 "parent" : self.currScope,
                 }
@@ -39,7 +43,7 @@ class SymbolTable:
     def endScope(self):
         self.currScope = self.SymbolTable[self.currScope]["parent"]
 
-    def addEntry(self, idVal, place, idType, idSize = 4):
+    def addVar(self, idVal, place, idType, idSize = 4):
         scope = self.getScope(idVal)
         if scope != self.currScope:
             sc = str(self.currScope)+"_"+place
@@ -59,6 +63,22 @@ class SymbolTable:
             return False
         else:
             return scope
+
+    def addFun(self, fun):
+        self.SymbolTable[fun] = {
+                "name" : fun,
+                "type" : "function",
+                "variables" : {},
+                "function" : {},
+                "rtype" : "undefined",
+                "parent" : self.currScope,
+                "arguments" : []
+                }
+        self.SymbolTable[self.currScope]["function"][fun] = {
+                "fname" : fun
+                }
+        self.currScope = fun
+
 
     def getAttribute(self, idVal, Name):
         scope = self.getScope(idVal)
