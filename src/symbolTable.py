@@ -16,7 +16,16 @@ class SymbolTable:
         self.function = {}
         self.stackbegin = []
         self.stackend = []
-
+    
+    def printSymbolTable(self,S,b):
+       for i in self.SymbolTable:
+           print i
+           print self.SymbolTable[i]
+#        print "ds the awesomest of awesome"
+#        print "---------------------------"
+#        for i in self.SymbolTable:
+#            print i
+    
     def newScope(self):
         scope = self.newScopeName()
         self.SymbolTable[scope] = {

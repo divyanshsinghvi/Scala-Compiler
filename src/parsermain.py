@@ -608,7 +608,7 @@ def p_for_logic(p):
 
 def p_for_init(p):
     ''' for_init : epsilon
-                 | var_def for_inits
+                 | path_var_def for_inits
                  | var_dcl for_inits
                  | infix_expr for_inits
     '''
@@ -1183,3 +1183,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
+print ST.printSymbolTable(ST,1)
