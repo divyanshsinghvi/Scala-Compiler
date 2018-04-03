@@ -661,15 +661,14 @@ def p_switch_block(p):
     ''' switch_block : BLOCKBEGIN s_mark1 switch_block_statements_0 BLOCKEND
     '''
     #test=newLabel()
-    exit=newLabel()
     print "------------------------------------------------"
-    emit('goto',exit)
-    emit('label',p[2]['label'])
+    emit('goto',p[2]['label'][1])
+    emit('label',p[2]['label'][0])
     for d in p[3]:
         temp =ST.getTemp()
         emit(op='==',out=temp,in1=d['place'],in2=p[2]['idVal']['place'])
         emit('if',d['label'],temp)
-    emit('label',exit) 
+    emit('label',p[2]['label'][1]) 
 
 def p_switch_block_statements_0(p):
     ''' switch_block_statements_0 : switch_block_statements
@@ -703,14 +702,14 @@ def p_expr(p):
               | R_SWITCH LPARAN postfix_expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
-    #if(p[1]=="break"):
-    #    emit("goto",ST.stackend[-1])
-    #if(p[1]=="continue"):
-    #    emit("goto",ST.stackbegin[-1])
-    #if(p[1]=="return" and len(p)==2):
-    #    emit("return")
-    #if(p[1]=="return" and len(p)==3):
-    #    emit("freturn",p[2]["place"])  # freturn,-,x,- , won't be able to get x easily in this case
+    if(p[1]=="break"):
+        emit("goto",ST.stackend[-1])
+    if(p[1]=="continue"):
+        emit("goto",ST.stackbegin[-1])
+    if(p[1]=="return" and len(p)==2):
+        emit("return")
+    if(p[1]=="return" and len(p)==3):
+        emit("freturn",p[2]["place"])  # freturn,-,x,- , won't be able to get x easily in this case
 
     printp(p)
 
@@ -718,8 +717,11 @@ def p_s_mark1(p):
     '''s_mark1 : epsilon
     '''
     test = newLabel()
+    exit=newLabel()
     emit('goto',test)
-    p[0] = {   'label' : test, 
+    ST.stackbegin.append(test)
+    ST.stackend.append(exit)
+    p[0] = {   'label' : [test,exit], 
                 'idVal' :    p[-3]
                 }
      
