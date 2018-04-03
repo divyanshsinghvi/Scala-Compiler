@@ -202,9 +202,8 @@ def p_var_def(p):
 
     '''
     print p[5]
-    ST.addEntry(p[1],p[1],p[3]['type']) 
-    #if('isArray' in p[5].keys() and p[5]['isArray']):
-    if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
+    ST.addVar(p[1],p[1],p[3]['type']) 
+    if('isArray' in p[5].keys() and p[5]['isArray']):
         print "oops array" 
         #emit('array','a','n')
     else:
@@ -368,7 +367,7 @@ def p_val_dcl_0(p):
 def p_var_dcl(p):
     '''var_dcl  :   id COLON type
     '''
-    ST.addEntry(p[1],p[1],p[3]['type'])
+    ST.addVar(p[1],p[1],p[3]['type'])
 
     #printp(p)
 
