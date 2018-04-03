@@ -20,13 +20,13 @@ class SymbolTable:
         self.stackend = []
     
     def printSymbolTable(self,S,b):
-       for i in self.SymbolTable:
-           print i
-           print self.SymbolTable[i]
-#        print "ds the awesomest of awesome"
-#        print "---------------------------"
-#        for i in self.SymbolTable:
-#            print i
+        for i in self.SymbolTable:
+            print i
+            print self.SymbolTable[i]
+        print "ds the awesomest of awesome"
+        print "---------------------------"
+            #for i in self.SymbolTable:
+            #print i
     
     def newScope(self):
         scope = self.newScopeName()
@@ -46,7 +46,8 @@ class SymbolTable:
     def addVar(self, idVal, place, idType, idSize = 4):
         scope = self.getScope(idVal)
         if scope != self.currScope:
-            sc = str(self.currScope)+"_"+place
+            #sc = str(self.currScope)+"_"+place
+            sc = place
             self.SymbolTable[self.currScope]["identifiers"][idVal] = {
                     "place" : sc,
                     "type" : idType,
@@ -79,6 +80,13 @@ class SymbolTable:
                 }
         self.currScope = fun
 
+    def getId(self,idVal):
+        scope = self.getScope(idVal)
+        if scope is not None:
+            return self.SymbolTable[scope]["identifiers"][idVal]
+        else:
+            sys.exit("Symbol not defined")
+
 
     def getAttribute(self, idVal, Name):
         scope = self.getScope(idVal)
@@ -104,7 +112,7 @@ class SymbolTable:
                 return scope
             scope = self.SymbolTable[scope]["parent"]
 
-        if idVal in self.SymbolTable[scope]["identifiers"]:
+        if idVal in self.SymbolTable[scope]["identifiers"].keys():
             return scope
         return None
 

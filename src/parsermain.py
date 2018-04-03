@@ -31,21 +31,23 @@ precedence = (
 )
 
 def evalArray(temp):
-    if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
+    print "+++++++",temp
+    if temp['type'] == 'Array':
         t1 = ST.getTemp()
+        print "I am here"
         emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
         r = {
                 'place' : t1,
-                'type' : temp['type']
+                'type' : 'Array'
                 }
         return r
     return temp
 
 def printp(p):
-    #for i in range(0,len(p)):
-    #    print (p.slice)[i],
+    for i in range(0,len(p)):
+        print (p.slice)[i],
 
-    #print "\n",
+    print "\n",
     a=2
 
 def p_compilation_unit(p):
@@ -201,12 +203,20 @@ def p_var_def(p):
     ''' var_def : id COLON type EQUALASGN val_var_init
 
     '''
-    print p[5]
     ST.addVar(p[1],p[1],p[3]['type']) 
+    print "========================"
+    print p[3]
     #if('isArray' in p[5].keys() and p[5]['isArray']):
-    if type(p[1]) == type({}) and 'arrAccess' in p[1] and p[1]['arrAccess']:
-        print "oops array" 
-        #emit('array','a','n')
+    if type(p[5]) == type({}) and 'isArray' in p[5] and p[5]['isArray']:
+        ST.addAttribute(p[1],'type','Array')  
+        ST.addAttribute(p[1],'typeArray',p[3]['type'])
+        ST.addAttribute(p[1],'size',p[3]['size'])
+        emit('array',p[1],p[3]['size'])
+        i = 0 
+        for d in p[5]['values']:
+            emit('star',p[1],i,d['place'])
+            i+=1
+       # emit('array',p[],'n')
     else:
         emit('=',in1=p[5]['place'],out=p[1])
 
@@ -217,7 +227,7 @@ def p_array_size(p):
     ''' array_size : LPARAN ints RPARAN                           
     '''
     p[0] = dict()
-    p[0]['place'] = p[2] 
+    p[0]['size'] = p[2] 
     #printp(p)
 def p_ints(p):
     ''' ints : INT
@@ -236,12 +246,12 @@ def p_val_var_init(p):
     '''val_var_init : array_init
                 | infix_expr
     '''
+    p[0]={}
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
     else:
-        p[0] = {
-                'isArray' : True
-                }
+        p[0]['values'] = p[1]
+        p[0]['isArray'] = True
 
     #printp(p)
 
@@ -249,12 +259,21 @@ def p_array_init(p):
     ''' array_init : BLOCKBEGIN epsilon BLOCKEND
                    | BLOCKBEGIN array_init_0 BLOCKEND
     '''
+    print "JJJJJ" ,p[2]
+    if p.slice[2].type == "epsilon":
+        p[0]=[]
+    else:
+        p[0]=p[2]
     printp(p)
 
 def p_array_init_0(p):
     '''array_init_0 : val_var_init 
                     | array_init_0 COMMA val_var_init
     '''
+    if len(p) == 4:
+        p[0] = p[1]+[p[3]]
+    else:
+        p[0] = [p[1]]
     printp(p)
 
 #some ambiguity here ???
@@ -409,7 +428,8 @@ def p_path(p):
             |   id DOT path
             |   R_SUPER DOT path
             '''
-    p[0] = p[1]
+    if(p.slice[1].type == 'id'):
+        p[0] = ST.getId(p[1])
     printp(p)
 
 #def path_0(p):
@@ -475,16 +495,16 @@ def p_simple_expr1(p):
     if p.slice[1].type == 'literal':
         p[0] = p[1]
     elif p.slice[1].type == 'path':
-        p[0] = {
-                'place' : p[1]
-                }
+        p[0] = p[1]
     elif len(p)==5:
+        print "--------------"
+        print p[3]
         p[0]['idVal'] = p[1]
-        p[0]['isArrayAccess'] = True
+        p[0]['arrAccess'] = True
         p[0]['type'] = ST.getAttribute(p[0]['idVal'],'type')
-        p[0]['place'] = ST.getAttribute(p[0]['idVal'],'place')
-        p[0]['index_place'] = p[3]['place']
-        del p[0]['idVal'] 
+        p[0]['place'] = p[1]
+        p[0]['index'] = p[3]['place']
+        print p[0] 
     elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
     elif p.slice[2].type == 'argument_exprs':
@@ -498,7 +518,10 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
-            emit('call',None,p[1]['idVal'],1)
+            p[0] = {
+                    'place' : ST.getTemp()
+                    }
+            emit('call',None,p[1]['place'],1)
     printp(p)
     #                |   simple_expr type_args
 
@@ -528,23 +551,21 @@ def p_type(p):                      # look at <T>
                 'type' : p[1]['idVal'].upper()
                 }
     elif p.slice[1].type == 'array_type':
-        p[0] = {
-                'type' : p[1]['type']
-                }
+        p[0] = p[1]
     else:
         p[0] = {
                 'type' : p[1].upper()
                 }
-    #printp(p)
-
 def p_array_type(p):
     ''' array_type : TYPE_ARRAY LSQRB type RSQRB array_size
     '''
+
+    print "-----------",p[5]
     p[0] = {
             'type' : p[3]['type'],
-            'place' : p[5]['place'],
-            'isarray' :  True
-            
+           # 'place' : p[5]['place'],
+            'isarray' :  True,
+            'size' : p[5]['size']    
             }
     #printp(p)
 
@@ -907,9 +928,13 @@ def p_assign(p):
             'type': 'Not defined'
             }
     if p[2] == '=':
+        print "TTTTTTTTT",p[3]
         p[3]=evalArray(p[3])
-        if type(temp) == type({}) and 'arrAccess' in temp and temp['arrAccess']:
-            emit(op='star',out=p[1]['place'],in1=p[1]['index'],in2=p[3]['place'])
+        print "-----------"
+        print p[1]
+        print p[3]
+        if p[1]['type'] == 'Array' :
+            emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
         else:
             emit(op='=',out=p[1]['place'],in1=p[3]['place'])
     ##Check
@@ -942,7 +967,8 @@ def p_and_expression(p):
     else:
         temp = ST.getTemp()
         p[0] = {
-                    'place' : temp
+                    'place' : temp,
+                    'type'  : 'bool'
                 }
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
@@ -983,7 +1009,8 @@ def p_eq_expression(p):
     else:
         temp = ST.getTemp()
         p[0] = {
-                    'place' : temp
+                    'place' : temp,
+                    'type'  : 'bool'
                 }
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
@@ -1003,7 +1030,8 @@ def p_comp_expression(p):
     else:
         temp = ST.getTemp()
         p[0] = {
-                    'place' : temp
+                    'place' : temp,
+                    'type'  : 'bool'
                 }
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
@@ -1020,7 +1048,8 @@ def p_shift_expression(p):
     else:
         temp = ST.getTemp()
         p[0] = {
-                    'place' : temp
+                    'place' : temp,
+                    'type'  : 'INT'
                 }
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
@@ -1037,7 +1066,8 @@ def p_add_expression(p):
     else:
         temp = ST.getTemp()
         p[0] = {
-                    'place' : temp
+                    'place' : temp,
+                    'type'  : 'INT'
                 }
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
@@ -1056,7 +1086,8 @@ def p_mul_expression(p):
     else:
         temp = ST.getTemp()
         p[0] = {
-                    'place' : temp
+                    'place' : temp,
+                    'type'  : 'INT'
                 }
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
@@ -1159,6 +1190,13 @@ def p_access(p):
                | access COMMA ID
                | access  COMMA INT
     '''
+    if len(p) == 2:
+        p[0] = {
+                'place' : p[1]
+                }
+    if p.slice[1].type == 'INT':
+        p[0]['type'] = 'INT'
+    print "JJJJJJJJJJJ",p[0]
     #printp(p)
 
 def p_literal(p):

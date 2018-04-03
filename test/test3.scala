@@ -2,7 +2,9 @@
   
 object Demo {
    def main(args: Array[String](1))= {
-     // println( "Returned Value : " + addInt(5,7) );
+      println( "Returned Value : " );
+      var a:Int = readint(2);
+      addInt();
    };
    
    def addInt( a:Int) : Int = {
