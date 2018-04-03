@@ -3,6 +3,7 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import SymbolTable
 ST=SymbolTable()
+ST.addFunc('println')
 x=1
 def newLabel():
     global x
@@ -524,11 +525,11 @@ def p_simple_expr1(p):
         p[0] = p[2]
     elif p.slice[2].type == 'argument_exprs':
  #       x = p[1]['idVal'].split('.')
-        if(p[1]['place'] == 'println'):
-            emit('PrintInt',p[2][0]['place'])
-        elif(p[1]['place'] == 'readInt'):
+        if(p[1]['name'] == 'println'):
+            emit('printInt',p[2][0]['place'])
+        elif(p[1]['name'] == 'readInt'):
             temp = ST.getTemp()
-            emit('ScanInt',temp)
+            emit('scanInt',temp)
             p[0] = {
                     'place': temp
                     }

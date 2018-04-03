@@ -85,7 +85,10 @@ class SymbolTable:
         if scope is not None:
             return self.SymbolTable[scope]["identifiers"][idVal]
         else:
-            sys.exit("Symbol not defined")
+            if self.SymbolTable[idVal] is not None:
+                return self.SymbolTable[idVal]
+            else:
+                sys.exit("Symbol not defined")
 
     def setRType(self,dataType):
         self.SymbolTable[self.currScope]["rType"] = dataType
