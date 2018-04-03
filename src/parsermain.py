@@ -703,14 +703,14 @@ def p_expr(p):
               | R_SWITCH LPARAN postfix_expr RPARAN switch_block
     '''
               #| R_ARRAY LPARAN literal literal_0 RPARAN
-    #if(p[1]=="break"):
-    #    emit("goto",ST.stackend[-1])
-    #if(p[1]=="continue"):
-    #    emit("goto",ST.stackbegin[-1])
-    #if(p[1]=="return" and len(p)==2):
-    #    emit("return")
-    #if(p[1]=="return" and len(p)==3):
-    #    emit("freturn",p[2]["place"])  # freturn,-,x,- , won't be able to get x easily in this case
+    if(p[1]=="break"):
+        emit("goto",ST.stackend[-1])
+    if(p[1]=="continue"):
+        emit("goto",ST.stackbegin[-1])
+    if(p[1]=="return" and len(p)==2):
+        emit("return")
+    if(p[1]=="return" and len(p)==3):
+        emit("freturn",p[2]["place"])  # freturn,-,x,- , won't be able to get x easily in this case
 
     printp(p)
 
