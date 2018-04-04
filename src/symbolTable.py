@@ -83,7 +83,7 @@ class SymbolTable:
         while self.SymbolTable[scope]['type'] not in ['main']:
             for i in self.SymbolTable[scope]["function"].keys():
                 if name == i.split("@")[0]:
-                    return self.StmbolTable[i]
+                    return self.SymbolTable[i]
             scope = self.SymbolTable[scope]['parent']
         for i in self.SymbolTable[scope]["function"].keys():
             if name == i.split("@")[0]:
