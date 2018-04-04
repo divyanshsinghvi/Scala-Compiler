@@ -44,6 +44,7 @@ def evalArray(temp):
     if temp['type'] == 'Array':
         t1 = ST.getTemp()
         #print "I am here"
+        print "YOYOYOY", temp
         emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
         r = {
                 'place' : t1,
@@ -55,21 +56,21 @@ def evalArray(temp):
 def makeIndex(size,place):
     t=ST.getTemp()
     t1=ST.getTemp()
-    old=t
+    old=0
     old1=0
     for i in range(0,len(place)-1):
         for j in range(i+1,len(size)):
-            if(i==0 and j==1 and len(size)>1):
+            if(j==i+1 and len(size)>1):
+                t=ST.getTemp()
                 emit("*",t,place[i]['place'],size[j])
-            else:
+                old=t
+            elif(len(size)>1):
                 t = ST.getTemp()
                 emit("*",t,old,size[j])
                 old=t
-        if(i==0):
-            old1=t
-        else:
-            t1=ST.getTemp()
-            emit("+",t1,old1,t)
+        t1=ST.getTemp()
+        emit("+",t1,old1,t)
+        old1=t1
     emit("+",t1,old1,place[len(place)-1]["place"])
     return t1
 
@@ -938,6 +939,7 @@ def p_assign(p):
             'type': 'Not defined'
             }
     if p[2] == '=':
+        print "HERE I AM O LORD",p[1]
         p[3]=evalArray(p[3])
         if p[1]['type'] == 'Array' :
             emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
