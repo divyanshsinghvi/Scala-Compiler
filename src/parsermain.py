@@ -47,7 +47,6 @@ def evalArray(temp):
     if temp['type'] == 'Array':
         t1 = ST.getTemp()
         #print "I am here"
-        print "YOYOYOY", temp
         emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
         r = {
                 'place' : t1,
@@ -238,9 +237,7 @@ def p_var_def(p):
     '''
     ST.addVar(p[1],p[1],p[3]['type']) 
     #if('isArray' in p[5].keys() and p[5]['isArray']):
-    print "P5", p[5]
     if type(p[5]) == type({}) and 'isArray' in p[5] and p[5]['isArray']:
-        print "I CAME HERE", p[5]
         ST.addAttribute(p[1],'type','Array')  
         ST.addAttribute(p[1],'typeArray',p[3]['type'])
         ST.addAttribute(p[1],'size',p[3]['size'])
@@ -254,7 +251,7 @@ def p_var_def(p):
             i+=1
        # emit('array',p[],'n')
     else:
-        emit('=',in1=p[5]['place'],out=p[1])
+	emit('=',in1=p[5]['place'],out=p[1])
 
 
     #printp(p)
@@ -263,7 +260,6 @@ def p_array_size(p):
     ''' array_size : LPARAN ints RPARAN                           
     '''
     p[0] = dict()
-    print "SIZE OF ARRAY",p[2]
     p[0]['size'] = p[2] 
     #printp(p)
 def p_ints(p):
@@ -286,11 +282,9 @@ def p_val_var_init(p):
                 | infix_expr
     '''
     p[0]={}
-    print "type", p.slice[1].type
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
     else:
-        "YES I'M HERE"
         p[0]['values'] = p[1]
         p[0]['isArray'] = True
 
@@ -482,7 +476,7 @@ def p_path(p):
             |   path DOT id
             |   R_SUPER DOT path
             '''
-    ST.printSymbolTable(ST,1)
+   # ST.printSymbolTable(ST,1)
     if(p.slice[1].type == 'id'):
         if p[1] not in ST.function:
             p[0] = ST.getId(p[1])
@@ -559,15 +553,10 @@ def p_simple_expr1(p):
         p[0]['arrAccess'] = True
         p[0]['type'] = ST.getAttribute(p[0]['idVal'],'type')
         p[0]['place'] = p[1]
-        print "THIS IS P!",p[1]
-        print ST.SymbolTable
         size=ST.getId(p[1])['size'] #a,b,c size
         place=p[3]          # i,j,k access index
-        print place
-        print size
         temp=makeIndex(size,place)
         p[0]['index'] = temp
-        print p[0]
         #p[0]['index'] = p[3]['place']
     elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
@@ -801,7 +790,7 @@ def p_f_mark1(p):
     l2 = newLabel()
     l3 = newLabel()
     l4 = newLabel()
-    ST.stackbegin.append(l1)
+    ST.stackbegin.append(l2)
     ST.stackend.append(l4)
     emit(op='label',out=l1) #emit label 1 
     p[0]=[l1,l2,l3,l4]
@@ -957,7 +946,6 @@ def p_assign(p):
             'type': 'Not defined'
             }
     if p[2] == '=':
-        print "HERE I AM O LORD",p[1]
         p[3]=evalArray(p[3])
         if p[1]['type'] == 'Array' :
             emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
@@ -1204,7 +1192,6 @@ def p_access(p):
             'type':"ID"
             }]
 
-    print "JJJJJJJJJJJ",p[0]
 
 def p_literal(p):
     ''' literal : BOOL
@@ -1240,4 +1227,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
-print ST.printSymbolTable(ST,1)
+#print ST.printSymbolTable(ST,1)

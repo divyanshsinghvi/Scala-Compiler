@@ -1,10 +1,9 @@
-package tr;
 
-class T(var g: Char,var h: Int,var i: Char,var j: Short,var k: Double,var l:Array[Char] ,var m: Char){
+class T(var g: Char,var h: Int,var i: Char,var j: Short,var k: Double,var l:Array[Char](3) ,var m: Char){
   var a: Char=g;
   var b: Int=h;
   var c: Char=i;
-  var d: Short=j;
+  var d: Int=j;
   var e: Float=k;
   var name:Array[Char](10);
   var f: Char = m;
@@ -23,7 +22,7 @@ void f (T x)
 }*/
 
 object demo{
-def main(args: Array[String])={
+def main(args: Array[String](3))={
     var k: T= new T('a',47114711d,'c',1234,3.141592897932d,'*',"abc");
     return 0;
 };
