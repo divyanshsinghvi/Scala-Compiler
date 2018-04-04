@@ -15,7 +15,7 @@ class SymbolTable:
         self.currScope = "main"
         self.tNo = -1
         self.scopeNo = -1
-        self.function = {}
+        self.function = []
         self.stackbegin = []
         self.stackend = []
     
@@ -70,13 +70,26 @@ class SymbolTable:
                 "function" : {},
                 "rType" : "undefined",
                 "parent" : self.currScope,
-                "arguments" : []
+                "arguments" : [],
+                "place" : fun.split("@")[0]
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun
                 }
         self.currScope = fun
     
+    def getFunc(self,name):
+        scope = self.currScope
+        while self.SymbolTable[scope]['type'] not in ['main']:
+            for i in self.SymbolTable[scope]["function"].keys():
+                if name == i.split("@")[0]:
+                    return self.StmbolTable[i]
+            scope = self.SymbolTable[scope]['parent']
+        for i in self.SymbolTable[scope]["function"].keys():
+            if name == i.split("@")[0]:
+                return self.SymbolTable[i]
+        sys.exit("function not declared")
+
     def endFunc(self):
         self.currScope = self.SymbolTable[self.currScope]["parent"]
 

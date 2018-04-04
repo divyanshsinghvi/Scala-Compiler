@@ -326,6 +326,7 @@ def p_fun_sig(p):           # function is named id@no.of args
     arg = len(p[2])
     name = p[1]+"@"+str(arg)
     p[0][1]=name
+    ST.function.append(p[1])
     #if name in ST.function:
     #    error("Error: function with same name and same number of arguments already defined.")
     #else:
@@ -446,12 +447,15 @@ def p_access_modifier(p):
 def p_path(p):
     '''path :   id
             |   R_THIS
-            |   id DOT path
+            |   path DOT id
             |   R_SUPER DOT path
             '''
     ST.printSymbolTable(ST,1)
     if(p.slice[1].type == 'id'):
-        p[0] = ST.getId(p[1])
+        if p[1] not in ST.function:
+            p[0] = ST.getId(p[1])
+        else:
+            p[0]=ST.getFunc(p[1])
     printp(p)
 
 #def path_0(p):
@@ -877,6 +881,8 @@ def p_exprs_1(p):
         p[0]=[p[1]]
     elif(len(p)==4):
         p[0]=p[1]+[p[3]]
+    else:
+        p[0]=[]
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
