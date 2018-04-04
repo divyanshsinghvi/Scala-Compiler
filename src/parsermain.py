@@ -3,7 +3,9 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import SymbolTable
 ST=SymbolTable()
+ST.newScope()
 ST.addFunc('println')
+ST.endScope()
 x=1
 def newLabel():
     global x
@@ -45,6 +47,7 @@ def evalArray(temp):
     if temp['type'] == 'Array':
         t1 = ST.getTemp()
         #print "I am here"
+        print "YOYOYOY", temp
         emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
         r = {
                 'place' : t1,
@@ -52,6 +55,27 @@ def evalArray(temp):
                 }
         return r
     return temp
+
+def makeIndex(size,place):
+    t=ST.getTemp()
+    t1=ST.getTemp()
+    old=0
+    old1=0
+    for i in range(0,len(place)-1):
+        for j in range(i+1,len(size)):
+            if(j==i+1 and len(size)>1):
+                t=ST.getTemp()
+                emit("*",t,place[i]['place'],size[j])
+                old=t
+            elif(len(size)>1):
+                t = ST.getTemp()
+                emit("*",t,old,size[j])
+                old=t
+        t1=ST.getTemp()
+        emit("+",t1,old1,t)
+        old1=t1
+    emit("+",t1,old1,place[len(place)-1]["place"])
+    return t1
 
 def printp(p):
 #    for i in range(0,len(p)):
@@ -214,11 +238,16 @@ def p_var_def(p):
     '''
     ST.addVar(p[1],p[1],p[3]['type']) 
     #if('isArray' in p[5].keys() and p[5]['isArray']):
+    print "P5", p[5]
     if type(p[5]) == type({}) and 'isArray' in p[5] and p[5]['isArray']:
+        print "I CAME HERE", p[5]
         ST.addAttribute(p[1],'type','Array')  
         ST.addAttribute(p[1],'typeArray',p[3]['type'])
         ST.addAttribute(p[1],'size',p[3]['size'])
-        emit('array',p[1],p[3]['size'])
+        size=1
+        for x in p[3]["size"]:
+            size*=x
+        emit('array',p[1],size)
         i = 0 
         for d in p[5]['values']:
             emit('star',p[1],i,d['place'])
@@ -234,14 +263,17 @@ def p_array_size(p):
     ''' array_size : LPARAN ints RPARAN                           
     '''
     p[0] = dict()
+    print "SIZE OF ARRAY",p[2]
     p[0]['size'] = p[2] 
     #printp(p)
 def p_ints(p):
     ''' ints : INT
-             | COMMA ints
+             | INT COMMA ints
     '''
     if(len(p)==2):
-        p[0] = p[1]
+        p[0] = [p[1]]
+    else:
+        p[0]=[p[1]]+p[3]
     # Array[Char](10,3,4)
 
 def p_val_def(p):
@@ -254,9 +286,11 @@ def p_val_var_init(p):
                 | infix_expr
     '''
     p[0]={}
+    print "type", p.slice[1].type
     if p.slice[1].type == 'infix_expr':
         p[0]=p[1]
     else:
+        "YES I'M HERE"
         p[0]['values'] = p[1]
         p[0]['isArray'] = True
 
@@ -324,6 +358,7 @@ def p_fun_sig(p):           # function is named id@no.of args
     arg = len(p[2])
     name = p[1]+"@"+str(arg)
     p[0][1]=name
+    ST.function.append(p[1])
     #if name in ST.function:
     #    error("Error: function with same name and same number of arguments already defined.")
     #else:
@@ -444,11 +479,15 @@ def p_access_modifier(p):
 def p_path(p):
     '''path :   id
             |   R_THIS
-            |   id DOT path
+            |   path DOT id
             |   R_SUPER DOT path
             '''
+    ST.printSymbolTable(ST,1)
     if(p.slice[1].type == 'id'):
-        p[0] = ST.getId(p[1])
+        if p[1] not in ST.function:
+            p[0] = ST.getId(p[1])
+        else:
+            p[0]=ST.getFunc(p[1])
     printp(p)
 
 #def path_0(p):
@@ -520,7 +559,16 @@ def p_simple_expr1(p):
         p[0]['arrAccess'] = True
         p[0]['type'] = ST.getAttribute(p[0]['idVal'],'type')
         p[0]['place'] = p[1]
-        p[0]['index'] = p[3]['place']
+        print "THIS IS P!",p[1]
+        print ST.SymbolTable
+        size=ST.getId(p[1])['size'] #a,b,c size
+        place=p[3]          # i,j,k access index
+        print place
+        print size
+        temp=makeIndex(size,place)
+        p[0]['index'] = temp
+        print p[0]
+        #p[0]['index'] = p[3]['place']
     elif p.slice[1].type =='LPARAN':
         p[0] = p[2]
     elif p.slice[2].type == 'argument_exprs':
@@ -629,7 +677,7 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd
+    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd f_mark4
     '''
     p[0] = p[6]
     #Check Scope
@@ -752,27 +800,35 @@ def p_f_mark1(p):
     l1 = newLabel()
     l2 = newLabel()
     l3 = newLabel()
+    l4 = newLabel()
     ST.stackbegin.append(l1)
-    ST.stackend.append(l3)
+    ST.stackend.append(l4)
     emit(op='label',out=l1) #emit label 1 
-    p[0]=[l1,l2,l3]
+    p[0]=[l1,l2,l3,l4]
     
 def p_f_mark2(p):
     ''' f_mark2 : epsilon
     '''
-    emit(op='if',in1=p[-1]['place'],out=p[-2][1]) #if true goto l2 
-    emit(op='goto',out=p[-2][2]) #goto exit l3
+    emit(op='if',in1=p[-1]['place'],out=p[-2][2]) #if true goto l2 
+    emit(op='goto',out=p[-2][3]) #goto exit l3
     emit(op='label',out=p[-2][1],) # emit label l2
-    p[0] = [p[-2][0],p[-2][1],p[-2][2]]
+    p[0] = [p[-2][0],p[-2][1],p[-2][2],p[-2][3]]
 
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
     '''
-    emit(op='goto',out=p[-3][0]) #goto l1
-    emit(op='label',out=p[-3][2]) #exit label
+    emit(op='goto',out=p[-3][1]) #goto l2
+    emit(op='label',out=p[-3][3]) #exit label
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
+
+def p_f_mark4(p):
+    '''f_mark4 : epsilon
+    '''
+    emit('goto',p[-5][0])
+    emit('label',p[-5][2])
+
 
 def p_WhMark1(p):
     '''WhMark1 : '''
@@ -866,6 +922,8 @@ def p_exprs_1(p):
         p[0]=[p[1]]
     elif(len(p)==4):
         p[0]=p[1]+[p[3]]
+    else:
+        p[0]=[]
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
@@ -899,6 +957,7 @@ def p_assign(p):
             'type': 'Not defined'
             }
     if p[2] == '=':
+        print "HERE I AM O LORD",p[1]
         p[3]=evalArray(p[3])
         if p[1]['type'] == 'Array' :
             emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
@@ -1124,13 +1183,28 @@ def p_access(p):
                | access COMMA ID
                | access  COMMA INT
     '''
-    if len(p) == 2:
-        p[0] = {
-                'place' : p[1]
-                }
-    if p.slice[1].type == 'INT':
-        p[0]['type'] = 'INT'
-    #printp(p)
+    if len(p) == 2 and p.slice[1].type =="INT":
+        p[0] = [{
+            'place' : p[1],
+            'type' : "INT"
+            }]
+    elif len(p)==2 and p.slice[1].type =="ID":
+        p[0] = [{
+            'place' : p[1],
+            'type' : "INT"
+            }]
+    elif p.slice[3].type=="INT":
+        p[0]=p[1]+[{
+            'place' : p[3],
+            'type' : "INT"
+            }]
+    elif p.slice[3].type=="ID":
+        p[0]=p[1]+[{
+            'place':p[3],
+            'type':"ID"
+            }]
+
+    print "JJJJJJJJJJJ",p[0]
 
 def p_literal(p):
     ''' literal : BOOL
@@ -1166,4 +1240,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
-#print ST.printSymbolTable(ST,1)
+print ST.printSymbolTable(ST,1)
