@@ -343,7 +343,10 @@ def p_FunMark1(p):
     if p[-2][1] in ST.SymbolTable[ST.currScope]["function"].keys():
         error("Error: function with same name and same number of arguments already defined.")
     else:
-        ST.addFunc(p[-2][1])
+        if(len(p[-2])>2):
+            ST.addFunc(p[-2][1],p[-2][2:])
+        else:
+            ST.addFunc(p[-2][1])
         ST.setRType(p[-1])
 
 def p_FunMark2(p):
@@ -591,14 +594,26 @@ def p_simple_expr1(p):
                     'place': temp
                     }
         else:
+            temp=ST.getTemp()
+            print("=,"+temp+","+str(len(p[2])))
+            l=[]
+            for i in p[2]:
+                if(is_number(i['place'])):
+                    temp=ST.getTemp()
+                    print("=,"+temp+","+str(i['place']))
+                    l.append(temp)
+                else:
+                    l.append(i['place'])
+            for i in reversed(l):
+                emit("par",None,i)
             name=p[1]["place"]+"@"+str(len(p[2]))
             rtype = ST.getRType(name)
             if(rtype!="void"):
-                temp = ST.getTemp()
-                p[0]["place"]=temp
-                emit("fcall",temp,p[1]["place"],len(p[2]))
+                temp1 = ST.getTemp()
+                p[0]["place"]=temp1
+                emit("fcall",temp1,p[1]["place"],temp)
             else:
-                emit('call',None,p[1]['place'],len(p[2]))
+                emit('call',None,p[1]['place'],temp)
     printp(p)
 
 def p_prefix_expr(p):
@@ -1247,4 +1262,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
-#print ST.printSymbolTable(ST,1)
+print ST.printSymbolTable(ST,1)

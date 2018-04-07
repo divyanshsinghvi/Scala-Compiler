@@ -61,7 +61,7 @@ class SymbolTable:
         else:
             return scope
 
-    def addFunc(self, fun):
+    def addFunc(self, fun, args=None):
         self.SymbolTable[fun] = {
                 "name" : fun,
                 "type" : "function",
@@ -70,8 +70,8 @@ class SymbolTable:
                 "function" : {},
                 "rType" : "undefined",
                 "parent" : self.currScope,
-                "arguments" : [],
-                "place" : fun.split("@")[0]
+                "arguments" : args,
+                "place" : (fun).split("@")[0]
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun
