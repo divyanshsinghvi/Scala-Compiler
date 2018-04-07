@@ -11,6 +11,24 @@ def newLabel():
     global x
     x=x+1
     return "label"+str(x)
+
+def is_number(var):
+    try:
+        int(var)
+        return True
+    except Exception:
+        return False
+
+def check(var):
+    if is_number(var):
+        t = ST.getTemp()
+        l=['=',t,var]
+        myList = ','.join(map(str, l)) 
+        print myList
+        return t
+    else:
+        return var
+
 def emit(op=None,out=None,in1=None,in2=None):
     CRED = '\033[91m'
     CEND = '\033[0m'
@@ -21,9 +39,11 @@ def emit(op=None,out=None,in1=None,in2=None):
     if out != None:
         l += [out]
     if in1 != None:
-        l += [in1]
+        t=check(in1)
+        l += [t]
     if in2 != None:
-        l += [in2]
+        t=check(in2)
+        l += [t]
     myList = ','.join(map(str, l)) 
     print myList
     #print(""+CEND)
