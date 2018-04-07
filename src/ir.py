@@ -5,8 +5,8 @@ MINUS='-'
 TIMES='*'
 DIV='/'
 MOD='%'
-AND='&&'
-OR ='||'
+AND='&&' #tobehandled
+OR ='||' #tobehandled
 LT='<'
 LE='<='
 EQ='=='
@@ -30,12 +30,12 @@ op['star']=['star']
 op['label']=['label']
 op['flabel']=['flabel']
 op['array']=['array']
-op['bitwise']=['&', '|', '^']
+op['bitwise']=['&', '|', '^'] #tobehandled
 op['printInt']=['printInt']
 op['scanInt']=['scanInt']
-class ir:
-    
 
+
+class ir:
     def __init__(self, rowList):
         self.out=None
         self.in1=None

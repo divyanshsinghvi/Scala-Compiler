@@ -1,6 +1,7 @@
 ## given the input as block, symbol table and offset of block updates global instructionCode in globalvar with nexuse and live information.
 import ir
-from symbolTable import SymbolTable
+from symbolTableOld import SymbolTable
+import copy
 
 def is_number(var):
     try:
@@ -17,8 +18,8 @@ class NextUse:
         prev=None
         for row in reversed(block):
             if prev is not None:
-                row.nextUse = prev.nextUse;
-                row.live = prev.live
+                row.nextUse = copy.deepcopy(prev.nextUse)
+                row.live = copy.deepcopy(prev.live)
 
             if row.operator == 'binop': 
                 row.live[row.out]=table.getVar(row.out,'live')
@@ -42,11 +43,9 @@ class NextUse:
                 table.setVar(row.out,{'live':None,'nextUse':None})
                 table.setVar(row.in1,{'live':1,'nextUse':number})
             elif row.operator == 'assign':
-		
-                row.live[row.out]=table.getVar(row.out,'live')
+	        row.live[row.out]=table.getVar(row.out,'live')
             	row.nextUse[row.out] = table.getVar(row.out,'nextUse') 
-                
-		if not is_number(row.in1):
+                if not is_number(row.in1):
 		    row.nextUse[row.in1] = table.getVar(row.in1,'nextUse') 
                     row.live[row.in1]=table.getVar(row.in1,'live')
                     table.setVar(row.in1,{'live':1,'nextUse':number})
@@ -58,9 +57,13 @@ class NextUse:
     
         for name in table.var:    #global assumed
             table.var[name]['nextUse']=None
-            table.var[name]['live']=1
+            if name .startswith("#t"):
+                table.var[name]['live']=0
+            else:
+                table.var[name]['live']=1
+            
 
 if __name__ == "__main__":
     t = ir.irTable('3ac.csv').arr
-    NextUse(t)
+    #NextUse(t,)
     
