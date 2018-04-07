@@ -12,8 +12,6 @@ tacBB = ir.irTable(filename)
 tacTable = tacBB.arr
 basicBlock=tacBB.leadList
 
-from table import symbolTable
-ST = symbolTable
 
 #from symbolTable import *
 #ST = HashTable
@@ -21,7 +19,12 @@ ST = symbolTable
 
 addressDescr = {}
 
+#from table import suppTable
+#ST = suppTable
+
 #print dir(ST)
-for name in ST.var:
-    addressDescr[name]={'Register':None, 'Stack':None, 'Memory': name}
+#for name in ST.var:
+#    addressDescr[name]={'Register':None, 'Stack':None, 'Memory': name}
 #    print name
+
+

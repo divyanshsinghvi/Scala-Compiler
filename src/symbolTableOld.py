@@ -22,14 +22,14 @@ class SymbolTable:
 
     def print_symboltable(self):
         
-        print("----------------------------------------")
         if not self.var:
             return 
         for name in self.var:
-            print(name)
+            print name,
             #print("Attribute for variable :")
             for key in self.var[name]:
-                print(key+"="+str(self.var[name][key]))
+                print key+"="+str(self.var[name][key]), 
+            print "\n"
         print("----------------------------------------")
     
 
