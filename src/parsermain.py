@@ -1262,4 +1262,4 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
-print ST.printSymbolTable(ST,1)
+#print ST.printSymbolTable(ST,1)
