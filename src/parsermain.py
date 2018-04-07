@@ -666,9 +666,9 @@ def p_catch_clause_1(p):
     printp(p)
 
 def p_for_logic(p):
-    ''' for_logic : LPARAN for_init semi f_mark1 infix_expr f_mark2 semi for_upd f_mark4
+    ''' for_logic : LPARAN f_scope_mark for_init semi f_mark1 infix_expr f_mark2 semi for_upd f_mark4
     '''
-    p[0] = p[6]
+    p[0] = p[7]
     #Check Scope
     printp(p)
 
@@ -742,11 +742,11 @@ def p_switch_block_statements_0(p):
 
 
 def p_expr(p):
-    ''' expr : R_IF LPARAN postfix_expr  RPARAN if_mark1 BLOCKBEGIN block BLOCKEND expression1
+    ''' expr : R_IF LPARAN postfix_expr  RPARAN BLOCKBEGIN if_mark1 block BLOCKEND expression1
               | R_WHILE LPARAN WhMark1 postfix_expr RPARAN WhMark2 BLOCKBEGIN block WhMark3  BLOCKEND
               | R_TRY BLOCKBEGIN block BLOCKEND catch_clause_1 expression2
               | R_DO BLOCKBEGIN block BLOCKEND R_WHILE LPARAN postfix_expr RPARAN
-              | R_FOR f_scope_mark for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
+              | R_FOR for_logic  BLOCKBEGIN block f_mark3 BLOCKEND
               | R_RETURN postfix_expr
               | R_RETURN
               | R_BREAK
@@ -858,7 +858,7 @@ def p_if_mark1(p):
     p[0]={}
     l1 = newLabel()
     l2 = newLabel()
-    emit('if',l1,p[-2]['place'])
+    emit('if',l1,p[-3]['place'])
     emit('goto',l2)
     emit('label',l1)
     ST.newScope()
@@ -868,7 +868,7 @@ def p_if_mark2(p):
     '''if_mark2 : epsilon
     '''
     ST.endScope()
-    emit('label',p[-4]['label'][1])
+    emit('label',p[-3]['label'][1])
 
 def p_if_mark3(p):
     '''if_mark3 : epsilon
@@ -876,7 +876,7 @@ def p_if_mark3(p):
     p[0]={}
     l3 = newLabel()
     emit('goto',l3)
-    emit('label',p[-5]['label'][1])
+    emit('label',p[-4]['label'][1])
     p[0]['label']=[l3]
 
 def p_if_mark4(p):
