@@ -99,9 +99,9 @@ def makeIndex(size,place):
     return t1
 
 def printp(p):
-#    for i in range(0,len(p)):
-#        print (p.slice)[i],
-#    print "\n",
+    #for i in range(0,len(p)):
+    #    print (p.slice)[i],
+    #print "\n",
     a=2
 
 def p_compilation_unit(p):
@@ -276,14 +276,14 @@ def p_var_def(p):
 	emit('=',in1=p[5]['place'],out=p[1])
 
 
-    #printp(p)
+    printp(p)
 
 def p_array_size(p):
     ''' array_size : LPARAN ints RPARAN                           
     '''
     p[0] = dict()
     p[0]['size'] = p[2] 
-    #printp(p)
+    printp(p)
 def p_ints(p):
     ''' ints : INT
              | INT COMMA ints
@@ -293,7 +293,7 @@ def p_ints(p):
     else:
         p[0]=[p[1]]+p[3]
     # Array[Char](10,3,4)
-
+    printp(p)
 def p_val_def(p):
     ''' val_def : id COLON type EQUALASGN val_var_init
     '''
@@ -310,7 +310,7 @@ def p_val_var_init(p):
         p[0]['values'] = p[1]
         p[0]['isArray'] = True
 
-    #printp(p)
+    printp(p)
 
 def p_array_init(p):
     ''' array_init : BLOCKBEGIN epsilon BLOCKEND
@@ -336,7 +336,7 @@ def p_array_init_0(p):
 def p_fun_def(p):
     ''' fun_def : fun_sig col_type_1 FunMark1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark2
     '''
-    #printp(p)
+    printp(p)
     
 
 def p_FunMark1(p):
@@ -350,7 +350,7 @@ def p_FunMark1(p):
         else:
             ST.addFunc(p[-2][1])
         ST.setRType(p[-1])
-
+    printp(p)
 def p_FunMark2(p):
     ''' FunMark2 : epsilon
     '''
@@ -359,7 +359,7 @@ def p_FunMark2(p):
     #    ST.function[p[-6][1]]["return"]=False
     #if(p[-6][1]!="main@0"):
     #    emit("freturn")
-
+    printp(p)
 def p_col_type_1(p) :
     ''' col_type_1 : COLON type
                     | epsilon
@@ -368,7 +368,7 @@ def p_col_type_1(p) :
         p[0]="void"
     else:
         p[0]=p[2]
-    #printp(p)
+    printp(p)
 
 def p_fun_sig(p):           # function is named id@no.of args
     ''' fun_sig : id param_clause  
@@ -387,7 +387,7 @@ def p_fun_sig(p):           # function is named id@no.of args
     #            "return":True
     #        }
     emit("flabel",p[1])
-    #printp(p)
+    printp(p)
 
 def p_param_clause(p):
     ''' param_clause : LPARAN  RPARAN
@@ -397,7 +397,7 @@ def p_param_clause(p):
         p[0]=[]
     else:
         p[0]=p[2]
-    #printp(p)
+    printp(p)
 
 def p_params(p):
     ''' params : param
@@ -411,7 +411,7 @@ def p_params(p):
         l = []
         l = l + [p[3]["place"]] + [p[3]["type"]]
         p[0]=p[1] + [l]
-    #printp(p)
+    printp(p)
 
 def p_param(p):
     ''' param : id COLON param_type eq_expr 
@@ -428,7 +428,7 @@ def p_param(p):
                 "type" : p[4]["type"],
                 "place" : p[2]
             }
-    #printp(p)
+    printp(p)
 
 def p_eq_expr(p):
     ''' eq_expr : epsilon
@@ -439,7 +439,7 @@ def p_param_type(p):
     ''' param_type : type
     '''
     p[0]=p[1]
-    #printp(p)
+    printp(p)
 
 def p_dcl(p):
     '''dcl  :   R_VAL val_dcl
@@ -449,8 +449,6 @@ def p_dcl(p):
 
 def p_val_dcl(p):
     '''val_dcl   :   id COLON type val_dcl_0'''
-    #printp(p)
-
     printp(p)
 def p_val_dcl_0(p):
     '''val_dcl_0    :   epsilon
@@ -462,7 +460,7 @@ def p_var_dcl(p):
     '''
     ST.addVar(p[1],p[1],p[3]['type'])
 
-    #printp(p)
+    printp(p)
 
 #def p_var_dcl_0(p):
 #    '''var_dcl_0    :   epsilon
@@ -518,7 +516,7 @@ def p_block_stat(p):
                     |   dcl
                     |   local_modifier_0 tmpl_def
                     |   expr'''
-    #printp(p)
+    printp(p)
                     
 def p_block(p):
     '''block    :   epsilon
@@ -621,9 +619,9 @@ def p_simple_expr1(p):
 
 def p_prefix_expr(p):
     '''prefix_expr  :   simple_expr
-                    |   OP_SUB simple_expr
-                    |   OP_ADD simple_expr
-                    |   OP_NOT simple_expr'''
+                    |   OP_SUB infix_expr
+                    |   OP_ADD infix_expr
+                    |   OP_NOT infix_expr'''
     if len(p) ==2 :
         p[0]=p[1]
     else:
@@ -637,7 +635,7 @@ def p_prefix_expr(p):
             p[0]['place']=temp
             p[0]['idVal']=temp
         else:
-             temp=ST.getTemp()
+            temp=ST.getTemp()
             emit("!",temp,p[2]['place'])
             p[0]={}
             p[0]['type']=p[2]['type']
@@ -661,6 +659,7 @@ def p_type(p):                      # look at <T>
         p[0] = {
                 'type' : p[1].upper()
                 }
+    printp(p)
 def p_array_type(p):
     ''' array_type : TYPE_ARRAY LSQRB type RSQRB array_size
     '''
@@ -671,7 +670,7 @@ def p_array_type(p):
             'isarray' :  True,
             'size' : p[5]['size']    
             }
-    #printp(p)
+    printp(p)
 
 #def p_simple_type(p):
 #    ''' simple_type : type
@@ -698,6 +697,7 @@ def p_qual_id(p):
                 'idVal' : p[1]['idVal']+"." +p[3]
                 }
 
+    printp(p)
 
 def p_object_def(p):
     ''' object_def : id class_template_opt
@@ -740,6 +740,7 @@ def p_for_inits(p):
                  | for_init
 
     '''
+    printp(p)
 
 def p_for_upd(p):           # to be done later, the for case
     ''' for_upd : RPARAN
@@ -783,6 +784,7 @@ def p_switch_block(p):
         emit('if',d['label'],temp)
     emit('label',p[2]['label'][1])
     ST.endScope()
+    printp(p)
 
 def p_switch_block_statements_0(p):
     ''' switch_block_statements_0 : switch_block_statements
@@ -832,11 +834,13 @@ def p_s_mark1(p):
     p[0] = {   'label' : [test,exit], 
                 'idVal' :    p[-3]
                 }
-     
+    printp(p)
+
 def p_f_scope_mark(p):
     '''f_scope_mark : epsilon
     '''
     ST.newScope()
+    printp(p)
 
 def p_f_mark1(p):
     ''' f_mark1 : epsilon
@@ -850,6 +854,7 @@ def p_f_mark1(p):
     emit(op='label',out=l1) #emit label 1 
     p[0]=[l1,l2,l3,l4]
     
+    printp(p)
 def p_f_mark2(p):
     ''' f_mark2 : epsilon
     '''
@@ -857,6 +862,7 @@ def p_f_mark2(p):
     emit(op='goto',out=p[-2][3]) #goto exit l3
     emit(op='label',out=p[-2][1],) # emit label l2
     p[0] = [p[-2][0],p[-2][1],p[-2][2],p[-2][3]]
+    printp(p)
 
 def p_f_mark3(p):
     ''' f_mark3 : epsilon
@@ -866,12 +872,14 @@ def p_f_mark3(p):
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
+    printp(p)
 
 def p_f_mark4(p):
     '''f_mark4 : epsilon
     '''
     emit('goto',p[-5][0])
     emit('label',p[-5][2])
+    printp(p)
 
 
 def p_WhMark1(p):
@@ -884,12 +892,14 @@ def p_WhMark1(p):
     ST.newScope()
     emit(op='label',out=l1) #emit label 1 
     p[0]=[l1,l2,l3]
+    printp(p)
 
 def p_WhMark2(p):
     '''WhMark2 : '''
     emit(op='if',in1=p[-2]['place'],out=p[-3][1]) #if true goto l2 
     emit(op='goto',out=p[-3][2]) #goto exit l3
     emit(op='label',out=p[-3][1],) # emit label l2
+    printp(p)
 
 def p_WhMark3(p):
     '''WhMark3 : '''
@@ -898,6 +908,7 @@ def p_WhMark3(p):
     ST.endScope()
     ST.stackbegin.pop()
     ST.stackend.pop()
+    printp(p)
 
 
 def p_expression1(p):
@@ -918,12 +929,14 @@ def p_if_mark1(p):
     emit('label',l1)
     ST.newScope()
     p[0]['label']=[l1,l2]
+    printp(p)
 
 def p_if_mark2(p):
     '''if_mark2 : epsilon
     '''
     ST.endScope()
     emit('label',p[-3]['label'][1])
+    printp(p)
 
 def p_if_mark3(p):
     '''if_mark3 : epsilon
@@ -933,12 +946,14 @@ def p_if_mark3(p):
     emit('goto',l3)
     emit('label',p[-4]['label'][1])
     p[0]['label']=[l3]
+    printp(p)
 
 def p_if_mark4(p):
     '''if_mark4 : epsilon
     '''
     ST.endScope()
     emit('label',p[-4]['label'][0])
+    printp(p)
 
 
 
@@ -955,6 +970,7 @@ def p_argument_exprs(p):
     '''
     p[0] = p[2]
     #printp(p)
+    printp(p)
 
 
 def p_exprs_1(p):
@@ -968,6 +984,7 @@ def p_exprs_1(p):
         p[0]=p[1]+[p[3]]
     else:
         p[0]=[]
+    printp(p)
 
 def p_postfix_expr(p):
     ''' postfix_expr : infix_expr id_1
@@ -1036,6 +1053,7 @@ def p_or_expression(p):
         p[3]=evalArray(p[3])
         p[1]=evalArray(p[1])
         emit(op='||',out=temp,in1=p[1]['place'],in2=p[3]['place'])
+    printp(p)
 
 def p_and_expression(p):
     ''' and_expression : bit_or_expression 
@@ -1077,6 +1095,7 @@ def p_bit_and_expression(p):
     if len(p)==2:
         p[0] = p[1]
     #printp(p)
+    printp(p)
 
 def p_eq_expression(p):
     '''eq_expression : comp_expression
@@ -1095,6 +1114,7 @@ def p_eq_expression(p):
         p[1]=evalArray(p[1])
         emit(op=p[2],out=temp,in1=p[1]['place'],in2=p[3]['place'])
     #printp(p)
+    printp(p)
 
 
 def p_comp_expression(p):
@@ -1181,6 +1201,7 @@ def p_unary_expression(p):
     else:
         p[0] = p[2]
 #    printp(p)
+    printp(p)
 
 
 def p_asgn(p):
@@ -1213,6 +1234,7 @@ def p_basic_type(p):
             'type' : p[1].upper()
             }
     #printp(p)
+    printp(p)
 
 def p_id(p):
     ''' id : ID
@@ -1248,6 +1270,7 @@ def p_access(p):
             'place':p[3],
             'type':"ID"
             }]
+    printp(p)
 
 
 def p_literal(p):
@@ -1264,6 +1287,7 @@ def p_literal(p):
                 }
 
     #printp(p)
+    printp(p)
 
 def p_epsilon(p):
     ''' epsilon :

@@ -1,17 +1,22 @@
-/* source : tutorailspoint.com*/                                                        
-  
-object Demo {
-   def main(args: Array[String](1))= {
-      println( "Returned Value : " );
-      var a:Int = readint(2);
-      addInt();
-   };
-   
-   def addInt( a:Int) : Int = {
-      var sum:Int = 0;
-      sum = a + b;
-
-      return sum;
-   };
+object demo{
+def main(args: Array[Strings](2))={
+    var i: Int =1;
+    var j: Int = 2;
+    var d: Int =2;
+    for (i= 0;i<= j; i=i+d){
+	println(i);
+        if (i>=j){
+		var a:Int =3;
+		var b:Int =2;
+		a+= b;
+            println(a);
+        }
+        else{
+		d  += i;
+            println(d);
+        };
+    };
+    return j;
 };
-
+};
+//0 2 2 5

@@ -1,11 +1,9 @@
-To run the parser use the following commands : 
-1) cd asgn3
+To run the irgen use the following commands : 
+1) cd asgn4
 2) make
-3) bin/parser test/test1.scala (to execute the first test-case file test1.c)
-4) firefox output.html
-If the 3rd command gives an error of list index out of range it means that the given code is wrong and the testcase is not parseable
-To check the error run the following command 
-
-python bin/parsermain.py test/test1.scala
-
-The output will be on terminal
+3) bin/irgen test/test1.scala (to execute the first test-case file test1.c)
+4) To check if the code is running (parts done in assignment2) do the following:
+    a) bin/irgen test/test1.scala > 3ac.csv
+    b) python src/registerAlloc.py ../3ac.csv > test.s
+    c) gcc -m32 test.s
+    d) ./a.out

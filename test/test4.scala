@@ -1,24 +1,19 @@
-/* source : tutorailspoint.com*/                                                        
 
-import java; //Example of class 
 
-class Point(val xc: Int, val yc: Int) {
-   var x: Int = xc;
-   var y: Int = yc;
-   
-   def move(dx: Int, dy: Int)={
-      x = x + dx;
-      y = y + dy;
-      println ("Point x location : " + x);
-      println ("Point y location : " + y);
-   };
+object Demo{
+def foo():Int ={
+    var a: Int = 1;
+	println(a);
+return 3;
+println(10000);
 };
-
-object Demo {
-   def main(args: Array[String])={
-      val pt:Point = new Point(10,20);
-
-      // Move to a new location
-      pt.move(10, 10);
-   };
+def main(args: Array[String](0))={
+    var a: Int;
+    var b: Int;
+    var c: Int =foo();
+	println(20000);
+	println(c);
+    return 0;
 };
+};
+// 1 20000 3

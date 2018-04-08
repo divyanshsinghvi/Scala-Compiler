@@ -1,14 +1,15 @@
 .DEFAULT_GOAL := parser
 .PHONY: parser codegen clean
 parser:
+	mkdir -p bin
 	cp src/lexer.py bin/lexer.py
 	cp src/lex.py bin/lex.py
 	cp src/yacc.py bin/yacc.py
 	cp src/tokens.py bin/tokens.py
 	cp src/regex.py bin/regex.py
 	cp src/parsermain.py bin/parsermain.py
-	cp src/parser.sh bin/parser
-	chmod +x bin/parser
+	cp src/parser.sh bin/irgen
+	chmod +x bin/irgen
 	chmod -R 777 bin/
 
 

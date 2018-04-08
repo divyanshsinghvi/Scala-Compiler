@@ -1,13 +1,18 @@
-object HelloWorld {
-   def main(args: Array[String](1))={
-  var b_ghj:Array[Int](200) ={4,5};
-    var a:Int;
-     a = b_ghj[2];
-     b_ghj[3] = a;
-     // var b:Int = 3+4; 
-    // var a:Int = readInt();
-   //if(a < 4){
-//	a = a+1;
-//	};
- };
+object demo{
+def main(args: Array[Strings](2))={
+    var i: Int =1;
+    var j: Int = 2;
+    var d: Int;
+    readInt(d);
+    println(d);
+    for (i= 0;i<= 3; i=i+d){
+	println(i);
+	for (j=0;j<10;j+=d){
+	continue;	
+	println(100);
+	
+};
+		
+};
+};
 };

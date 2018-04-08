@@ -1,27 +1,21 @@
-// all data types supported in our grammar
-/* source : tutorailspoint.com*/                                                        
 
-object HelloWorld {
-def main(args: Array[String])= {
+object demo{
+def main(args: Array[String](3))={
+	
+	var i:Int;
+	var j:Int;
+	var k:Int;
+	var res:Int;
+	for(res = 0,i=0; i < 10; i=i+1){
+		for(j = 0; j < 10; j=j+1){
+			for(k = 0; k < 10; k=k+1){
+				res += 1;
+				println(res);
+				break;
+			};
+		};
+	};
 
-var a :Int=0;
-var b :Int=035;
-var c :Int=21; 
-var d :Int=0xFFFFFFFF; 
-var e :Int=777L;
-
-var f :Float=0.0; 
-var g :Float=1e30f; 
-var h :Float=3.14159f; 
-var i :Float=1.0e100;
-var j :Float=.1;
-var k :Char='a'; 
-var l :Char='\u0041';
-val m :Char='	';
-
-var n :String="Hello compilers\n world";
-
-while( true ){
-println( "Value of a: " + a );};
- };
+	println(res);
+};
 };
