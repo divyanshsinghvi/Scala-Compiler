@@ -3,10 +3,12 @@ import ply.yacc as yacc
 import lexer
 from symbolTable import SymbolTable
 ST=SymbolTable()
-ST.newScope()
+#ST.newScope()
 ST.addFunc('println')
+ST.endFunc()
 ST.addFunc('readInt')
-ST.endScope()
+ST.endFunc()
+#ST.endScope()
 x=1
 def newLabel():
     global x
@@ -257,12 +259,10 @@ def p_var_def(p):
     ''' var_def : id COLON type EQUALASGN val_var_init
 
     '''
-    ST.addVar(p[1],p[1],p[3]['type']) 
     #if('isArray' in p[5].keys() and p[5]['isArray']):
     if type(p[5]) == type({}) and 'isArray' in p[5] and p[5]['isArray']:
-        ST.addAttribute(p[1],'type','Array')  
+        ST.addVar(p[1],p[1],'Array',p[3]['size'],p[3]['type'])
         ST.addAttribute(p[1],'typeArray',p[3]['type'])
-        ST.addAttribute(p[1],'size',p[3]['size'])
         size=1
         for x in p[3]["size"]:
             size*=x
@@ -273,6 +273,7 @@ def p_var_def(p):
             i+=1
        # emit('array',p[],'n')
     else:
+        ST.addVar(p[1],p[1],p[3]['type'])
 	emit('=',in1=p[5]['place'],out=p[1])
 
 

@@ -10,6 +10,7 @@ class SymbolTable:
                     "variables" : {},
                     "type" : "main",
                     "parent" : None,
+                    "offset" : 0
                     }
                 }
         self.currScope = "main"
@@ -33,13 +34,16 @@ class SymbolTable:
                 "variables" : {},
                 "type" : "scope",
                 "parent" : self.currScope,
+                "offset" : self.SymbolTable[self.currScope]['offset']
                 }
         self.currScope = scope
+        print "scope,"+scope
 
     def endScope(self):
         self.currScope = self.SymbolTable[self.currScope]["parent"]
+        print "scope,"+self.currScope
 
-    def addVar(self, idVal, place, idType, idSize = 4):
+    def addVar(self, idVal, place, idType, idSize = 4,typeArray=None):
         scope = self.getScope(idVal)
         if scope != self.currScope:
             #sc = str(self.currScope)+"_"+place
@@ -47,11 +51,40 @@ class SymbolTable:
             self.SymbolTable[self.currScope]["identifiers"][idVal] = {
                     "place" : sc,
                     "type" : idType,
-                    "size" : idSize
+                    "size" : idSize,
                     }
+            if idType == 'Array':
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['typeArray']=typeArray
+                size = self.getSize(idVal)
+                s = self.getWidth(typeArray)
+                self.SymbolTable[self.currScope]["offset"] += size*s
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
+            else:
+                self.SymbolTable[self.currScope]["offset"] += idSize
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
         else:
             sys.exit("Variable "+idVal+" is already initialised in this scope")
         #print(self.SymbolTable[self.currScope]["identifiers"])
+    
+    def getWidth(self,idType):
+        if idType == "INT":
+            return 4
+        elif idType == "FLOAT":
+            return 8
+        elif idType == "CHAR":
+            return 1
+        elif idType == "BOOL":
+            return 1
+
+    def getSize(self,idVal):
+        scope = self.getScope(idVal)
+        while self.SymbolTable[scope]['type'] not in ['main']:
+            if idVal in self.SymbolTable[scope]["identifiers"].keys():
+                if self.SymbolTable[scope]["identifiers"][idVal]['type'] == 'Array':
+                    import numpy
+                    return numpy.prod(self.SymbolTable[scope]["identifiers"][idVal]['size'])
+                else:
+                    return self.SymbolTable[scope]["identifiers"][idval]['size']
 
     def searchEntry(self, idVal):
         scope = self.getScope(idVal)
@@ -71,12 +104,14 @@ class SymbolTable:
                 "rType" : "undefined",
                 "parent" : self.currScope,
                 "arguments" : args,
-                "place" : (fun).split("@")[0]
+                "place" : (fun).split("@")[0],
+                "offset" : 0
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun
                 }
         self.currScope = fun
+        print "scope,"+fun
     
     def getFunc(self,name):
         scope = self.currScope
@@ -92,7 +127,8 @@ class SymbolTable:
 
     def endFunc(self):
         self.currScope = self.SymbolTable[self.currScope]["parent"]
-
+        print "scope,"+self.currScope
+    
     def getId(self,idVal):
         scope = self.getScope(idVal)
         if scope is not None:
@@ -125,6 +161,11 @@ class SymbolTable:
         else:
             #print("Fail")
             return False
+    
+    def getOffset(self,idVal):
+        scope = self.getScope(idVal)
+        return self.SymbolTable[scope]["identifiers"]['offset']
+
 
     def getScope(self, idVal):
         scope = self.currScope
