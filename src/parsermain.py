@@ -5,6 +5,7 @@ from symbolTable import SymbolTable
 ST=SymbolTable()
 ST.newScope()
 ST.addFunc('println')
+ST.addFunc('readInt')
 ST.endScope()
 x=1
 def newLabel():
@@ -19,8 +20,8 @@ def is_number(var):
     except Exception:
         return False
 
-def check(var):
-    if is_number(var):
+def check(var,op):
+    if is_number(var) and op!="=":
         t = ST.getTemp()
         l=['=',t,var]
         myList = ','.join(map(str, l)) 
@@ -37,12 +38,13 @@ def emit(op=None,out=None,in1=None,in2=None):
     if op != None:
         l += [op]
     if out != None:
-        l += [out]
+        t=check(out,op)
+        l += [t]
     if in1 != None:
-        t=check(in1)
+        t=check(in1,op)
         l += [t]
     if in2 != None:
-        t=check(in2)
+        t=check(in2,op)
         l += [t]
     myList = ','.join(map(str, l)) 
     print myList
@@ -586,13 +588,14 @@ def p_simple_expr1(p):
     elif p.slice[2].type == 'argument_exprs':
  #       x = p[1]['idVal'].split('.')
         if(p[1]['name'] == 'println'):
-            emit('printInt',p[2][0]['place'])
+            if(is_number(p[2][0]['place'])):
+                temp=ST.getTemp()
+                emit("=",temp,p[2][0]['place'])
+                emit('printInt',temp)
+            else:
+                emit('printInt',p[2][0]['place'])
         elif(p[1]['name'] == 'readInt'):
-            temp = ST.getTemp()
-            emit('scanInt',temp)
-            p[0] = {
-                    'place': temp
-                    }
+            emit('scanInt',p[2][0]['place'])
         else:
             temp=ST.getTemp()
             print("=,"+temp+","+str(len(p[2])))
@@ -623,6 +626,23 @@ def p_prefix_expr(p):
                     |   OP_NOT simple_expr'''
     if len(p) ==2 :
         p[0]=p[1]
+    else:
+        if p.slice[1].type == 'OP_ADD':
+            p[0]=p[2]
+        elif p.slice[1].type == 'OP_SUB':
+            temp=ST.getTemp()
+            emit("-",temp,0,p[2]['place'])
+            p[0]={}
+            p[0]['type']=p[2]['type']
+            p[0]['place']=temp
+            p[0]['idVal']=temp
+        else:
+             temp=ST.getTemp()
+            emit("!",temp,p[2]['place'])
+            p[0]={}
+            p[0]['type']=p[2]['type']
+            p[0]['place']=temp
+            p[0]['idVal']=temp
 
     printp(p)
 
@@ -972,8 +992,10 @@ def p_infix_expr(p):
     printp(p)
 
 def p_assign(p):
-    ''' assign : simple_expr1  asgn infix_expr
+    ''' assign : simple_expr1  asgn or_expression
     '''
+    if 'islit' in p[1].keys():
+        sys.exit("Type Error: Assignment to constant not defined.")
     temp = ST.getTemp()
     p[0] = {
             'place' : temp,
@@ -1237,7 +1259,8 @@ def p_literal(p):
     '''
     p[0] = {
             'type' : p.slice[1].type,
-            'place' : p[1]
+            'place' : p[1],
+            'islit' : True
                 }
 
     #printp(p)

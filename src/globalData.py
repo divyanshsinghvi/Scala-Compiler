@@ -1,5 +1,5 @@
 from globalvar import *
-from symbolTable import *
+from symbolTableOld import *
 def globalData():
     print("\t.data")
     for name in ST.var:

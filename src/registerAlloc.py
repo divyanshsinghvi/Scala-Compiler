@@ -2,7 +2,7 @@
 import ir
 from globalvar import *
 from globalData import *
-
+from table import Table
 #addressDescr = {}
 
 noOfReg = 6

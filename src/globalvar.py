@@ -19,12 +19,12 @@ basicBlock=tacBB.leadList
 
 addressDescr = {}
 
-#from table import suppTable
-#ST = suppTable
+from table import suppTable
+ST = suppTable
 
 #print dir(ST)
-#for name in ST.var:
-#    addressDescr[name]={'Register':None, 'Stack':None, 'Memory': name}
+for name in ST.var:
+    addressDescr[name]={'Register':None, 'Stack':None, 'Memory': name}
 #    print name
 
 

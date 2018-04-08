@@ -139,7 +139,7 @@ class SymbolTable:
 
     def getTemp(self):
         self.tNo += 1
-        newTemp = "#t"+str(self.tNo) 
+        newTemp = "t"+str(self.tNo) 
         return newTemp
 
     def newScopeName(self):
