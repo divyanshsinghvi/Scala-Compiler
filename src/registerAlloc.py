@@ -481,7 +481,9 @@ def generateCode(i):
         print('\tpushl %ebp')
         print('\tmovl %esp, %ebp')
         print('\tsubl $'+str(ST.printScopeOffset()+tempmax*4)+', %esp') 
-
+    elif tacTable[i].oper=='param':
+        endBlock()
+        print('\tpushl '+address(tacTable[i].in1))
 
 def endBlock():
     for variable in addressDescr:

@@ -53,7 +53,7 @@ def emit(op=None,out=None,in1=None,in2=None):
             t=check(in2,op)
             l += [t]
         else:
-            l+=in2
+            l += [in2]
     myList = ','.join(map(str, l)) 
     print myList
     #print(""+CEND)
@@ -422,10 +422,10 @@ def p_params(p):
     printp(p)
 
 def p_param(p):
-    ''' param : R_VAR var_def
-              | var_def
-              | var_dcl
-              | R_VAR var_dcl
+    ''' param : R_VAR id COLON type EQUALASGN val_var_init
+              | id COLON type EQUALASGN val_var_init
+              | id COLON type
+              | R_VAR id COLON type
     '''
     if(len(p)==2):
         p[0]=p[1]
@@ -601,8 +601,9 @@ def p_simple_expr1(p):
         elif(p[1]['name'] == 'readInt'):
             emit('scanInt',p[2][0]['place'])
         else:
-            temp=ST.getTemp()
-            print("=,"+temp+","+str(len(p[2])))
+            #temp=ST.getTemp()
+            #print("=,"+temp+","+str(len(p[2])))
+            #print "HUl"
             l=[]
             for i in p[2]:
                 if(is_number(i['place'])):
@@ -618,7 +619,7 @@ def p_simple_expr1(p):
             if(rtype!="void"):
                 temp1 = ST.getTemp()
                 p[0]["place"]=temp1
-                emit("fcall",temp1,p[1]["place"],temp)
+                emit("fcall",temp1,p[1]["place"],len(p[2]))
             else:
                 emit('call',None,p[1]['place'],temp)
     printp(p)

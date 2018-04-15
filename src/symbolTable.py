@@ -13,7 +13,7 @@ class SymbolTable:
                     "offset" : 0,
                     "temp"  : 0,
                     "tempmax" : 0,
-                    "varwidth" : 0
+                    "varwidth" : 0,
                     }
                 }
         self.currScope = "main"
@@ -40,7 +40,7 @@ class SymbolTable:
                 "offset" : self.SymbolTable[self.currScope]['offset'],
                 "temp" : 0,
                 "tempmax" : 0,
-                "varwidth" : 0
+                "varwidth" : 0,
                 }
         self.currScope = scope
         print "startscope,"+scope
@@ -118,7 +118,7 @@ class SymbolTable:
                 "offset" : 4,
                 "temp" : 0,
                 "tempmax" : 0,
-                "varwidth" : 0
+                "varwidth" : 0,
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun
