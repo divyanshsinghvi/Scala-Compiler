@@ -4,6 +4,7 @@ from globalvar import *
 from globalData import *
 from table import Table
 import pickle
+from globalOther import ST
 #from parsermain import ST
 #addressDescr = {}
 

@@ -1,9 +1,9 @@
 import sys
 import ply.yacc as yacc
 import lexer
-from globalvar import *
+#from globalvar import *
 import pickle
-#from symbolTable import SymbolTable
+from globalOther import ST
 #ST=SymbolTable()
 #global ST
 #ST.newScope()

@@ -12,8 +12,8 @@ global ST1
 tacBB = ir.irTable(filename)
 tacTable = tacBB.arr
 basicBlock=tacBB.leadList
-from symbolTable import SymbolTable
-ST = SymbolTable()
+#from symbolTable import SymbolTable
+#ST = SymbolTable()
 
 
 #from symbolTable import *
