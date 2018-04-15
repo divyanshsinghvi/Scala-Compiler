@@ -15,7 +15,7 @@ def main(args: Array[String](3))={
 			};
 		};
 	};
-
+return 0;
 	println(res);
 };
 };

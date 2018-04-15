@@ -9,5 +9,6 @@ object Doom{
         c=!(b+2);
         println(a);
         println(c);
+return 0;
 };
 };
