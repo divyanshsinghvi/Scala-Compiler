@@ -301,6 +301,7 @@ def p_ints(p):
 def p_val_def(p):
     ''' val_def : id COLON type EQUALASGN val_var_init
     '''
+    p[0]=p[5]
     printp(p)
 
 def p_val_var_init(p):
@@ -418,20 +419,15 @@ def p_params(p):
     printp(p)
 
 def p_param(p):
-    ''' param : id COLON param_type eq_expr 
-              | R_VAR id COLON param_type eq_expr
-              | R_VAL id COLON param_type eq_expr
+    ''' param : R_VAR var_def
+              | var_def
+              | var_dcl
+              | R_VAR var_dcl
     '''
-    if(len(p)==5):
-        p[0]={
-                "type" : p[3]["type"],
-                "place" : p[1]
-            }
+    if(len(p)==2):
+        p[0]=p[1]
     else:
-        p[0]={
-                "type" : p[4]["type"],
-                "place" : p[2]
-            }
+        p[0]=p[2]
     printp(p)
 
 def p_eq_expr(p):
@@ -463,7 +459,10 @@ def p_var_dcl(p):
     '''var_dcl  :   id COLON type
     '''
     ST.addVar(p[1],p[1],p[3]['type'])
-
+    print p[1]
+    p[0] = {}
+    p[0]['place'] = p[1]
+    p[0]['type']= p[3]['type']
     printp(p)
 
 #def p_var_dcl_0(p):
