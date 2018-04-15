@@ -422,10 +422,10 @@ def p_params(p):
     printp(p)
 
 def p_param(p):
-    ''' param : R_VAR id COLON type EQUALASGN val_var_init
-              | id COLON type EQUALASGN val_var_init
-              | id COLON type
-              | R_VAR id COLON type
+    ''' param : R_VAR var_def
+              | var_def
+              | var_dcl
+              | R_VAR var_dcl
     '''
     if(len(p)==2):
         p[0]=p[1]
