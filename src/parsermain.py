@@ -1,8 +1,11 @@
 import sys
 import ply.yacc as yacc
 import lexer
-from symbolTable import SymbolTable
-ST=SymbolTable()
+from globalvar import *
+import pickle
+#from symbolTable import SymbolTable
+#ST=SymbolTable()
+#global ST
 #ST.newScope()
 ST.addFunc('println')
 ST.endFunc()
@@ -1310,4 +1313,6 @@ code_full=code_full+'\n'
 f.close()
 
 parser.parse(code_full)
+pickle_out=open("ST.picle","wb")
+pickle.dump(ST,pickle_out)
 #print ST.printSymbolTable(ST,1)

@@ -33,8 +33,9 @@ op['array']=['array']
 op['bitwise']=['&', '|', '^'] #tobehandled
 op['printInt']=['printInt']
 op['scanInt']=['scanInt']
-
-
+op['startscope']=['startscope']
+op['scope']=['scope']
+op['fstartscope']=['fstartscope']
 class ir:
     def __init__(self, rowList):
         self.out=None
@@ -48,7 +49,7 @@ class ir:
             if rowList[0] in val:
                 self.operator = key;
                 break
-        #print(operator)        
+        #print(self.operator)        
         if self.operator == 'binop':
             self.out = rowList[1]
             self.in1 = rowList[2] 
@@ -99,6 +100,15 @@ class ir:
             #print rowList[1]
         elif self.operator == 'scanInt':
             self.out = rowList[1]
+        elif self.operator == 'startscope':
+#            print "saddddddddddddddddddddddddddddddddddd"+rowList[1]
+            self.out = rowList[1]
+        elif self.operator == 'scope':
+#            print rowList
+            self.out = rowList[1]
+        elif self.operator == 'fstartscope':
+#            print rowList
+            self.out = rowList[1]
 
 class irTable:
     def __init__(self, filename):
@@ -109,6 +119,7 @@ class irTable:
             for row in reader:
                 if row[0].startswith('#'):
                     continue
+                #print row
                 self.arr.append(ir(row))
         instrTable = self.arr # ir.irTable(filename).arr
         self.leadList.add(0)

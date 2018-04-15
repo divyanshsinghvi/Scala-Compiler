@@ -10,7 +10,10 @@ class SymbolTable:
                     "variables" : {},
                     "type" : "main",
                     "parent" : None,
-                    "offset" : 0
+                    "offset" : 0,
+                    "temp"  : 0,
+                    "tempmax" : 0,
+                    "varwidth" : 0
                     }
                 }
         self.currScope = "main"
@@ -20,7 +23,7 @@ class SymbolTable:
         self.stackbegin = []
         self.stackend = []
     
-    def printSymbolTable(self,S,b):
+    def printSymbolTable(self,S=None,b=None):
         for i in self.SymbolTable:
             print i
             print self.SymbolTable[i]
@@ -34,12 +37,18 @@ class SymbolTable:
                 "variables" : {},
                 "type" : "scope",
                 "parent" : self.currScope,
-                "offset" : self.SymbolTable[self.currScope]['offset']
+                "offset" : self.SymbolTable[self.currScope]['offset'],
+                "temp" : 0,
+                "tempmax" : 0,
+                "varwidth" : 0
                 }
         self.currScope = scope
-        print "scope,"+scope
+        print "startscope,"+scope
 
     def endScope(self):
+        parent = self.SymbolTable[self.currScope]["parent"]
+        self.SymbolTable[parent]["tempmax"]=max(self.SymbolTable[self.currScope]["tempmax"],self.SymbolTable[self.currScope]["temp"])
+        #self.SymbolTable[self.currScope]["tempmax"]=0
         self.currScope = self.SymbolTable[self.currScope]["parent"]
         print "scope,"+self.currScope
 
@@ -58,6 +67,7 @@ class SymbolTable:
                 size = self.getSize(idVal)
                 s = self.getWidth(typeArray)
                 self.SymbolTable[self.currScope]["offset"] += size*s
+                self.SymbolTable[self.currScope]["varwidth"]+= size*s
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
             else:
                 self.SymbolTable[self.currScope]["offset"] += idSize
@@ -105,13 +115,16 @@ class SymbolTable:
                 "parent" : self.currScope,
                 "arguments" : args,
                 "place" : (fun).split("@")[0],
-                "offset" : 0
+                "offset" : 0,
+                "temp" : 0,
+                "tempmax" : 0,
+                "varwidth" : 0
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun
                 }
         self.currScope = fun
-        print "scope,"+fun
+        print "fstartscope,"+fun
     
     def getFunc(self,name):
         scope = self.currScope
@@ -126,6 +139,7 @@ class SymbolTable:
         sys.exit("function not declared")
 
     def endFunc(self):
+        self.SymbolTable[self.currScope]["tempmax"]=max(self.SymbolTable[self.currScope]["tempmax"],self.SymbolTable[self.currScope]["temp"])
         self.currScope = self.SymbolTable[self.currScope]["parent"]
         print "scope,"+self.currScope
     
@@ -164,7 +178,12 @@ class SymbolTable:
     
     def getOffset(self,idVal):
         scope = self.getScope(idVal)
-        return self.SymbolTable[scope]["identifiers"]['offset']
+        tempmax = self.SymbolTable[scope]['tempmax']
+        return self.SymbolTable[scope]["identifiers"][idVal]['offset']+tempmax*4
+
+    def numVarScope(self):
+        #print(self.currScope)
+        return self.SymbolTable[self.currScope]["varwidth"]
 
 
     def getScope(self, idVal):
@@ -179,11 +198,16 @@ class SymbolTable:
         return None
 
     def getTemp(self):
-        self.tNo += 1
-        newTemp = "t"+str(self.tNo) 
+        self.SymbolTable[self.currScope]["temp"]+=1
+        newTemp = "t"+str(self.SymbolTable[self.currScope]["temp"]) 
         return newTemp
 
     def newScopeName(self):
         self.scopeNo += 1
         newScope = "s"+str(self.scopeNo) 
         return newScope
+    
+    def printScopeOffset(self):
+        scope = self.currScope
+        return self.SymbolTable[scope]['offset']
+

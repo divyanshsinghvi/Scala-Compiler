@@ -3,12 +3,19 @@ import ir
 from globalvar import *
 from globalData import *
 from table import Table
+import pickle
+#from parsermain import ST
 #addressDescr = {}
+
+
+pickle_in = open("ST.picle","rb")
+ST = pickle.load(pickle_in)
+
 
 noOfReg = 6
 registerName = ["eax", "ebx", "ecx","edx","esi", "edi"]
 registerDescr=[None]*6
-
+#scope= ""
 #class RegisterAlloc:
 
     #def printCode(instr,op1,op2):
@@ -24,6 +31,15 @@ def regName(regNo):
     return registerName[regNo] 
 
 def address(var):
+    #print ST.currScope
+    #print var
+    if var.startswith("t"):
+        var = "-" + str(int(var[1:])*4)+"(%ebp)"
+        #print("I am awesome")
+        return var
+    #ST.printSymbolTable()
+    a = ST.getOffset(var)
+    var = "-"+str(a)+"(%ebp)"
     return var
 
 def printInstr(op,x,xDest,y=None,yDest=None,i=-1):
@@ -387,7 +403,7 @@ def generateCode(i):
         if is_number(tacTable[i].out):
             printInstr('movl',regName(0),'Register',tacTable[i].out,'Constant')
         else:
-            printInstr('movl',regName(0),'Register',tacTable[i].out,'Memory')
+            printInstr('movl',regName(0),'Register',address(tacTable[i].out),'Memory')
         print('\tsubl $8, %esp')
         print('\tpushl %'+regName(0))
         print('\tpushl $.format')
@@ -422,7 +438,7 @@ def generateCode(i):
     elif tacTable[i].oper in ['return', 'freturn']:
         endBlock();
         if tacTable[i].oper == 'freturn':
-            printInstr('movl', regName(0), 'Register', tacTable[i].in1, 'Memory')
+            printInstr('movl', regName(0), 'Register', address(tacTable[i].in1), 'Memory')
             addressDescr[tacTable[i].in1]['Register'] = 0
             addressDescr[tacTable[i].in1]['Memory'] = tacTable[i].in1
         print('\tret')
@@ -447,6 +463,22 @@ def generateCode(i):
         addressDescr[tacTable[i].out]['Register']=ry
         addressDescr[tacTable[i].out]['Memory']=None
         registerDescr[ry] = tacTable[i].out
+    
+    elif tacTable[i].oper=='startscope':
+        #print tacTable[i].out
+        #ST.printSymbolTable(1,1)
+        ST.currScope = tacTable[i].out
+        #tempmax = ST.SymbolTable[ST.currScope]['tempmax']
+        ST.SymbolTable[ST.currScope]['tempmax']=ST.SymbolTable[ST.SymbolTable[ST.currScope]['parent']]['tempmax']
+        print('\tsubl $'+str(ST.numVarScope())+', %esp') 
+    elif tacTable[i].oper=='fstartscope':
+        #print tacTable[i].out
+        #ST.printSymbolTable(1,1)
+        ST.currScope = tacTable[i].out
+        tempmax = ST.SymbolTable[ST.currScope]['tempmax']
+        print('\tmovl %esp, %ebp')
+        print('\tsubl $'+str(ST.printScopeOffset()+tempmax*4)+', %esp') 
+
 
 def endBlock():
     for variable in addressDescr:

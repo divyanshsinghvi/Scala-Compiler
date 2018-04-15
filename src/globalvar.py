@@ -8,9 +8,12 @@ global tacTable
 global addressDescr
 global ST
 global basicBlock
+global ST1
 tacBB = ir.irTable(filename)
 tacTable = tacBB.arr
 basicBlock=tacBB.leadList
+from symbolTable import SymbolTable
+ST = SymbolTable()
 
 
 #from symbolTable import *
@@ -20,11 +23,9 @@ basicBlock=tacBB.leadList
 addressDescr = {}
 
 from table import suppTable
-ST = suppTable
+ST1 = suppTable
 
 #print dir(ST)
-for name in ST.var:
+for name in ST1.var:
     addressDescr[name]={'Register':None, 'Stack':None, 'Memory': name}
 #    print name
-
-

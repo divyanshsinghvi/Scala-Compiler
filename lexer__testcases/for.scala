@@ -3,9 +3,9 @@ def main(args: Array[Strings](2))={
     var i: Int =1;
     var j: Int = 2;
     var d: Int =2;
-    for (i= 0;i<= j; i=i+d){
+    for (i= 0;i<= 2; i=i+2){
 	println(i);
-        if (i>=j){
+        if (i>=2){
 		var a:Int =3;
 		var b:Int =2;
 		a+= b;

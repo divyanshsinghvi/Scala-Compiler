@@ -3,10 +3,10 @@
 #code.And calculate next use of each of following
 
 import ir
+from  globalvar import *
 from symbolTableOld import SymbolTable
 from nextUse import NextUse
 #from basicBlock import basicBlock
-from  globalvar import *
 import numbers
 
 def is_number(var):
@@ -56,6 +56,8 @@ class Table:
                     self.table.setVar(row.out,{'type':'array','live':1,'size':row.in1})
                 else:
                     self.table.setVar(row.out,{'type':'array','live':1,'size':self.table.getVar(row.in1,'value')})
+            elif row.operator == 'startscope':
+                self.table.setVar(row.out,{})
         for name in self.table.var:
             self.table.var[name]['nextUse']=None
             if name.startswith('t'):

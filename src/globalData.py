@@ -2,18 +2,18 @@ from globalvar import *
 from symbolTableOld import *
 def globalData():
     print("\t.data")
-    for name in ST.var:
-        if ST.getVar(name,'value') is not None :
+    for name in ST1.var:
+        if ST1.getVar(name,'value') is not None :
             print("\t.globl "+str(name))
             print(str(name)+":")
-            print("\t."+ST.var[name]['type']+" "+ST.var[name]['value'])
+            print("\t."+ST1.var[name]['type']+" "+ST1.var[name]['value'])
     print("\t.bss")
-    for name in ST.var:
-        if ST.getVar(name,'value') is None and ST.getVar(name,'type') == 'array':
+    for name in ST1.var:
+        if ST1.getVar(name,'value') is None and ST1.getVar(name,'type') == 'array':
             print("\t.globl "+str(name))
             print(str(name)+":")
-            print("\t.zero " + str(int(ST.getVar(name,'size'))*4)) #all are integers so space is 4byte
-        elif ST.getVar(name,'value') is None and ST.getVar(name,'type') == 'int':
+            print("\t.zero " + str(int(ST1.getVar(name,'size'))*4)) #all are integers so space is 4byte
+        elif ST1.getVar(name,'value') is None and ST1.getVar(name,'type') == 'int':
             print("\t.globl "+str(name))
             print(str(name)+":")
             print("\t.zero 4") #all are integers so space is 4byte
@@ -25,7 +25,7 @@ def globalData():
     print('\t.string "%d "')
     print(".format2 :")
     print('\t.string "%d"')
-        #    print("\t."+ST.var[name]['type'])
+        #    print("\t."+ST1.var[name]['type'])
         
 if __name__ == '__main__':
     globalData()
