@@ -49,8 +49,11 @@ def emit(op=None,out=None,in1=None,in2=None):
         t=check(in1,op)
         l += [t]
     if in2 != None:
-        t=check(in2,op)
-        l += [t]
+        if op!="fcall":
+            t=check(in2,op)
+            l += [t]
+        else:
+            l+=in2
     myList = ','.join(map(str, l)) 
     print myList
     #print(""+CEND)
@@ -459,7 +462,7 @@ def p_var_dcl(p):
     '''var_dcl  :   id COLON type
     '''
     ST.addVar(p[1],p[1],p[3]['type'])
-    print p[1]
+    #print p[1]
     p[0] = {}
     p[0]['place'] = p[1]
     p[0]['type']= p[3]['type']
@@ -609,7 +612,7 @@ def p_simple_expr1(p):
                 else:
                     l.append(i['place'])
             for i in reversed(l):
-                emit("par",None,i)
+                emit("param",i)
             name=p[1]["place"]+"@"+str(len(p[2]))
             rtype = ST.getRType(name)
             if(rtype!="void"):
