@@ -1,5 +1,4 @@
 local variable 
-
-and or in regalloc
 getreg in regalloc
-
+blank line
+arrays

@@ -115,7 +115,7 @@ class SymbolTable:
                 "parent" : self.currScope,
                 "arguments" : args,
                 "place" : (fun).split("@")[0],
-                "offset" : 0,
+                "offset" : 4,
                 "temp" : 0,
                 "tempmax" : 0,
                 "varwidth" : 0

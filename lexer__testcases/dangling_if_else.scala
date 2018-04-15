@@ -12,18 +12,18 @@ object Demo {
 	m[1,1]+=1;
 	b = m[1,1];
 	println(b);
-//	if (i<=e){
-//	b = b + f;
-//        a[i]=a[i]+d;
-//	println(a[i]);
-//    };
-//    if (i>=f){
-//	b = b + c*f;
-//        a[i]=a[i]-d;
-//	println(a[i]);
-//    } else {
-//        b = d;
-//	println(b);
-//    };
+	if (i<=e){
+	b = b + f;
+        a[i]=a[i]+d;
+	println(a[i]);
+    };
+    if (i>=f){
+	b = b + c*f;
+        a[i]=a[i]-d;
+	println(a[i]);
+    } else {
+        b = d;
+	println(b);
+    };
   };
 };

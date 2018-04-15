@@ -430,7 +430,7 @@ def generateCode(i):
         endBlock();
         print('\tcall ' + tacTable[i].in1)
         if tacTable[i].oper == 'fcall':
-            printInstr('movl', tacTable[i].out, 'Memory', regName(0), 'Register')
+            printInstr('movl', address(tacTable[i].out), 'Memory', regName(0), 'Register')
             registerDescr[0] = None;
             addressDescr[tacTable[i].out]['Memory'] = tacTable[i].out
             addressDescr[tacTable[i].out]['Register'] = None
@@ -441,6 +441,7 @@ def generateCode(i):
             printInstr('movl', regName(0), 'Register', address(tacTable[i].in1), 'Memory')
             addressDescr[tacTable[i].in1]['Register'] = 0
             addressDescr[tacTable[i].in1]['Memory'] = tacTable[i].in1
+        print('\tleave')
         print('\tret')
 
     elif tacTable[i].oper == '!':
@@ -476,6 +477,7 @@ def generateCode(i):
         #ST.printSymbolTable(1,1)
         ST.currScope = tacTable[i].out
         tempmax = ST.SymbolTable[ST.currScope]['tempmax']
+        print('\tpushl %ebp')
         print('\tmovl %esp, %ebp')
         print('\tsubl $'+str(ST.printScopeOffset()+tempmax*4)+', %esp') 
 

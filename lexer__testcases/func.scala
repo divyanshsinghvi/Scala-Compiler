@@ -1,5 +1,3 @@
-
-
 object Demo{
 def foo():Int ={
     var a: Int = 1;
