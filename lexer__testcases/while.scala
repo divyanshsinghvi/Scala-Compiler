@@ -2,7 +2,7 @@
 object demo{
 def main(args: Array[String](3))={
 	
-	var i:Int;
+	var i:Int=2;
 	var j:Int;
 	var k:Int;
 	var res:Int=0;
