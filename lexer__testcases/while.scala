@@ -1,6 +1,6 @@
 
 object demo{
-def main(args: Array[String](3))={
+def main(var args:String)={
 	
 	var i:Int=2;
 	var j:Int;

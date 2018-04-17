@@ -76,6 +76,31 @@ class SymbolTable:
             sys.exit("Variable "+idVal+" is already initialised in this scope")
         #print(self.SymbolTable[self.currScope]["identifiers"])
     
+    
+    def addParamVar(self, idVal, place, idType, idSize = 4,typeArray=None):
+        scope = self.getScope(idVal)
+        if scope != self.currScope:
+            #sc = str(self.currScope)+"_"+place
+            sc = place
+            self.SymbolTable[self.currScope]["identifiers"][idVal] = {
+                    "place" : sc,
+                    "type" : idType,
+                    "size" : idSize,
+                    }
+            if idType == 'Array':
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['typeArray']=typeArray
+                size = self.getSize(idVal)
+                s = self.getWidth(typeArray)
+                self.SymbolTable[self.currScope]["paramoffset"] -= size*s
+                self.SymbolTable[self.currScope]["varwidth"]+= size*s
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["paramoffset"]
+            else:
+                self.SymbolTable[self.currScope]["paramoffset"] -= idSize
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["paramoffset"]
+        else:
+            sys.exit("Variable "+idVal+" is already initialised in this scope")
+        #print(self.SymbolTable[self.currScope]["identifiers"])
+    
     def getWidth(self,idType):
         if idType == "INT":
             return 4
@@ -119,6 +144,7 @@ class SymbolTable:
                 "temp" : 0,
                 "tempmax" : 0,
                 "varwidth" : 0,
+                "paramoffset":-4,
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun
@@ -126,6 +152,9 @@ class SymbolTable:
         self.currScope = fun
         print "fstartscope,"+fun
     
+    def addFuncArgs(self,fun,args=None):
+        self.SymbolTable[fun]['args'] = args
+                         
     def getFunc(self,name):
         scope = self.currScope
         while self.SymbolTable[scope]['type'] not in ['main']:
@@ -178,6 +207,9 @@ class SymbolTable:
     
     def getOffset(self,idVal):
         scope = self.getScope(idVal)
+        off = self.SymbolTable[scope]["identifiers"][idVal]['offset']
+        if off < 0:
+            return off
         tempmax = self.SymbolTable[scope]['tempmax']
         return self.SymbolTable[scope]["identifiers"][idVal]['offset']+tempmax*4
 

@@ -32,15 +32,20 @@ def regName(regNo):
     return registerName[regNo] 
 
 def address(var):
-    #print ST.currScope
+    #scope = ST.currScope
+    #print ST.SymbolTable[scope]["identifiers"][var]['offset']
     #print var
     if var.startswith("_t"):
         var = "-" + str(int(var[2:])*4)+"(%ebp)"
         #print("I am awesome")
         return var
     #ST.printSymbolTable()
-    a = ST.getOffset(var)
-    var = "-"+str(a)+"(%ebp)"
+    
+    a = ST.getOffset(var) 
+    if a < 0:
+        var = str(a*-1)+"(%ebp)"
+    else:
+        var = "-"+str(a)+"(%ebp)"
     return var
 
 def printInstr(op,x,xDest,y=None,yDest=None,i=-1):

@@ -5,7 +5,7 @@ def foo():Int ={
 return 3;
 println(10000);
 };
-def main(args: Array[String](0))={
+def main(var args:Int)={
     var a: Int;
     var b: Int;
     var c: Int =foo();

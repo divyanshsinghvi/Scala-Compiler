@@ -344,21 +344,26 @@ def p_array_init_0(p):
 def p_fun_def(p):
     ''' fun_def : fun_sig col_type_1 FunMark1 EQUALASGN BLOCKBEGIN block BLOCKEND FunMark2
     '''
-    printp(p)
+
     
 
 def p_FunMark1(p):
     ''' FunMark1 : epsilon
     '''
-    if p[-2][1] in ST.SymbolTable[ST.currScope]["function"].keys():
-        error("Error: function with same name and same number of arguments already defined.")
+    #if p[-2][1] in ST.SymbolTable[ST.currScope]["function"].keys():
+   #     error("Error: function with same name and same number of arguments already defined.")
+  #  else:
+    if(len(p[-2])>2):
+        ST.addFunc(p[-2][1],p[-2][2:])
+        print "IIII",ST.currScope
     else:
-        if(len(p[-2])>2):
-            ST.addFunc(p[-2][1],p[-2][2:])
-        else:
-            ST.addFunc(p[-2][1])
-        ST.setRType(p[-1])
+        ST.addFunc(p[-2][1])
+    ST.setRType(p[-1])
+    for l in range(2,len(p[-2])):
+        ST.addParamVar(p[-2][l][0],p[-2][l][0],p[-2][l][1])
     printp(p)
+
+
 def p_FunMark2(p):
     ''' FunMark2 : epsilon
     '''
@@ -377,6 +382,11 @@ def p_col_type_1(p) :
     else:
         p[0]=p[2]
     printp(p)
+#new added
+#def p_FunMark0(p):
+#    ''' FunMark0 : epsilon
+#    '''
+#    ST.addFunc(p[-1])
 
 def p_fun_sig(p):           # function is named id@no.of args
     ''' fun_sig : id param_clause  
@@ -422,15 +432,46 @@ def p_params(p):
     printp(p)
 
 def p_param(p):
-    ''' param : R_VAR var_def
-              | var_def
-              | var_dcl
-              | R_VAR var_dcl
+    ''' param : R_VAR id COLON type EQUALASGN val_var_init
+              | R_VAR id COLON type 
     '''
-    if(len(p)==2):
-        p[0]=p[1]
+
+    if(len(p)==7):
+        print p[4]
+        if type(p[6]) == type({}) and 'isArray' in p[6] and p[6]['isArray']:
+      #      ST.addParamVar(p[2],p[2],'Array',p[4]['size'],p[4]['type'])
+            ST.addAttribute(p[2],'typeArray',p[4]['type'])
+            size=1
+            for x in p[4]["size"]:
+                size*=x
+            emit('array',p[2],size)
+            i = 0 
+            for d in p[6]['values']:
+                emit('star',p[2],i,d['place'])
+                i+=1
+             #added attributes like isarray and type and place
+            par={ 'place':p[2],
+                    'type': 'Array',
+                    'size' : p[4]['size'],
+                    'typeArray':p[4]['type'],
+                    }
+            p[0] = par
+       # emit('array',p[],'n')
+        else: 
+       #     ST.addParamVar(p[2],p[2],p[4]['type'])
+	    emit('=',in1=p[6]['place'],out=p[2])
+	    par = {
+                    'type' : p[4]['type'],
+                    'place' : p[2],
+                    }
+            p[0] = par
     else:
-        p[0]=p[2]
+     #   ST.addParamVar(p[2],p[2],p[4]['type'])
+    #print p[1]
+        p[0] = {}
+        p[0]['place'] = p[2]
+        p[0]['type']= p[4]['type']
+        
     printp(p)
 
 def p_eq_expr(p):
@@ -1318,4 +1359,3 @@ f.close()
 parser.parse(code_full)
 pickle_out=open("ST.picle","wb")
 pickle.dump(ST,pickle_out)
-#print ST.printSymbolTable(ST,1)
