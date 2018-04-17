@@ -74,7 +74,7 @@ precedence = (
 )
 
 def evalArray(temp):
-    if temp['type'] == 'Array':
+    if type(temp)==type({}) and 'type' in temp and temp['type'] == 'Array':
         t1 = ST.getTemp()
         #print "I am here"
         emit(op='ldar',out=t1,in1=temp['place'],in2=temp['index'])
@@ -107,9 +107,9 @@ def makeIndex(size,place):
     return t1
 
 def printp(p):
-    #for i in range(0,len(p)):
-    #    print (p.slice)[i],
-    #print "\n",
+#    for i in range(0,len(p)):
+#        print (p.slice)[i],
+#    print "\n",
     a=2
 
 def p_compilation_unit(p):
@@ -279,6 +279,7 @@ def p_var_def(p):
             i+=1
        # emit('array',p[],'n')
     else:
+        p[5]=evalArray(p[5])
         ST.addVar(p[1],p[1],p[3]['type'])
 	emit('=',in1=p[5]['place'],out=p[1])
 
@@ -304,7 +305,7 @@ def p_ints(p):
 def p_val_def(p):
     ''' val_def : id COLON type EQUALASGN val_var_init
     '''
-    p[0]=p[5]
+    p[0]=evalArray(p[5])
     printp(p)
 
 def p_val_var_init(p):
@@ -355,7 +356,6 @@ def p_FunMark1(p):
   #  else:
     if(len(p[-2])>2):
         ST.addFunc(p[-2][1],p[-2][2:])
-        print "IIII",ST.currScope
     else:
         ST.addFunc(p[-2][1])
     ST.setRType(p[-1])
@@ -435,7 +435,6 @@ def p_param(p):
     ''' param : R_VAR id COLON type EQUALASGN val_var_init
               | R_VAR id COLON type 
     '''
-
     if(len(p)==7):
         print p[4]
         if type(p[6]) == type({}) and 'isArray' in p[6] and p[6]['isArray']:
@@ -459,6 +458,7 @@ def p_param(p):
        # emit('array',p[],'n')
         else: 
        #     ST.addParamVar(p[2],p[2],p[4]['type'])
+	    p[6]=evalArray(p[6])
 	    emit('=',in1=p[6]['place'],out=p[2])
 	    par = {
                     'type' : p[4]['type'],
@@ -638,6 +638,7 @@ def p_simple_expr1(p):
                 emit("=",temp,p[2][0]['place'])
                 emit('printInt',temp)
             else:
+                p[2][0]=evalArray(p[2][0])
                 emit('printInt',p[2][0]['place'])
         elif(p[1]['name'] == 'readInt'):
             emit('scanInt',p[2][0]['place'])
@@ -1359,3 +1360,4 @@ f.close()
 parser.parse(code_full)
 pickle_out=open("ST.picle","wb")
 pickle.dump(ST,pickle_out)
+ST.printSymbolTable()

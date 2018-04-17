@@ -116,8 +116,9 @@ class SymbolTable:
         while self.SymbolTable[scope]['type'] not in ['main']:
             if idVal in self.SymbolTable[scope]["identifiers"].keys():
                 if self.SymbolTable[scope]["identifiers"][idVal]['type'] == 'Array':
-                    import numpy
-                    return numpy.prod(self.SymbolTable[scope]["identifiers"][idVal]['size'])
+                    import operator
+                    return reduce(operator.mul,self.SymbolTable[scope]["identifiers"][idVal]['size'],1)
+#                    return numpy.prod(self.SymbolTable[scope]["identifiers"][idVal]['size'])
                 else:
                     return self.SymbolTable[scope]["identifiers"][idval]['size']
 

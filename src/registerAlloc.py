@@ -380,9 +380,9 @@ def generateCode(i):
             printInstr('movl',regName(ri),'Register',address(tacTable[i].in2),'Memory')
             addressDescr[tacTable[i].in2]['Register'] = ri
             registerDescr[ri] = tacTable[i].in2
- 
- 
-        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1)+"(,%"+regName(ri)+",4)",'Memory')
+		  
+	print('\tmovl -'+str(ST.getOffset(tacTable[i].in1))+"(%ebp,%"+regName(ri)+",4), %"+ regName(rx) )	
+	#printInstr('movl',regName(rx),'Register',address(tacTable[i].in1)+",%"+regName(ri)+",4)",'Memory')
 #        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1) + " + " + str(int(tacTable[i].in2)*4),'Memory')
     elif tacTable[i].oper == 'star':
         ry = getRegIn(i,tacTable[i].in2)
@@ -395,9 +395,12 @@ def generateCode(i):
             printInstr('movl',regName(ri),'Register',address(tacTable[i].in1),'Memory')
             addressDescr[tacTable[i].in1]['Register'] = ri
             registerDescr[ri] = tacTable[i].in1
-
-        printInstr('movl',address(tacTable[i].out)+ "(,%"+regName(ri)+",4)",'Memory',regName(ry),'Register')
-        #printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
+	print('\tmovl %'+regName(ry) +', -'+str(ST.getOffset(tacTable[i].out))+"(%ebp,%"+regName(ri)+",4)" )	
+       # printInstr('movl',address(tacTable[i].out)+ "(,%"+regName(ri)+",4)",'Memory',regName(ry),'Register')
+        #print "IIIII",tacTable[i].in1
+#	a = ST.getOffset(tacTable[i].out)-4*int(tacTable[i].in1)
+#	print("\tmovl %"+regName(ry)+", -"+str(a)+"(%ebp)")
+	#printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
     elif tacTable[i].oper == 'printInt':
         #print(tacTable[i].oper, tacTable[i].out, tacTable[i].in1, tacTable[i].in2)
         #spillAllReg()
