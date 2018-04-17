@@ -435,6 +435,7 @@ def generateCode(i):
     elif tacTable[i].oper in ['call', 'fcall']:
         endBlock();
         print('\tcall ' + tacTable[i].in1)
+        print('\taddl $'+str(-1*(ST.SymbolTable[tacTable[i].in1+"@"+tacTable[i].in2]['paramoffset'])-4) +', %esp')
         if tacTable[i].oper == 'fcall':
             printInstr('movl', address(tacTable[i].out), 'Memory', regName(0), 'Register')
             registerDescr[0] = None;

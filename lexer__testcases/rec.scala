@@ -1,14 +1,16 @@
 object Demo{
 def foo(var a:Int, var b:Int):Int ={
-    //a = 1;
-	println(a);
-return a+b;
-println(10000);
+	if(a == 0)
+	{return 0;
+	};
+	var c:Int = foo(a-1,b-1);
+	println(10000);
+	return c;
 };
-def main(var args:Int)={
+def main()={
     var a: Int=5;
     var b: Int=4;
-    var c: Int =foo(a,b);
+    var c: Int =foo(10,10);
 	println(20000);
 	println(c);
     return 0;
