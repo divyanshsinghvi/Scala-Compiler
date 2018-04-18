@@ -130,6 +130,24 @@ class SymbolTable:
         else:
             return scope
 
+    def addCls(self,cls,args=None,parent=None):
+        self.SymbolTable[cls]={
+                "name" : cls,
+                "type" : "class",
+                "identifiers":{},
+                "variables" : {},
+                "function" : {},
+                "rType" : "undefined",
+                "parent" : parent,
+                "arguments" : args,
+                "place" : (cls).split("@")[0],
+                "offset" : 4,
+                "temp" : 0,
+                "tempmax" : 0,
+                "varwidth" : 0,
+                "paramoffset":-4,
+                }
+
     def addFunc(self, fun, args=None):
         self.SymbolTable[fun] = {
                 "name" : fun,
