@@ -151,6 +151,7 @@ def p_tmpl_def(p):
 def p_class_def(p): 
     '''class_def : id class_param_clause class_template_opt
     '''
+    ST.addCls(p[1])
     printp(p)
 
 def p_class_param_clause(p):
@@ -1387,4 +1388,4 @@ f.close()
 parser.parse(code_full)
 pickle_out=open("ST.picle","wb")
 pickle.dump(ST,pickle_out)
-#ST.printSymbolTable()
+ST.printSymbolTable()
