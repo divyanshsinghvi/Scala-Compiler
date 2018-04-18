@@ -96,10 +96,11 @@ class SymbolTable:
                     }
             if idType == 'Array':
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['typeArray']=typeArray
-                size = self.getSize(idVal)
-                s = self.getWidth(typeArray)
-                self.SymbolTable[self.currScope]["paramoffset"] -= size*s
-                self.SymbolTable[self.currScope]["varwidth"]+= size*s
+              #  size = self.getSize(idVal)
+                #s = self.getWidth(typeArray)
+                size =4
+                self.SymbolTable[self.currScope]["paramoffset"] -= size
+                self.SymbolTable[self.currScope]["varwidth"]+= size
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["paramoffset"]
             else:
                 self.SymbolTable[self.currScope]["paramoffset"] -= idSize
@@ -241,18 +242,27 @@ class SymbolTable:
     
     def getOffset(self,idVal):
         scope = self.getScope(idVal)
-        off = self.SymbolTable[scope]["identifiers"][idVal]['offset']
-        if off < 0:
-            return off
-        tempmax = self.SymbolTable[scope]['tempmax']
-        return self.SymbolTable[scope]["identifiers"][idVal]['offset']+tempmax*4
-
+        if '.' not in idVal:
+            off = self.SymbolTable[scope]["identifiers"][idVal]['offset']
+            if off < 0:
+                return off
+            tempmax = self.SymbolTable[scope]['tempmax']
+            return self.SymbolTable[scope]["identifiers"][idVal]['offset']+tempmax*4
+        else:
+            idVal = idVal.split('.')
+            off = self.SymbolTable[scope]["identifiers"][idVal[0]]['offset']
+            off1 = self.SymbolTable[scope]["identifiers"][idVal[0]]['list'][idVal[1]]['offset']
+            if off+off1 < 0:
+                return off
+            return off+off1 + self.SymbolTable[scope]['tempmax']*4
     def numVarScope(self):
         #print(self.currScope)
         return self.SymbolTable[self.currScope]["varwidth"]
 
 
     def getScope(self, idVal):
+        if '.' in idVal:
+            idVal = idVal.split('.')[0]
         scope = self.currScope
         while self.SymbolTable[scope]["type"] not in ["main"]:
             if idVal in self.SymbolTable[scope]["identifiers"]:

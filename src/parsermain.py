@@ -646,8 +646,8 @@ def p_simple_expr1(p):
                     |   ID LSQRB access RSQRB
                     |   path
                     |   LPARAN exprs_1 RPARAN
-                    |   simple_expr DOT id
                     |   simple_expr1 argument_exprs'''
+                    #|   simple_expr DOT id
     p[0] = dict()
     if p.slice[1].type == 'literal':
         p[0] = p[1]

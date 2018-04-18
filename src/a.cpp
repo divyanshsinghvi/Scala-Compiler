@@ -7,12 +7,13 @@ class Geeks
     public:
  
     // Data Members
-    string geekname;
- 
+    //string geekname;
+    int a; 
     // Member Functions()
     void printname()
     {
-       cout << "Geekname is: " << geekname;
+        a= 3;
+       printf("DS is awesome");
     }
 };
  
@@ -22,7 +23,7 @@ int main() {
     Geeks obj1;
  
     // accessing data member
-    obj1.geekname = "Abhi";
+    //obj1.geekname = "Abhi";
  
     // accessing member function
     obj1.printname();
