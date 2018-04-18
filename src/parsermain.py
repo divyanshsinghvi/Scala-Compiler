@@ -1127,6 +1127,15 @@ def p_bit_or_expression(p):
     '''
     if len(p)==2:
         p[0] = p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp,
+                    'type'  : 'INT'
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op='|',out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 def p_xor_expression(p):
@@ -1135,6 +1144,15 @@ def p_xor_expression(p):
     '''
     if len(p)==2:
         p[0] = p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp,
+                    'type'  : 'INT'
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op='^',out=temp,in1=p[1]['place'],in2=p[3]['place'])
     printp(p)
 
 def p_bit_and_expression(p):
@@ -1143,6 +1161,15 @@ def p_bit_and_expression(p):
     '''
     if len(p)==2:
         p[0] = p[1]
+    else:
+        temp = ST.getTemp()
+        p[0] = {
+                    'place' : temp,
+                    'type'  : 'INT'
+                }
+        p[3]=evalArray(p[3])
+        p[1]=evalArray(p[1])
+        emit(op='&',out=temp,in1=p[1]['place'],in2=p[3]['place'])
     #printp(p)
     printp(p)
 
@@ -1360,4 +1387,4 @@ f.close()
 parser.parse(code_full)
 pickle_out=open("ST.picle","wb")
 pickle.dump(ST,pickle_out)
-ST.printSymbolTable()
+#ST.printSymbolTable()
