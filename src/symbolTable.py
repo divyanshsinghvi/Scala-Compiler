@@ -53,7 +53,7 @@ class SymbolTable:
         self.currScope = self.SymbolTable[self.currScope]["parent"]
         print "scope,"+self.currScope
 
-    def addVar(self, idVal, place, idType, idSize = 4,typeArray=None):
+    def addVar(self, idVal, place, idType, idSize = 4,typeArray=None,sizeObj=None):
         scope = self.getScope(idVal)
         if scope != self.currScope:
             #sc = str(self.currScope)+"_"+place
@@ -70,6 +70,9 @@ class SymbolTable:
                 self.SymbolTable[self.currScope]["offset"] += size*s
                 self.SymbolTable[self.currScope]["varwidth"]+= size*s
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
+            elif sizeObj is not None:
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
+                self.SymbolTable[self.currScope]["offset"] += sizeObj
             else:
                 self.SymbolTable[self.currScope]["offset"] += idSize
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
@@ -77,7 +80,10 @@ class SymbolTable:
             sys.exit("Variable "+idVal+" is already initialised in this scope")
         #print(self.SymbolTable[self.currScope]["identifiers"])
     
-    
+   
+    def addClassList(self,idVal,listl):
+        scope=self.getScope(idVal)
+        
     def addParamVar(self, idVal, place, idType, idSize = 4,typeArray=None):
         scope = self.getScope(idVal)
         if scope != self.currScope:

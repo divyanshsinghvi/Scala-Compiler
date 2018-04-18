@@ -291,15 +291,22 @@ def p_var_def(p):
             i+=1
        # emit('array',p[],'n')
     elif type(p[5]) == type({}) and 'isObject' in p[5] and p[5]['isObject']:
+        l = {}
         emit("Object",p[1],p[3]['type'])
+        off=ST.SymbolTable[p[3]['type']]['totalOffset'] 
+        ST.addVar(p[1],p[1],p[3]['type'],sizeObj=off)
+        offset =0
         for i in ST.SymbolTable[p[3]['type']]['identifiers'].keys():
-            ST.addVar(p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],ST.SymbolTable[p[3]['type']]['identifiers'][i]['type'])
+            l[ST.SymbolTable[p[3]['type']]['identifiers'][i]['place']]={
+                    'place':p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],'type':ST.SymbolTable[p[3]['type']]['identifiers'][i]['type'],'offset':offset}
+            offset+=4
+        ST.addAttribute(p[1],'list',l)
+        #ST.printSymbolTable()
     else:
+        #print(p[5])
         p[5]=evalArray(p[5])
         ST.addVar(p[1],p[1],p[3]['type'])
 	emit('=',in1=p[5]['place'],out=p[1])
-
-
     printp(p)
 
 def p_array_size(p):
@@ -570,8 +577,8 @@ def p_path(p):
             p[0]=ST.getFunc(p[1])
     elif(p.slice[1].type=='path'):
         if "_ZYX"+p[3]+p[1]['place'] not in ST.function:
-            p[0] = ST.getId(p[1]['place']+'.'+p[3])
-
+            l = ST.getAttribute(p[1]['place'],'list')
+            p[0] = l[p[3]]
     
     printp(p)
 
