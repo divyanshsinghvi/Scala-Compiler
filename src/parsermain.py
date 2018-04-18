@@ -146,12 +146,22 @@ def p_tmpl_def(p):
     ''' tmpl_def : R_CLASS class_def
                  | R_OBJECT object_def        
     '''
+    a = ST.SymbolTable[ST.currScope]
+    ST.SymbolTable[ST.currScope]['totalOffset'] = a['offset'] + a['temp']*4
+    printp(p)
+
+def p_cmark1(p):
+    '''cmark1 : epsilon
+    '''
+    ST.addCls(p[-1])
     printp(p)
 
 def p_class_def(p): 
-    '''class_def : id class_param_clause class_template_opt
+    '''class_def : id cmark1 class_param_clause class_template_opt
     '''
-    ST.addCls(p[1])
+    p[0] ={
+            'place' : p[1]
+            }
     printp(p)
 
 def p_class_param_clause(p):
@@ -224,7 +234,8 @@ def p_template_body_0(p):
     printp(p)
 
 def p_template_stat(p):
-    ''' template_stat : block_stat
+    ''' template_stat : def
+                      | dcl
                       | modifier_0 def
                       | modifier_0 dcl
     '''
@@ -279,6 +290,10 @@ def p_var_def(p):
             emit('star',p[1],i,d['place'])
             i+=1
        # emit('array',p[],'n')
+    elif type(p[5]) == type({}) and 'isObject' in p[5] and p[5]['isObject']:
+        emit("Object",p[1],p[3]['type'])
+        for i in ST.SymbolTable[p[3]['type']]['identifiers'].keys():
+            ST.addVar(p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],ST.SymbolTable[p[3]['type']]['identifiers'][i]['type'])
     else:
         p[5]=evalArray(p[5])
         ST.addVar(p[1],p[1],p[3]['type'])
@@ -553,6 +568,11 @@ def p_path(p):
             p[0] = ST.getId(p[1])
         else:
             p[0]=ST.getFunc(p[1])
+    elif(p.slice[1].type=='path'):
+        if "_ZYX"+p[3]+p[1]['place'] not in ST.function:
+            p[0] = ST.getId(p[1]['place']+'.'+p[3])
+
+    
     printp(p)
 
 #def path_0(p):
@@ -584,17 +604,24 @@ def p_simple_expr(p):
                     |   simple_expr1'''
     if len(p) == 2:
         p[0] = p[1]
+    else:
+        p[0]=p[2]
+
     printp(p)
  #                   |   block
 
 def p_class_template(p):
     '''class_template   :   id class_template_1'''
+    p[0]={  'place': p[1],
+            'isObject':True,
+            }
+
     printp(p)
 
 def p_class_template_1(p):
     '''class_template_1 :   LPARAN id  class_template_0 RPARAN
                         |   LPARAN literal class_template_0 RPARAN
-                        |   epsilon '''
+                        |   LPARAN RPARAN '''
     printp(p)
 
 def p_class_template_0(p):
@@ -707,7 +734,7 @@ def p_type(p):                      # look at <T>
         p[0] = p[1]
     else:
         p[0] = {
-                'type' : p[1].upper()
+                'type' : p[1]
                 }
     printp(p)
 def p_array_type(p):

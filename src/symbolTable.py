@@ -20,6 +20,7 @@ class SymbolTable:
         self.tNo = -1
         self.scopeNo = -1
         self.function = []
+        self.classlist = []
         self.stackbegin = []
         self.stackend = []
     
@@ -130,7 +131,7 @@ class SymbolTable:
         else:
             return scope
 
-    def addCls(self,cls,args=None,parent=None):
+    def addCls(self,cls,args=None,parent="main"):
         self.SymbolTable[cls]={
                 "name" : cls,
                 "type" : "class",
@@ -141,12 +142,15 @@ class SymbolTable:
                 "parent" : parent,
                 "arguments" : args,
                 "place" : (cls).split("@")[0],
-                "offset" : 4,
+                "offset" : 0,
                 "temp" : 0,
                 "tempmax" : 0,
                 "varwidth" : 0,
                 "paramoffset":-4,
+                "totalOffset":0,
                 }
+        self.currScope = cls
+        self.classlist += []
 
     def addFunc(self, fun, args=None):
         self.SymbolTable[fun] = {
@@ -173,7 +177,12 @@ class SymbolTable:
     
     def addFuncArgs(self,fun,args=None):
         self.SymbolTable[fun]['args'] = args
-                         
+    
+    def getClass():
+        scope = self.currScope
+        return self.SymbolTable[scope]['parent']
+
+
     def getFunc(self,name):
         scope = self.currScope
         while self.SymbolTable[scope]['type'] not in ['main']:
