@@ -11,8 +11,8 @@ from globalOther import ST
 
 pickle_in = open("ST.picle","rb")
 ST = pickle.load(pickle_in)
-
-
+global lab
+lab=1
 noOfReg = 6
 registerName = ["eax", "ebx", "ecx","edx","esi", "edi"]
 registerDescr=[None]*6
@@ -204,6 +204,7 @@ def getRegOut(i,var): #getReg  8.6.3
 
 
 def generateCode(i):
+    global lab
     if tacTable[i].oper in ['+', '-', '*', '&', '|', '^']: 
         ry = getRegIn(i,tacTable[i].in1)
         if registerDescr[ry] != tacTable[i].in1:
@@ -251,13 +252,90 @@ def generateCode(i):
             print('\txorl %' + regName(rz) + ', %' + regName(rx))
             addressDescr[tacTable[i].out]['Register'] = rx
             addressDescr[tacTable[i].out]['Memory'] = None
+    elif tacTable[i].oper == '||':
+        #printInstr('movl',regName(rx),'Register',regName(ry),'Register')
+        ry = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
+
+        rz = getRegIn(i,tacTable[i].in2)
+        if registerDescr[rz] != tacTable[i].in2:
+            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
+            #print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
+            addressDescr[tacTable[i].in2]['Register'] = rz
+            registerDescr[rz] = tacTable[i].in2
+        
+        rx = getRegOut(i,tacTable[i].out)
+        registerDescr[rx] = tacTable[i].out
+
+        printInstr('movl',address(registerDescr[0]),'Memory',regName(rx),'Register')
+            #print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
+        #registerDescr[0] = None
+        #addressDescr[var]['Register'] = None
+        #addressDescr[var]['Memory'] = var
+        print("\tcmpl $0, %"+regName(rz))
+        lab2=lab
+        lab+=1
+        lab3=lab
+        lab+=1
+        lab4 =lab
+        lab+=1
+        print("\tjne .L"+str(lab2))
+        print("\tcmpl $0, %"+regName(ry))
+        print("\tje .L"+str(lab3))
+        print(".L"+str(lab2)+":")
+        print("\tmovl $1, %"+regName(rx)) 
+        print("\tjmp .L"+str(lab4))
+        print(".L"+str(lab3)+":")
+        print("\tmovl $0, %"+regName(rx))
+        print(".L"+str(lab4)+":")
+        print("\tmovl %"+regName(rx)+", %"+regName(rz))
+    elif tacTable[i].oper == '&&':
+        ry = getRegIn(i,tacTable[i].in1)
+        if registerDescr[ry] != tacTable[i].in1:
+            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
+            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
+            addressDescr[tacTable[i].in1]['Register'] = ry
+            registerDescr[ry] = tacTable[i].in1
+
+        rz = getRegIn(i,tacTable[i].in2)
+        if registerDescr[rz] != tacTable[i].in2:
+            printInstr('movl',regName(rz),'Register',address(tacTable[i].in2),'Memory')
+            #print('\tmov ' + regName(rz) + ', DWORD PTR ' + tacTable[i].in2)
+            addressDescr[tacTable[i].in2]['Register'] = rz
+            registerDescr[rz] = tacTable[i].in2
+        
+        rx = getRegOut(i,tacTable[i].out)
+        registerDescr[rx] = tacTable[i].out
+
+        printInstr('movl',address(registerDescr[0]),'Memory',regName(rx),'Register')
+            #print('\tmov DWORD PTR ' + variable + ', ' + regName(addressDescr[variable]['Register']))
+        #registerDescr[0] = None
+        #addressDescr[var]['Register'] = None
+        #addressDescr[var]['Memory'] = var
+        print("\tcmpl $0, %"+regName(rz))
+        global lab
+        lab1=lab
+        lab+=1
+        lab2=lab
+        lab+=1
+        print("\tje .L"+str(lab1))
+        print("\tcmpl $0, %"+regName(ry))
+        print("\tje .L"+str(lab1))
+        print("\tmovl $1, %"+regName(rx)) 
+        print("\tjmp .L"+str(lab2))
+        print(".L"+str(lab1)+":")
+        print("\tmovl $0, %"+regName(rx))
+        print(".L"+str(lab2)+":")
+        print("\tmovl %"+regName(rx)+", %"+regName(rz))
     elif tacTable[i].oper == '=':
-        #rx, ry = getReg(i)
 	if not is_number(tacTable[i].in1):
             ry = getRegIn(i,tacTable[i].in1)
             if registerDescr[ry] != tacTable[i].in1:
                 printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
-                #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
                 addressDescr[tacTable[i].in1]['Register'] = ry
                 registerDescr[ry] = tacTable[i].in1
             rx = getRegOut(i,tacTable[i].out)
