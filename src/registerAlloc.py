@@ -48,6 +48,10 @@ def address(var):
         var = "-" + str(int(var[2:])*4)+"(%ebp)"
         #print("I am awesome")
         return var
+    #print "-------------"
+    if '@ARRAY' in var:
+        print('\tleal -'+str(ST.getOffset(var.split('@')[0]))+"(%ebp), %eax")
+        return "%eax"
     #ST.printSymbolTable() 
     a = ST.getOffset(var) 
     if a < 0:
@@ -466,10 +470,17 @@ def generateCode(i):
             printInstr('movl',regName(ri),'Register',address(tacTable[i].in2),'Memory')
             addressDescr[tacTable[i].in2]['Register'] = ri
             registerDescr[ri] = tacTable[i].in2
-		  
-	print('\tmovl -'+str(ST.getOffset(tacTable[i].in1))+"(%ebp,%"+regName(ri)+",4), %"+ regName(rx) )	
-	#printInstr('movl',regName(rx),'Register',address(tacTable[i].in1)+",%"+regName(ri)+",4)",'Memory')
-#        printInstr('movl',regName(rx),'Register',address(tacTable[i].in1) + " + " + str(int(tacTable[i].in2)*4),'Memory')
+	
+        z=  ST.getId(tacTable[i].in1)
+        if 'isparam' in z.keys():
+            print('\tmovl '+str(-1*ST.getOffset(tacTable[i].in1))+"(%ebp), %edi")
+            print('\timull $4, %'+regName(ri))
+            print('\taddl %'+regName(ri)+', %edi')
+            print('\tmovl (%edi), %'+regName(rx))
+            #print"boom"
+        else:
+	    print('\tmovl -'+str(ST.getOffset(tacTable[i].in1))+"(%ebp,%"+regName(ri)+",4), %"+ regName(rx) )	
+    
     elif tacTable[i].oper == 'star':
         ry = getRegIn(i,tacTable[i].in2)
         if registerDescr[ry] !=tacTable[i].in2:
@@ -600,6 +611,7 @@ def endBlock():
     for r in addressDescr:
         addressDescr[r]['Register'] = None
         addressDescr[r]['Memory'] = r
+
 
 
 if __name__ == '__main__':

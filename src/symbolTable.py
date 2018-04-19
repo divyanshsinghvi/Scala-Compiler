@@ -68,10 +68,12 @@ class SymbolTable:
             if idType == 'Array':
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['typeArray']=typeArray
                 size = self.getSize(idVal)
+                #print size,"0000000000000000000000"
                 s = self.getWidth(typeArray)
                 self.SymbolTable[self.currScope]["offset"] += size*s
                 self.SymbolTable[self.currScope]["varwidth"]+= size*s
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
+                self.SymbolTable[self.currScope]['totalsize']=size*s
             elif sizeObj is not None:
                 self.SymbolTable[self.currScope]["offset"] += sizeObj
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
@@ -246,7 +248,7 @@ class SymbolTable:
         if scope != None:
             self.SymbolTable[self.getScope(idVal)]["identifiers"][idVal][Name] = Val
             return True
-            # print("Success")
+            #print("Success")
         else:
             #print("Fail")
             return False

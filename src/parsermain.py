@@ -383,6 +383,10 @@ def p_FunMark1(p):
     ST.setRType(p[-1])
     for l in range(2,len(p[-2])):
         ST.addParamVar(p[-2][l][0],p[-2][l][0],p[-2][l][1])
+        if p[-2][l][1] is 'Array':
+            #ST.addAttribute(p[2],'typeArray',p[4]['type'])
+            ST.addAttribute(p[-2][l][0],'isparam',True)
+
     printp(p)
 
 
@@ -467,7 +471,9 @@ def p_param(p):
         #print p[4]
         if type(p[6]) == type({}) and 'isArray' in p[6] and p[6]['isArray']:
       #      ST.addParamVar(p[2],p[2],'Array',p[4]['size'],p[4]['type'])
-            ST.addAttribute(p[2],'typeArray',p[4]['type'])
+        #    ST.addAttribute(p[2],'typeArray',p[4]['type'])
+        #    ST.addAttribute(p[2],'isparam',True)
+        #    ST.addAttribute(p[2],'offset',4)
             size=1
             for x in p[4]["size"]:
                 size*=x
@@ -481,6 +487,7 @@ def p_param(p):
                     'type': 'Array',
                     'size' : p[4]['size'],
                     'typeArray':p[4]['type'],
+                    'isparam' : True,
                     }
             p[0] = par
        # emit('array',p[],'n')
@@ -491,6 +498,7 @@ def p_param(p):
 	    par = {
                     'type' : p[4]['type'],
                     'place' : p[2],
+                    'isparam' : True,
                     }
             p[0] = par
     else:
@@ -499,7 +507,7 @@ def p_param(p):
         p[0] = {}
         p[0]['place'] = p[2]
         p[0]['type']= p[4]['type']
-        
+        p[0]['isparam'] = True
     printp(p)
 
 def p_eq_expr(p):
@@ -715,7 +723,10 @@ def p_simple_expr1(p):
                     print("=,"+temp+","+str(i['place']))
                     l.append(temp)
                 else:
-                    l.append(i['place'])
+                    if i['type'] == 'Array':
+                        l.append(i['place']+"@"+"ARRAY")
+                    else:
+                        l.append(i['place'])
             for i in reversed(l):
                 emit("param",i)
             name=p[1]["place"]+"@"+str(len(p[2]))

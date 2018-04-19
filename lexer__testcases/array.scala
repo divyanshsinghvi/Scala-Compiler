@@ -1,17 +1,43 @@
 
-object Demo {
-  def foo(var a:Array[Int](2,2)={})={
-    
+class Demo(){
+  def foo(var a:Array[Int](2)={}):Int={
+	println(a[1]);
+	return 0; 
   };  
-  
-  def main(var d:Array[Int](2,2)={})={
-    //var m:Int=3;
-    var a: Array[Int](2,1) = {200,300};
-    println(a[1,0]);
-	var m:Int = a[1,0];
-        var b:Int = a[1,0];
-	println(m);
-	println(b);
+};
+class True(){ 
+  def main()={
+    var a: Array[Int](2) = {200,300};
+    //println(a[1]);
+	var d : Demo = new Demo();
+	var x:Int= d.foo(a);
     return 0;
 };
 };
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//var m:Int=3;
+//	var m:Int = a[0];
+//        var b:Int = a[1];
+//	println(m);
+//	println(a[1]);
