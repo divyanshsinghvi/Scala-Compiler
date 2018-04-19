@@ -19,7 +19,8 @@ def main(var args:Int)={
     var r: Int =1;
     var x: Int =1;
 	var c:Demo = new Demo();
-    c.e=4;
+    c.f = 123;
+	c.e=4;
     var d: Int = c.foo(a,b);
     println(d);
     //var c: Int =foo(a,b);

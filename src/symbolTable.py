@@ -259,9 +259,9 @@ class SymbolTable:
             idVal = idVal.split('.')
             off = self.SymbolTable[scope]["identifiers"][idVal[0]]['offset']
             off1 = self.SymbolTable[scope]["identifiers"][idVal[0]]['list'][idVal[1]]['offset']
-            if off+off1 < 0:
+            if off-off1 < 0:
                 return off
-            return off+off1 + self.SymbolTable[scope]['tempmax']*4
+            return off-off1+4+ self.SymbolTable[scope]['tempmax']*4
     def numVarScope(self):
         #print(self.currScope)
         return self.SymbolTable[self.currScope]["varwidth"]
