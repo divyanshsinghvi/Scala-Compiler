@@ -37,8 +37,8 @@ def address(var):
    ## print var
     if var.startswith("this."):
         parent = ST.SymbolTable[ST.currScope]['parent']
-        off = ST.SymbolTable[parent]["identifiers"][var.split('.')[1]]['offset'] 
-        print('\tmovl 4(%ebp), %edi')
+        off = ST.SymbolTable[parent]["identifiers"][var.split('.')[1]]['offset'] -4
+        print('\tmovl 8(%ebp), %edi')
         print('\taddl $'+str(off)+", %edi")
         print('\tmovl (%edi), %edi')
         return "%edi"

@@ -298,8 +298,7 @@ def p_var_def(p):
         offset =0
         for i in ST.SymbolTable[p[3]['type']]['identifiers'].keys():
             l[ST.SymbolTable[p[3]['type']]['identifiers'][i]['place']]={
-                    'place':p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],'type':ST.SymbolTable[p[3]['type']]['identifiers'][i]['type'],'offset':offset}
-            offset+=4
+                    'place':p[1]+'.'+ST.SymbolTable[p[3]['type']]['identifiers'][i]['place'],'type':ST.SymbolTable[p[3]['type']]['identifiers'][i]['type'],'offset':ST.SymbolTable[p[3]['type']]["identifiers"][i]['offset']}
         ST.addAttribute(p[1],'list',l)
         #ST.printSymbolTable()
     else:
