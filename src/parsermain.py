@@ -592,15 +592,19 @@ def p_path(p):
         #print p[1]
         if 'isthis' in p[1].keys():
             parent = ST.SymbolTable[ST.currScope]['parent']
-            p[0] = dict(ST.SymbolTable[parent]['identifiers'][p[3]])
-            p[0]['isthis']=True
-            p[0]['place']='this.'+p[3]
+            if "_ZXY"+parent+ p[3] not in ST.function:
+                p[0] = dict(ST.SymbolTable[parent]['identifiers'][p[3]])
+                p[0]['isthis']=True
+                p[0]['place']='this.'+p[3]
+            else:
+                p[0] = dict(ST.getClassFunc("_ZXY"+parent+p[3]))
+                p[0]['objname'] = "this"
         else:
             if "_ZXY"+p[1]['type']+ p[3] not in ST.function:
                 l = ST.getAttribute(p[1]['place'],'list')
                 p[0] = l[p[3]]
             else:
-                p[0] = ST.getClassFunc("_ZXY"+p[1]['type']+p[3])
+                p[0] = dict(ST.getClassFunc("_ZXY"+p[1]['type']+p[3]))
                 p[0]['objname'] = p[1]['place']
         #print p[0] 
     printp(p)

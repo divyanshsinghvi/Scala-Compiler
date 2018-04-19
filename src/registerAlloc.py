@@ -523,9 +523,14 @@ def generateCode(i):
     elif tacTable[i].oper in ['call', 'fcall']:
         endBlock();
         funname = tacTable[i].in1.split('__')[0]
-        objname = tacTable[i].in1.split('__')[1] 
-        print('\tleal '+str(-1*ST.getOffset(objname))+'(%ebp), %eax')
-        print('\tpushl %eax')
+        objname = tacTable[i].in1.split('__')[1]
+        #print objname
+        if objname != 'this':
+            print('\tleal '+str(-1*ST.getOffset(objname))+'(%ebp), %eax')
+            print('\tpushl %eax')
+        else:
+            print('\tpushl 8(%ebp)')
+
         print('\tcall ' + funname)
         print('\taddl $'+str(-1*(ST.SymbolTable[funname+"@"+tacTable[i].in2]['paramoffset'])-4) +', %esp')
         if tacTable[i].oper == 'fcall':
