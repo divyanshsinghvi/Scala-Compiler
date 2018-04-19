@@ -1,5 +1,5 @@
-object Demo {
-    def main(args: Array[String](2))={
+class Demo(){
+    def main()={
     var i: Int = 0;
     var b: Int = 3;
     var c: Int = 2;
@@ -25,5 +25,6 @@ object Demo {
         b = d;
 	println(b);
     };
-  };
+	return;  
+};
 };

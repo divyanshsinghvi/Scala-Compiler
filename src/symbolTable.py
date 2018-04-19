@@ -153,7 +153,7 @@ class SymbolTable:
                 "temp" : 0,
                 "tempmax" : 0,
                 "varwidth" : 0,
-                "paramoffset":-4,
+                "paramoffset":-8,
                 "totalOffset":0,
                 }
         self.currScope = cls
@@ -174,7 +174,7 @@ class SymbolTable:
                 "temp" : 0,
                 "tempmax" : 0,
                 "varwidth" : 0,
-                "paramoffset":-4,
+                "paramoffset":-8,
                 }
         self.SymbolTable[self.currScope]["function"][fun] = {
                 "fname" : fun

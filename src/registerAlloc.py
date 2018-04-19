@@ -13,7 +13,7 @@ pickle_in = open("ST.picle","rb")
 ST = pickle.load(pickle_in)
 global lab
 lab=1
-noOfReg = 6
+noOfReg = 5
 registerName = ["eax", "ebx", "ecx","edx","esi", "edi"]
 registerDescr=[None]*6
 #scope= ""
@@ -35,12 +35,18 @@ def address(var):
     #scope = ST.currScope
     #print ST.SymbolTable[scope]["identifiers"][var]['offset']
    ## print var
+    if var.startswith("this."):
+        parent = ST.SymbolTable[ST.currScope]['parent']
+        off = ST.SymbolTable[parent]["identifiers"][var.split('.')[1]]['offset'] 
+        print('\tmovl 4(%ebp), %edi')
+        print('\taddl $'+str(off)+", %edi")
+        print('\tmovl (%edi), %edi')
+        return "%edi"
     if var.startswith("_t"):
         var = "-" + str(int(var[2:])*4)+"(%ebp)"
         #print("I am awesome")
         return var
-    #ST.printSymbolTable()
-    
+    #ST.printSymbolTable() 
     a = ST.getOffset(var) 
     if a < 0:
         var = str(a*-1)+"(%ebp)"

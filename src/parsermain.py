@@ -581,17 +581,28 @@ def p_path(p):
             p[0] = ST.getId(p[1])
         else:
             p[0]=ST.getFunc(p[1])
+    elif(p.slice[1].type=='R_THIS'):
+        p[0] = {
+                'isthis' : True,
+                
+                }
     elif(p.slice[1].type=='path'):
         #print ST.function
         #ST.printSymbolTable()
         #print p[1]['type'],p[3]
         #print p[1]
-        if "_ZXY"+p[1]['type']+ p[3] not in ST.function:
-            l = ST.getAttribute(p[1]['place'],'list')
-            p[0] = l[p[3]]
+        if 'isthis' in p[1].keys():
+            parent = ST.SymbolTable[ST.currScope]['parent']
+            p[0] = dict(ST.SymbolTable[parent]['identifiers'][p[3]])
+            p[0]['isthis']=True
+            p[0]['place']='this.'+p[3]
         else:
-            p[0] = ST.getClassFunc("_ZXY"+p[1]['type']+p[3])
-            p[0]['objname'] = p[1]['place']
+            if "_ZXY"+p[1]['type']+ p[3] not in ST.function:
+                l = ST.getAttribute(p[1]['place'],'list')
+                p[0] = l[p[3]]
+            else:
+                p[0] = ST.getClassFunc("_ZXY"+p[1]['type']+p[3])
+                p[0]['objname'] = p[1]['place']
         #print p[0] 
     printp(p)
 

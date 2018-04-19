@@ -12,7 +12,7 @@ class Geeks
     // Member Functions()
     void printname()
     {
-        a= 3;
+       a= 3;
        printf("DS is awesome");
     }
 };
