@@ -34,7 +34,7 @@ def regName(regNo):
 def address(var):
     #scope = ST.currScope
     #print ST.SymbolTable[scope]["identifiers"][var]['offset']
-    #print var
+   ## print var
     if var.startswith("_t"):
         var = "-" + str(int(var[2:])*4)+"(%ebp)"
         #print("I am awesome")

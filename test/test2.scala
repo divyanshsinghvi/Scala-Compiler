@@ -1,4 +1,4 @@
-object Demo {
+class Demo(){
     def main(args: Array[String](2))={
     var i: Int = 0;
     var b: Int = 3;
