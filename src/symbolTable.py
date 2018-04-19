@@ -71,8 +71,8 @@ class SymbolTable:
                 self.SymbolTable[self.currScope]["varwidth"]+= size*s
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
             elif sizeObj is not None:
-                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
                 self.SymbolTable[self.currScope]["offset"] += sizeObj
+                self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
             else:
                 self.SymbolTable[self.currScope]["offset"] += idSize
                 self.SymbolTable[self.currScope]["identifiers"][idVal]['offset'] = self.SymbolTable[self.currScope]["offset"]
@@ -188,6 +188,13 @@ class SymbolTable:
     def getClass():
         scope = self.currScope
         return self.SymbolTable[scope]['parent']
+    
+    def getClassFunc(self,name):
+        scope = self.currScope
+        for i in self.SymbolTable.keys():
+            if name == i.split("@")[0]:
+                return self.SymbolTable[i]
+        sys.exit("function not declared")
 
 
     def getFunc(self,name):

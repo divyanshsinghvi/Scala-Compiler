@@ -16,9 +16,11 @@ var c: Int;
 def main(var args:Int)={
     var a: Int=5;
     var b: Int=4;
-    var c:Demo = new Demo();
+    var r: Int =1;
+    var x: Int =1;
+	var c:Demo = new Demo();
     c.e=4;
-    var d: Int = c.e;
+    var d: Int = c.foo(a,b);
     println(d);
     //var c: Int =foo(a,b);
 	println(20000);

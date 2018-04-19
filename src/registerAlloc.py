@@ -515,17 +515,14 @@ def generateCode(i):
 
     elif tacTable[i].oper in ['call', 'fcall']:
         endBlock();
-
-        ry = getRegIn(i,tacTable[i].in1.split('.')[0])
-        if registerDescr[ry] != tacTable[i].in1:
-            printInstr('movl',regName(ry),'Register',address(tacTable[i].in1),'Memory')
-            #print('\tmov ' + regName(ry) + ', DWORD PTR ' + tacTable[i].in1)
-            addressDescr[tacTable[i].in1]['Register'] = ry
-            registerDescr[ry] = tacTable[i].in1 
-        print('\tleal '+str(ST.getOffset(tacTable[i].in1.split('.')[0]))+'(%ebp), (%esp)')
-        print('\tcall ' + "_ZYX"+tacTable[i].in1.split('.')[1]+tacTable[i].in1.split('.')[0])
-        print('\taddl $'+str(-1*(ST.SymbolTable[tacTable[i].in1+"@"+tacTable[i].in2]['paramoffset'])-4) +', %esp')
+        funname = tacTable[i].in1.split('__')[0]
+        objname = tacTable[i].in1.split('__')[1] 
+        print('\tleal '+str(-1*ST.getOffset(objname))+'(%ebp), %eax')
+        print('\tpushl %eax')
+        print('\tcall ' + funname)
+        print('\taddl $'+str(-1*(ST.SymbolTable[funname+"@"+tacTable[i].in2]['paramoffset'])-4) +', %esp')
         if tacTable[i].oper == 'fcall':
+            #print tacTable[i]
             printInstr('movl', address(tacTable[i].out), 'Memory', regName(0), 'Register')
             registerDescr[0] = None;
             addressDescr[tacTable[i].out]['Memory'] = tacTable[i].out

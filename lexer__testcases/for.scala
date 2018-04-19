@@ -1,4 +1,4 @@
-object demo{
+class demo(){
 def main(var a:Int=2)={
     var i: Int =1;
     var j: Int = 2;

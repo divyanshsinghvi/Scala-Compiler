@@ -416,9 +416,12 @@ def p_fun_sig(p):           # function is named id@no.of args
     '''
     p[0] = ["func"]+[p[1]]+p[2]
     arg = len(p[2])
-    name = p[1]+"@"+str(arg)
+    if p[1] =='main' :
+        name = p[1]+"@"+str(arg)
+    else:
+        name = "_ZXY"+ST.currScope+p[1]+"@"+str(arg)
     p[0][1]=name
-    ST.function.append(p[1])
+    ST.function.append("_ZXY"+ST.currScope+p[1])
     #if name in ST.function:
     #    error("Error: function with same name and same number of arguments already defined.")
     #else:
@@ -427,7 +430,10 @@ def p_fun_sig(p):           # function is named id@no.of args
     #            "args":arg,
     #            "return":True
     #        }
-    emit("flabel",p[1])
+    if p[1] == 'main':
+        emit("flabel",p[1])
+    else:
+        emit("flabel",'_ZXY'+ST.currScope+p[1])
     printp(p)
 
 def p_param_clause(p):
@@ -459,7 +465,7 @@ def p_param(p):
               | R_VAR id COLON type 
     '''
     if(len(p)==7):
-        print p[4]
+        #print p[4]
         if type(p[6]) == type({}) and 'isArray' in p[6] and p[6]['isArray']:
       #      ST.addParamVar(p[2],p[2],'Array',p[4]['size'],p[4]['type'])
             ST.addAttribute(p[2],'typeArray',p[4]['type'])
@@ -576,10 +582,17 @@ def p_path(p):
         else:
             p[0]=ST.getFunc(p[1])
     elif(p.slice[1].type=='path'):
-        if "_ZYX"+p[3]+p[1]['place'] not in ST.function:
+        #print ST.function
+        #ST.printSymbolTable()
+        #print p[1]['type'],p[3]
+        #print p[1]
+        if "_ZXY"+p[1]['type']+ p[3] not in ST.function:
             l = ST.getAttribute(p[1]['place'],'list')
             p[0] = l[p[3]]
-    
+        else:
+            p[0] = ST.getClassFunc("_ZXY"+p[1]['type']+p[3])
+            p[0]['objname'] = p[1]['place']
+        #print p[0] 
     printp(p)
 
 #def path_0(p):
@@ -696,9 +709,10 @@ def p_simple_expr1(p):
             if(rtype!="void"):
                 temp1 = ST.getTemp()
                 p[0]["place"]=temp1
-                emit("fcall",temp1,p[1]["place"],len(p[2]))
+                #print p[1]
+                emit("fcall",temp1,p[1]["place"]+"__"+p[1]['objname'],len(p[2]))
             else:
-                emit('call',None,p[1]['place'],temp)
+                emit('call',None,p[1]['place']+"__"+p[1]['objname'],temp)
     printp(p)
 
 def p_prefix_expr(p):
