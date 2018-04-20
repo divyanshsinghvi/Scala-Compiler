@@ -24,7 +24,9 @@ class Dream() extends Qwer{
 	var p:Int;
 	def foo3(var z:Int):Int={
 //return z+ this.e;
-	return z + this.e+this.p + this.d;
+	this.p = this.foo2(z);
+	println(this.p);
+	return z + this.e+this.p;
 	//	return	z + this.d + this.e + this.p+this.c;
 		
 	};
