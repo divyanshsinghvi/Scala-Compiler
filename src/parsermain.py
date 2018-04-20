@@ -663,11 +663,25 @@ def p_path(p):
                 p[0] = dict(ST.getClassFunc("_ZXY"+parent+p[3]))
                 p[0]['objname'] = "this"
         else:
-            if "_ZXY"+p[1]['type']+ p[3] not in ST.function :
+            parent = p[1]['type']
+            flagfunc = 1
+            if parent in ST.SymbolTable:
+                extends = ST.SymbolTable[parent]['extends']
+                while parent is not None:
+                    if "_ZXY"+parent+ p[3] in ST.function:
+                        flagfunc=0
+                        break
+                    if extends is None:
+                        break
+                    parent = extends
+                    extends = ST.SymbolTable[parent]['extends']
+            
+            
+            if flagfunc:
                 l = ST.getAttribute(p[1]['place'],'list')
                 p[0] = l[p[3]]
             else:
-                p[0] = dict(ST.getClassFunc("_ZXY"+p[1]['type']+p[3]))
+                p[0] = dict(ST.getClassFunc("_ZXY"+parent+p[3]))
                 p[0]['objname'] = p[1]['place']
         #print p[0] 
     printp(p)
