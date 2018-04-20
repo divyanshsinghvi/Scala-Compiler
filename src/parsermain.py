@@ -223,6 +223,7 @@ def p_class_template_opt_2(p):
         ST.SymbolTable[p[-3]]['offset'] = ST.SymbolTable[p[2]]['offset']
     else:
         p[0] = None
+        ST.SymbolTable[p[-3]]['extends'] = None
     printp(p)
 #def p_class_template_opt_1(p):
 #    '''class_template_opt_1 : LPARAN id com_id RPARAN
@@ -619,11 +620,30 @@ def p_path(p):
                     p[0]['isthis']=True
                     p[0]['place']='this.'+p[3]
                 elif extends is not None:
-                    if p[3] in ST.SymbolTable[extends]['identifiers']:
-                        p[0] = dict(ST.SymbolTable[parent]['identifiers'][extends+p[3]])
-                        p[0]['isthis']=True
-                        p[0]['place']='this.'+extends+p[3]
-                    else:
+                    flag = 1
+                    p[3] = extends + p[3]
+                    me = parent
+                    while extends is not None:
+                        #p[3] = extends + p[3]
+                        if p[3] in ST.SymbolTable[me]['identifiers']:
+                            p[0] = dict(ST.SymbolTable[me]['identifiers'][p[3]])
+                            p[0]['isthis']=True
+                            p[0]['place']='this.'+p[3]
+                            flag=0
+                            break;
+                        print me
+                        parent = extends
+                        print p[3]
+                       # ST.printSymbolTable()
+                        extends = ST.SymbolTable[parent]['extends']
+                        if extends is not None:
+                            p[3] = p[3].replace(parent,parent+extends)
+                    
+                    #if p[3] in ST.SymbolTable[extends]['identifiers']:
+                    #    p[0] = dict(ST.SymbolTable[parent]['identifiers'][extends+p[3]])
+                    #    p[0]['isthis']=True
+                    #    p[0]['place']='this.'+extends+p[3]
+                    if flag:
                         sys.exit("Variable not found")
                 else:
                     sys.exit("Variable not found")
@@ -631,7 +651,7 @@ def p_path(p):
                 p[0] = dict(ST.getClassFunc("_ZXY"+parent+p[3]))
                 p[0]['objname'] = "this"
         else:
-            if "_ZXY"+p[1]['type']+ p[3] not in ST.function:
+            if "_ZXY"+p[1]['type']+ p[3] not in ST.function :
                 l = ST.getAttribute(p[1]['place'],'list')
                 p[0] = l[p[3]]
             else:

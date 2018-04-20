@@ -19,6 +19,17 @@ class Qwer() extends Demo{
 	};
 
 };
+class Dream() extends Qwer{
+	var c:Int;
+	var p:Int;
+	def foo3(var z:Int):Int={
+//return z+ this.e;
+	return z + this.e+this.p + this.d;
+	//	return	z + this.d + this.e + this.p+this.c;
+		
+	};
+
+};
 class True(){
 var a: Int;
 var b: Int;
@@ -28,11 +39,13 @@ def main(var args:Int)={
     var b: Int=4;
     var r: Int =1;
     var x: Int =1;
-	var c:Qwer = new Qwer();
+	var c:Dream = new Dream();
     c.f = 123;
 	c.e=4;
 c.d = 23;
-    var d: Int = c.foo2(a);
+c.p = 212;
+c.c = 13;
+    var d: Int = c.foo3(a);
     println(d);
     //var c: Int =foo(a,b);
 	println(20000);
