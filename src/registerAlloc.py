@@ -540,7 +540,8 @@ def generateCode(i):
         #spillAllReg()
         endBlock()
         print('\tsubl $8, %esp')
-        print('\tpushl $'+tacTable[i].out)
+        print('\tleal '+address(tacTable[i].out)+', %edi')
+        print('\tpushl %edi')
         print('\tpushl $.format2')
         #printInstr('xorl',regName(0),'Register',regName(0),'Register')
         #if is_number(tacTable[i].in1):
