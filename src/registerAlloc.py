@@ -471,6 +471,7 @@ def generateCode(i):
     
 
     elif tacTable[i].oper == 'ldar':
+        endBlock()
         rx = getRegOut(i,tacTable[i].out)
         if registerDescr[rx] != tacTable[i].out:
             printInstr('movl',regName(rx),'Register',address(tacTable[i].out),'Memory')
@@ -495,6 +496,7 @@ def generateCode(i):
 	    print('\tmovl -'+str(ST.getOffset(tacTable[i].in1))+"(%ebp,%"+regName(ri)+",4), %"+ regName(rx) )	
     
     elif tacTable[i].oper == 'star':
+        endBlock()
         ry = getRegIn(i,tacTable[i].in2)
         if registerDescr[ry] !=tacTable[i].in2:
             printInstr('movl',regName(ry),'Register',address(tacTable[i].in2),'Memory')
@@ -505,20 +507,20 @@ def generateCode(i):
             printInstr('movl',regName(ri),'Register',address(tacTable[i].in1),'Memory')
             addressDescr[tacTable[i].in1]['Register'] = ri
             registerDescr[ri] = tacTable[i].in1
-	print('\tmovl %'+regName(ry) +', -'+str(ST.getOffset(tacTable[i].out))+"(%ebp,%"+regName(ri)+",4)" )	
-       # printInstr('movl',address(tacTable[i].out)+ "(,%"+regName(ri)+",4)",'Memory',regName(ry),'Register')
-        #print "IIIII",tacTable[i].in1
-#	a = ST.getOffset(tacTable[i].out)-4*int(tacTable[i].in1)
-#	print("\tmovl %"+regName(ry)+", -"+str(a)+"(%ebp)")
-	#printInstr('movl',address(tacTable[i].out)+ " + " + str(int(tacTable[i].in1)*4),'Memory',regName(ry),'Register')
+	
+        z=  ST.getId(tacTable[i].out)
+        if 'isparam' in z.keys():
+            #print "BAAAM"
+            print('\tmovl '+str(-1*ST.getOffset(tacTable[i].out))+"(%ebp), %edi")
+            print('\timull $4, %'+regName(ri))
+            print('\taddl %'+regName(ri)+', %edi')
+            print('\tmovl %'+regName(ry)+', (%edi)')
+            #print('\tmovl (%edi), %'+regName(rx))
+            #print"boom"
+        else:
+            print('\tmovl %'+regName(ry) +', -'+str(ST.getOffset(tacTable[i].out))+"(%ebp,%"+regName(ri)+",4)" )	
     elif tacTable[i].oper == 'printInt':
-        #print(tacTable[i].oper, tacTable[i].out, tacTable[i].in1, tacTable[i].in2)
-        #spillAllReg()
         endBlock()
-        #printInstr('xorl',regName(0),'Register',regName(0),'Register')
-        #printInstr('movl',regName(4),'Register','5','Constant')
-        #printInstr('movl',regName(4),'Register','b','Memory')
-        #print tacTable[i].out
         if is_number(tacTable[i].out):
             printInstr('movl',regName(0),'Register',tacTable[i].out,'Constant')
         else:
