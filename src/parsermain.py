@@ -160,8 +160,11 @@ def p_class_def(p):
     '''class_def : id cmark1 class_param_clause class_template_opt
     '''
     p[0] ={
-            'place' : p[1]
+            'place' : p[1],
+            'extends':p[4],
             }
+    
+    
     printp(p)
 
 def p_class_param_clause(p):
@@ -205,23 +208,32 @@ def p_eq_expr_1(p):
 def p_class_template_opt(p):
     ''' class_template_opt : class_template_opt_2 template_body
     '''
+    p[0] = p[1]
     printp(p)
 def p_class_template_opt_2(p):
-    ''' class_template_opt_2 : R_EXTENDS id  class_template_opt_1
+    ''' class_template_opt_2 : R_EXTENDS id 
                              | epsilon
-
     '''
+    #print p[-3]+"-------------"
+    if len(p) == 3:
+        p[0] = p[2]
+        ST.SymbolTable[p[-3]]['extends'] = p[2]
+        for i in ST.SymbolTable[p[2]]['identifiers'].keys():
+            ST.SymbolTable[p[-3]]['identifiers'][p[2]+i] = dict(ST.SymbolTable[p[2]]['identifiers'][i])
+        ST.SymbolTable[p[-3]]['offset'] = ST.SymbolTable[p[2]]['offset']
+    else:
+        p[0] = None
     printp(p)
-def p_class_template_opt_1(p):
-    '''class_template_opt_1 : LPARAN id com_id RPARAN
-                            | epsilon
-    '''
-    printp(p)
-def p_com_id(p):
-    ''' com_id : epsilon
-                | com_id COMMA id 
-    '''
-    printp(p)
+#def p_class_template_opt_1(p):
+#    '''class_template_opt_1 : LPARAN id com_id RPARAN
+#                            | epsilon
+#    '''
+#    printp(p)
+#def p_com_id(p):
+#    ''' com_id : epsilon
+#                | com_id COMMA id 
+#    '''
+#    printp(p)
 def p_template_body(p):
     ''' template_body : BLOCKBEGIN template_body_0 BLOCKEND
     '''
@@ -599,11 +611,22 @@ def p_path(p):
         #print p[1]['type'],p[3]
         #print p[1]
         if 'isthis' in p[1].keys():
-            parent = ST.SymbolTable[ST.currScope]['parent']
+            parent = ST.SymbolTable[ST.currScope]['classname']
+            extends = ST.SymbolTable[parent]['extends']
             if "_ZXY"+parent+ p[3] not in ST.function:
-                p[0] = dict(ST.SymbolTable[parent]['identifiers'][p[3]])
-                p[0]['isthis']=True
-                p[0]['place']='this.'+p[3]
+                if p[3] in ST.SymbolTable[parent]['identifiers']:
+                    p[0] = dict(ST.SymbolTable[parent]['identifiers'][p[3]])
+                    p[0]['isthis']=True
+                    p[0]['place']='this.'+p[3]
+                elif extends is not None:
+                    if p[3] in ST.SymbolTable[extends]['identifiers']:
+                        p[0] = dict(ST.SymbolTable[parent]['identifiers'][extends+p[3]])
+                        p[0]['isthis']=True
+                        p[0]['place']='this.'+extends+p[3]
+                    else:
+                        sys.exit("Variable not found")
+                else:
+                    sys.exit("Variable not found")
             else:
                 p[0] = dict(ST.getClassFunc("_ZXY"+parent+p[3]))
                 p[0]['objname'] = "this"

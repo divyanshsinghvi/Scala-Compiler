@@ -38,8 +38,21 @@ def address(var):
     if var.startswith("this."):
         parent = ST.SymbolTable[ST.currScope]['classname']
         #print parent
+        off = []
+        #if var.split('.')[1] in ST.SymbolTable[parent]['identifiers']:
+        #print ST.currScope
         off = ST.SymbolTable[parent]["identifiers"][var.split('.')[1]]['offset']-4
-        totalOffset = ST.SymbolTable[parent]['totalOffset']
+        #else:
+        #    sys.exit("Variable not found address line 45 in registeralloc")
+        #else:
+        #    extend = ST.SymbolTable[parent]['extends']
+        #    if extend is None:
+        #        sys.exit("variable not found")
+        #    else:
+        #        if var.split('.')[1] in ST.SymbolTable[extend]['identifiers']:
+        #            off = ST.SymbolTable[extend]['extend'+var.split('.')[1]]
+        #        else:
+        #            sys.exit("Variable not found")
         print('\tmovl 8(%ebp), %edi')
         print('\taddl $'+str(off)+", %edi")
         #print('\tmovl (%edi), %edi')
