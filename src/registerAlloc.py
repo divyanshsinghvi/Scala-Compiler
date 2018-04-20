@@ -602,8 +602,14 @@ def generateCode(i):
         addressDescr[tacTable[i].out]['Register']=ry
         addressDescr[tacTable[i].out]['Memory']=None
         registerDescr[ry] = tacTable[i].out
+    elif tacTable[i].oper=='scope':
+        endBlock()
+        #print tacTable[i].out
+        #ST.printSymbolTable(1,1)
+        ST.currScope = tacTable[i].out
     
     elif tacTable[i].oper=='startscope':
+        endBlock()
         #print tacTable[i].out
         #ST.printSymbolTable(1,1)
         ST.currScope = tacTable[i].out
