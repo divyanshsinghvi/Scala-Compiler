@@ -564,10 +564,25 @@ def p_var_dcl(p):
 #    printp(p)
 
 def p_fun_dcl(p):
-    '''fun_dcl  :   fun_sig COLON type 
-                |   fun_sig'''
-    printp(p)
+    '''fun_dcl  :   id param_clause BLOCKBEGIN COLON type BLOCKEND'''
+       #         |   id param_clause'''
 
+    
+    p[0] = ["func"]+[p[1]]+p[2]
+    arg = len(p[2])
+    if p[1] =='main' :
+        name = p[1]+"@"+str(arg)
+    else:
+        name = "_ZXY"+ST.currScope+p[1]+"@"+str(arg)
+    p[0][1]=name
+    ST.function.append("_ZXY"+ST.currScope+p[1])
+    #print p[0] 
+    if len(p[0])>2:
+        ST.addDef(p[0][1],p[0][2:])
+    else:
+        ST.addDef(p[0][1])
+    printp(p)
+    
 #def fun_dcl_1(p):
 #    '''fun_dcl_0    :   COLON type fun_dcl_0
 #                    |   epsilon'''
@@ -1608,7 +1623,6 @@ def p_error(p):
     CEND = '\033[0m'
     print(CRED+"Syntax error at '%s'" % p.value +CEND)
     print(CRED+"Syntax error at '%s'" % p.lineno + CEND)
-    
 parser = yacc.yacc()
 
 f = open(sys.argv[1],"r")
