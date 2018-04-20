@@ -1,5 +1,5 @@
 class demo(){
-def main()={
+def main():Int={
     var i: Int =1;
     var j: Int = 2;
     var d: Int =2;
@@ -22,4 +22,5 @@ def main()={
     return j;
 };
 };
+
 //0 2 2 5
