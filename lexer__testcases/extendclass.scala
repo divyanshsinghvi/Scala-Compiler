@@ -47,7 +47,7 @@ def main(var args:Int)={
 c.d = 23;
 c.p = 212;
 c.c = 13;
-    var d: Int = c.foo3(a);
+    var d: Int = c.foo2(a);
     println(d);
     //var c: Int =foo(a,b);
 	println(20000);
