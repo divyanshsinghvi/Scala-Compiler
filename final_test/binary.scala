@@ -5,7 +5,8 @@ class Demo(){
         var mid:Int;
         var end:Int = len - 1;
         while (start <= end) {
-            mid = (start + end) / 2;
+            mid = (start + end);
+	    mid= mid/2;
             if (key == inputArr[mid]) {
                 return mid;
             };

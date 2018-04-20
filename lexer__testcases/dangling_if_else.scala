@@ -3,7 +3,7 @@ class Demo(){
     var i: Int = 0;
     var b: Int = 3;
     var c: Int = 2;
-    var d: Int = 1;
+    var d: Int = 1000;
     var e: Int = 3;
     var f: Int = 2;
     var m: Array[Int](3,3)={};
@@ -17,7 +17,7 @@ class Demo(){
         a[i]=a[i]+d;
 	println(a[i]);
     };
-    if (i>=f){
+    if (i<=f){
 	b = b + c*f;
         a[i]=a[i]-d;
 	println(a[i]);
@@ -25,6 +25,6 @@ class Demo(){
         b = d;
 	println(b);
     };
-	return;  
+	return 0;  
 };
 };

@@ -1,6 +1,5 @@
-import packag; 
-object demo{
-def main(args: Array[String])={
+class demo(){
+def main(var args: Array[String])={
     var i: Int=6;
     for (;i<= 8 && i 6.67 && i!= 7; i=i+1){
     var 36a :Int ;

@@ -1,4 +1,4 @@
-object demo{
+class demo(){
 def main(var na: Int,var argv:Array[Int](1))={
     var wflg: Int = 0;
     var tflg: Int = 0;
