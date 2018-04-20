@@ -397,7 +397,7 @@ def p_FunMark1(p):
     for l in range(2,len(p[-2])):
         ST.addParamVar(p[-2][l][0],p[-2][l][0],p[-2][l][1])
         if p[-2][l][1] is 'Array':
-            #ST.addAttribute(p[2],'typeArray',p[4]['type'])
+            ST.addAttribute(p[-2][l][0],'typeArray','Int')
             ST.addAttribute(p[-2][l][0],'isparam',True)
 
     printp(p)
@@ -1213,8 +1213,14 @@ def p_assign(p):
             'type': 'Not defined'
             }
     if p[2] == '=':
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         p[3]=evalArray(p[3])
         if p[1]['type'] == 'Array' :
             emit('star',p[1]['place'],p[1]['index'],p[3]['place'])
@@ -1241,8 +1247,14 @@ def p_or_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp
@@ -1259,8 +1271,14 @@ def p_and_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1278,8 +1296,14 @@ def p_bit_or_expression(p):
     if len(p)==2:
         p[0] = p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1297,8 +1321,14 @@ def p_xor_expression(p):
     if len(p)==2:
         p[0] = p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1316,8 +1346,14 @@ def p_bit_and_expression(p):
     if len(p)==2:
         p[0] = p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1337,8 +1373,14 @@ def p_eq_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1361,8 +1403,14 @@ def p_comp_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1381,8 +1429,14 @@ def p_shift_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1401,8 +1455,14 @@ def p_add_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
@@ -1422,8 +1482,14 @@ def p_mul_expression(p):
     if len(p) == 2:
         p[0]=p[1]
     else:
-        if p[1]['type'] != p[3]['type']:
-            sys.exit("Type error") 
+        c1 = p[1]['type']
+        c2 = p[3]['type']
+        if p[1]['type'] == 'Array':
+            c1 = 'INT'
+        if p[3]['type'] == 'Array':
+            c2 = 'INT'
+        if c1 !=c2 :
+            sys.exit("Type error bla") 
         temp = ST.getTemp()
         p[0] = {
                     'place' : temp,
