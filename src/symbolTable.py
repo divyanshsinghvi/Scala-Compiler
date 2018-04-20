@@ -163,6 +163,22 @@ class SymbolTable:
                 }
         self.currScope = cls
         self.classlist += []
+    def addDef(self,fun,args=None):
+        self.SymbolTable[fun] = {
+                "name" : fun,
+                "type" : "function",
+                "identifiers" : {},
+                "variables" : {},
+                "function" : {},
+                "rType" : {'type':"INT"},
+                "place" : (fun).split("@")[0],
+                "arguments" : args,
+                "offset" : 4,
+                "temp" : 0,
+                "tempmax" : 0,
+                "varwidth" : 0,
+                "paramoffset":-8,
+                }
 
     def addFunc(self, fun, args=None):
         self.SymbolTable[fun] = {
