@@ -63,8 +63,13 @@ def address(var):
         return var
     #print "-------------"
     if '@ARRAY' in var:
-        print('\tleal -'+str(ST.getOffset(var.split('@')[0]))+"(%ebp), %eax")
-        return "%eax"
+        z = ST.getId(var.split('@')[0])
+        if 'isparam' in z.keys():
+            print('\tmovl -'+str(ST.getOffset(var.split('@')[0]))+"(%ebp), %edi")
+            return "%edi"
+        else:
+            print('\tleal -'+str(ST.getOffset(var.split('@')[0]))+"(%ebp), %edi")
+            return "%edi"
     #ST.printSymbolTable() 
     a = ST.getOffset(var) 
     if a < 0:

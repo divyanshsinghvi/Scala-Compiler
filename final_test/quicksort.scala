@@ -31,22 +31,25 @@ class Demo(){
   def Sort(var arr:Array[Int](7)={},var start:Int,var end:Int):Int={
       var pivot:Int;
       var temp:Int;
-      println(100);
+      //println(100);
       if(start < end){
+	//println(start);
+	//println(end);
         if(start == end-1){
             if(arr[start] > arr[end]){
                 temp = arr[start];
                 arr[start] = arr[end];
                 arr[end]=temp;
             //println(1); 
-            }else{
+            };
+	}else{
+	//	prinln("BAAM");
               pivot = this.partition(arr,start,end);
               this.Sort(arr,start,pivot-1);
               this.Sort(arr,pivot+1,end);
-
+		//println(pivot);
             };
       };
-  };
   return 0;
 };
 };

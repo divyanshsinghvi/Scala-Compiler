@@ -1,5 +1,5 @@
 class Demo(){
-  def quicksort(var x:Array[Int](5)={}, var first:Int, var last:Int):Int={
+  def quicksort(var x:Array[Int](6)={}, var first:Int, var last:Int):Int={
                 var pivot:Int;
                 var j:Int;
                 var temp:Int;
@@ -11,10 +11,10 @@ class Demo(){
                 if(first<last){
                   pivot=first;
                   i=first;
-                  j=last;
+                  j=last+1;
 
                   while(i<j){
-                  while((x[i] <= x[pivot]) && (i < last)){
+                  while((x[i] <= x[pivot]) && (i <= last)){
                     i= i + 1;};
                   while(x[j]>x[pivot]){
                     j= j - 1;};
@@ -36,12 +36,13 @@ class Demo(){
 
                 return 0;
                 };
+return 0;
 };
-
+};
 class test(){
    def main()={
-    var arr: Array[Int](5)={16,17,13,14,15};
-    var size:Int = 5;
+    var arr: Array[Int](6)={16,17,13,14,15,1};
+    var size:Int = 6;
     var first:Int = 0;
     var l:Int = size - 1;
     var i:Int;
